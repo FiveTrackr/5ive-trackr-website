@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verify Your Email - 5ive Trackr</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+            background: linear-gradient(135deg, #2e6417 0%, #1e4009 50%, #0f2a04 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .verification-container {
+            background: white;
+            border-radius: 16px;
+            padding: 40px;
+            max-width: 500px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            animation: fadeIn 0.4s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .email-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 30px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #2e6417, #3a7d1f);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .email-icon svg {
+            width: 40px;
+            height: 40px;
+            fill: white;
+        }
+
+        .pulse-ring {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            border: 2px solid #2e6417;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: translate(-50%, -50%) scale(1);
+                opacity: 1;
+            }
+            100% {
+                transform: translate(-50%, -50%) scale(1.5);
+                opacity: 0;
+            }
+        }
+
+        h1 {
+            font-size: 28px;
+            font-weight: 700;
+            color: #1a1a1a;
+            margin-bottom: 16px;
+        }
+
+        .email-address {
+            font-size: 16px;
+            color: #2e6417;
+            font-weight: 600;
+            margin-bottom: 24px;
+            background: #f0f7f4;
+            padding: 12px 16px;
+            border-radius: 8px;
+            display: inline-block;
+        }
+
+        .instruction-text {
+            font-size: 16px;
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 32px;
+        }
+
+        .verification-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+
+        .send-email-btn {
+            background: linear-gradient(135deg, #2e6417, #3a7d1f);
+            color: white;
+            border: none;
+            padding: 16px 32px;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(46, 100, 23, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .send-email-btn:hover {
+            background: linear-gradient(135deg, #1e4009, #2e6417);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(46, 100, 23, 0.4);
+        }
+
+        .send-email-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .resend-btn {
+            background: white;
+            color: #2e6417;
+            border: 2px solid #2e6417;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: none;
+        }
+
+        .resend-btn:hover {
+            background: #f0f7f4;
+        }
+
+        .status-message {
+            padding: 16px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            font-weight: 500;
+            display: none;
+        }
+
+        .status-success {
+            background: #e8f5e8;
+            color: #2e6417;
+            border: 1px solid #c8e6c9;
+        }
+
+        .status-error {
+            background: #ffeaa7;
+            color: #d63031;
+            border: 1px solid #fdcb6e;
+        }
+
+        .status-info {
+            background: #e3f2fd;
+            color: #1976d2;
+            border: 1px solid #bbdefb;
+        }
+
+        .verification-success {
+            display: none;
+            animation: slideIn 0.5s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .success-icon {
+            width: 60px;
+            height: 60px;
+            margin: 0 auto 20px;
+            background: #2e6417;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: scaleIn 0.4s ease-out;
+        }
+
+        .success-icon svg {
+            width: 30px;
+            height: 30px;
+            stroke: white;
+            stroke-width: 3;
+            fill: none;
+        }
+
+        .access-webapp-btn {
+            background: linear-gradient(135deg, #2e6417, #3a7d1f);
+            color: white;
+            text-decoration: none;
+            padding: 16px 32px;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(46, 100, 23, 0.3);
+        }
+
+        .access-webapp-btn:hover {
+            background: linear-gradient(135deg, #1e4009, #2e6417);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(46, 100, 23, 0.4);
+        }
+
+        .spinner {
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-top: 2px solid white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @media (max-width: 480px) {
+            .verification-container {
+                padding: 30px 20px;
+            }
+            
+            h1 {
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="verification-container">
+        <div class="email-verification-content">
+            <div class="email-icon">
+                <svg viewBox="0 0 24 24">
+                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                    <polyline points="22,6 12,13 2,6"/>
+                </svg>
+                <div class="pulse-ring"></div>
+            </div>
+
+            <h1>Verify Your Email</h1>
+            <div class="email-address" id="userEmail">your-email@example.com</div>
+            <p class="instruction-text">
+                To complete your account setup and access your 5ive Trackr dashboard, please verify your email address by clicking the confirmation link we'll send you.
+            </p>
+
+            <div class="status-message" id="statusMessage"></div>
+
+            <div class="verification-actions">
+                <button class="send-email-btn" id="sendEmailBtn">
+                    <span id="btnText">Send Verification Email</span>
+                    <div class="spinner" id="spinner" style="display: none;"></div>
+                </button>
+                <button class="resend-btn" id="resendBtn">Resend Email</button>
+            </div>
+        </div>
+
+        <div class="verification-success" id="verificationSuccess">
+            <div class="success-icon">
+                <svg viewBox="0 0 24 24">
+                    <polyline points="20,6 9,17 4,12"/>
+                </svg>
+            </div>
+            <h1>Email Verified!</h1>
+            <p class="instruction-text">
+                Great! Your email has been verified and your account is now active. You can now access your 5ive Trackr dashboard.
+            </p>
+            <a href="https://five-trackr-yq6ly.ondigitalocean.app" class="access-webapp-btn">
+                Access Dashboard
+                <span>→</span>
+            </a>
+        </div>
+    </div>
+
+    <script>
+        // Get user data from URL parameters or sessionStorage
+        const urlParams = new URLSearchParams(window.location.search);
+        const sessionId = urlParams.get('session_id');
+        let userId = urlParams.get('user_id') || sessionStorage.getItem('userId');
+        let userEmail = urlParams.get('email') || sessionStorage.getItem('userEmail') || 'your-email@example.com';
+        
+        // Elements
+        const userEmailEl = document.getElementById('userEmail');
+        const sendEmailBtn = document.getElementById('sendEmailBtn');
+        const resendBtn = document.getElementById('resendBtn');
+        const statusMessage = document.getElementById('statusMessage');
+        const btnText = document.getElementById('btnText');
+        const spinner = document.getElementById('spinner');
+        const verificationContent = document.querySelector('.email-verification-content');
+        const verificationSuccess = document.getElementById('verificationSuccess');
+
+        // Initialize user data
+        async function initializeUserData() {
+            if (sessionId && !userId) {
+                try {
+                    const response = await fetch(`/api/auth/get-user-from-session?session_id=${sessionId}`);
+                    const data = await response.json();
+                    
+                    if (data.success) {
+                        userId = data.user.user_id;
+                        userEmail = data.user.email;
+                        userEmailEl.textContent = userEmail;
+                        
+                        // Store in sessionStorage for future use
+                        sessionStorage.setItem('userId', userId);
+                        sessionStorage.setItem('userEmail', userEmail);
+                        
+                        // Check if already verified
+                        if (data.user.email_verified) {
+                            showVerificationSuccess();
+                        }
+                    } else {
+                        showStatus('Failed to load user information. Please try again.', 'error');
+                    }
+                } catch (error) {
+                    console.error('Error loading user data:', error);
+                    showStatus('Failed to load user information. Please check your connection.', 'error');
+                }
+            } else {
+                userEmailEl.textContent = userEmail;
+            }
+        }
+
+        // Initialize on page load
+        initializeUserData();
+
+        // Variables for polling
+        let pollInterval;
+        let emailSent = false;
+        let resendCooldown = false;
+
+        // Show status message
+        function showStatus(message, type = 'info') {
+            statusMessage.textContent = message;
+            statusMessage.className = `status-message status-${type}`;
+            statusMessage.style.display = 'block';
+            
+            if (type !== 'error') {
+                setTimeout(() => {
+                    statusMessage.style.display = 'none';
+                }, 5000);
+            }
+        }
+
+        // Set button loading state
+        function setButtonLoading(loading) {
+            sendEmailBtn.disabled = loading;
+            spinner.style.display = loading ? 'block' : 'none';
+            btnText.textContent = loading ? 'Sending...' : (emailSent ? 'Email Sent' : 'Send Verification Email');
+        }
+
+        // Send verification email
+        async function sendVerificationEmail() {
+            if (!userId) {
+                showStatus('User ID not found. Please try signing up again.', 'error');
+                return;
+            }
+
+            setButtonLoading(true);
+
+            try {
+                const response = await fetch('/api/auth/send-verification-email', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        user_id: userId,
+                        email: userEmail
+                    })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    emailSent = true;
+                    showStatus('Verification email sent! Please check your inbox and spam folder.', 'success');
+                    
+                    // Show resend button after 30 seconds
+                    setTimeout(() => {
+                        resendBtn.style.display = 'block';
+                    }, 30000);
+
+                    // Start polling for verification status
+                    startVerificationPolling();
+                } else {
+                    showStatus(data.error || 'Failed to send verification email. Please try again.', 'error');
+                }
+            } catch (error) {
+                console.error('Error sending verification email:', error);
+                showStatus('Network error. Please check your connection and try again.', 'error');
+            } finally {
+                setButtonLoading(false);
+            }
+        }
+
+        // Check verification status
+        async function checkVerificationStatus() {
+            if (!userId) return false;
+
+            try {
+                const response = await fetch(`/api/auth/check-verification-status?user_id=${userId}`);
+                const data = await response.json();
+                
+                return data.verified === true;
+            } catch (error) {
+                console.error('Error checking verification status:', error);
+                return false;
+            }
+        }
+
+        // Start polling for verification
+        function startVerificationPolling() {
+            pollInterval = setInterval(async () => {
+                const isVerified = await checkVerificationStatus();
+                
+                if (isVerified) {
+                    clearInterval(pollInterval);
+                    showVerificationSuccess();
+                }
+            }, 3000); // Check every 3 seconds
+
+            // Stop polling after 10 minutes
+            setTimeout(() => {
+                if (pollInterval) {
+                    clearInterval(pollInterval);
+                }
+            }, 600000);
+        }
+
+        // Show verification success
+        function showVerificationSuccess() {
+            verificationContent.style.display = 'none';
+            verificationSuccess.style.display = 'block';
+            
+            // Clear any stored data
+            sessionStorage.removeItem('userId');
+            sessionStorage.removeItem('userEmail');
+        }
+
+        // Resend email with cooldown
+        async function resendEmail() {
+            if (resendCooldown) return;
+            
+            resendCooldown = true;
+            resendBtn.disabled = true;
+            resendBtn.textContent = 'Sending...';
+            
+            await sendVerificationEmail();
+            
+            // Cooldown for 60 seconds
+            setTimeout(() => {
+                resendCooldown = false;
+                resendBtn.disabled = false;
+                resendBtn.textContent = 'Resend Email';
+            }, 60000);
+        }
+
+        // Event listeners
+        sendEmailBtn.addEventListener('click', sendVerificationEmail);
+        resendBtn.addEventListener('click', resendEmail);
+
+        // Check if user is already verified on page load
+        window.addEventListener('load', async () => {
+            if (userId) {
+                const isVerified = await checkVerificationStatus();
+                if (isVerified) {
+                    showVerificationSuccess();
+                }
+            }
+        });
+
+        // Handle page visibility change (to check verification when user returns)
+        document.addEventListener('visibilitychange', async () => {
+            if (!document.hidden && userId && !verificationSuccess.style.display) {
+                const isVerified = await checkVerificationStatus();
+                if (isVerified) {
+                    showVerificationSuccess();
+                }
+            }
+        });
+    </script>
+</body>
+</html>

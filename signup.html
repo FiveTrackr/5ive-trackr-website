@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>5ive Trackr - Professional Football Management</title>
+    <link rel="stylesheet" href="/website/css/signup-styles.css">
+    <script src="https://js.stripe.com/v3/"></script>
+</head>
+<body>
+    <!-- Floating Navigation -->
+    <nav class="floating-nav">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <img src="/website/img/5iveTrackr-straight-logo.svg" alt="5ive Trackr" class="logo-image">
+            </div>
+            <div class="nav-links">
+                <a href="#features" class="nav-link">Features</a>
+                <a href="#pricing" class="nav-link">Pricing</a>
+                <a href="#contact" class="nav-link">Contact</a>
+                <a href="/home.html" class="nav-cta">Sign In</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section with Clean Design -->
+    <section class="hero-section">
+        <div class="hero-background">
+            <div class="animated-grid"></div>
+            <div class="floating-elements">
+                <div class="floating-card"></div>
+                <div class="floating-card"></div>
+                <div class="floating-card"></div>
+            </div>
+        </div>
+        
+        <div class="hero-content">
+            <div class="hero-badge animate-up">
+                <span class="badge-icon">⚽</span>
+                <span>Trusted by 1000+ football venues</span>
+            </div>
+            
+            <h1 class="hero-title animate-up-delay-1">
+                Transform Your
+                <span class="gradient-text">Football Venue</span>
+                Management
+            </h1>
+            
+            <p class="hero-description animate-up-delay-2">
+                The complete platform for professional football venue management.
+                Streamline operations, maximize revenue, and deliver exceptional experiences.
+            </p>
+            
+            <div class="hero-cta animate-up-delay-3">
+                <button class="primary-cta" onclick="scrollToPricing()">
+                    <span>Get Started Today</span>
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                        <path d="M8 1l7 7-7 7M1 8h14"/>
+                    </svg>
+                </button>
+                <button class="secondary-cta" onclick="scrollToFeatures()">
+                    <span>Watch Demo</span>
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                        <polygon points="5,3 15,8 5,13"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        
+        <div class="hero-visual animate-up-delay-4">
+            <div class="dashboard-preview">
+                <div class="preview-header">
+                    <div class="window-controls">
+                        <span class="control red"></span>
+                        <span class="control yellow"></span>
+                        <span class="control green"></span>
+                    </div>
+                    <div class="preview-title">5ive Trackr Dashboard</div>
+                </div>
+                <div class="preview-content">
+                    <div class="stats-grid">
+                        <div class="stat-card pulse-1">
+                            <div class="stat-number">247</div>
+                            <div class="stat-label">Active Players</div>
+                        </div>
+                        <div class="stat-card pulse-2">
+                            <div class="stat-number">12</div>
+                            <div class="stat-label">Live Matches</div>
+                        </div>
+                        <div class="stat-card pulse-3">
+                            <div class="stat-number">£15.2K</div>
+                            <div class="stat-label">Monthly Revenue</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section with Intersection Animations -->
+    <section id="features" class="features-section">
+        <div class="section-container">
+            <div class="section-header animate-on-scroll">
+                <h2 class="section-title">Built for Professional Football Venues</h2>
+                <p class="section-subtitle">Every feature designed to increase efficiency and revenue</p>
+            </div>
+            
+            <div class="features-grid">
+                <div class="feature-item animate-on-scroll" data-delay="0">
+                    <div class="feature-icon-container">
+                        <div class="feature-icon">📊</div>
+                        <div class="icon-glow"></div>
+                    </div>
+                    <h3>Advanced Analytics</h3>
+                    <p>Real-time insights into venue performance, revenue tracking, and player engagement metrics.</p>
+                    <div class="feature-preview">
+                        <div class="chart-animation"></div>
+                    </div>
+                </div>
+                
+                <div class="feature-item animate-on-scroll" data-delay="100">
+                    <div class="feature-icon-container">
+                        <div class="feature-icon">⚽</div>
+                        <div class="icon-glow"></div>
+                    </div>
+                    <h3>Smart Pitch Management</h3>
+                    <p>Automated scheduling, availability optimization, and dynamic pricing for maximum utilization.</p>
+                    <div class="feature-preview">
+                        <div class="pitch-grid-animation"></div>
+                    </div>
+                </div>
+                
+                <div class="feature-item animate-on-scroll" data-delay="200">
+                    <div class="feature-icon-container">
+                        <div class="feature-icon">👥</div>
+                        <div class="icon-glow"></div>
+                    </div>
+                    <h3>League Ecosystem</h3>
+                    <p>Complete league management with automated fixtures, live standings, and player statistics.</p>
+                    <div class="feature-preview">
+                        <div class="league-animation"></div>
+                    </div>
+                </div>
+                
+                <div class="feature-item animate-on-scroll" data-delay="300">
+                    <div class="feature-icon-container">
+                        <div class="feature-icon">📱</div>
+                        <div class="icon-glow"></div>
+                    </div>
+                    <h3>Mobile First</h3>
+                    <p>Native iOS and Android apps for managers, referees, and players. Works seamlessly offline.</p>
+                    <div class="feature-preview">
+                        <div class="mobile-animation"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing Section with Premium Design -->
+    <section id="pricing" class="pricing-section">
+        <div class="pricing-background">
+            <div class="gradient-orb orb-1"></div>
+            <div class="gradient-orb orb-2"></div>
+            <div class="gradient-orb orb-3"></div>
+        </div>
+        
+        <div class="section-container">
+            <div class="section-header animate-on-scroll">
+                <h2 class="section-title">Choose Your Plan</h2>
+                <p class="section-subtitle">Professional pricing for professional venues</p>
+            </div>
+            
+            <div class="pricing-grid">
+                <!-- Starter Plan -->
+                <div class="pricing-card animate-on-scroll" data-plan="starter" data-delay="0">
+                    <div class="card-glow"></div>
+                    <div class="card-content">
+                        <div class="plan-info">
+                            <div class="plan-header">
+                                <h3>Starter</h3>
+                                <p>Perfect for emerging venues</p>
+                            </div>
+                            <div class="plan-price">
+                                <span class="currency">£</span>
+                                <span class="amount">49.99</span>
+                                <span class="period">/month</span>
+                            </div>
+                        </div>
+                        
+                        <ul class="features-list">
+                            <li><span class="feature-check">✓</span> 1 pitch</li>
+                            <li><span class="feature-check">✓</span> 10 referees</li>
+                            <li><span class="feature-check">✓</span> 1 division</li>
+                            <li><span class="feature-check">✓</span> 1 league per division</li>
+                            <li><span class="feature-check">✓</span> 10 teams</li>
+                        </ul>
+                        
+                        <button class="plan-button" data-plan="starter" onclick="selectPlan('starter')">
+                            <span>Get Started</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Growth Plan (Featured) -->
+                <div class="pricing-card featured animate-on-scroll" data-plan="growth" data-delay="100">
+                    <div class="popular-label">Most Popular</div>
+                    <div class="card-glow featured-glow"></div>
+                    <div class="card-content">
+                        <div class="plan-info">
+                            <div class="plan-header">
+                                <h3>Growth</h3>
+                                <p>Growing clubs and venues</p>
+                            </div>
+                            <div class="plan-price">
+                                <span class="currency">£</span>
+                                <span class="amount">99.99</span>
+                                <span class="period">/month</span>
+                            </div>
+                        </div>
+                        
+                        <ul class="features-list">
+                            <li><span class="feature-check">✓</span> 3 pitches</li>
+                            <li><span class="feature-check">✓</span> 25 referees</li>
+                            <li><span class="feature-check">✓</span> 5 divisions</li>
+                            <li><span class="feature-check">✓</span> 3 leagues per division</li>
+                            <li><span class="feature-check">✓</span> 30 teams</li>
+                        </ul>
+                        
+                        <button class="plan-button featured-button" data-plan="growth" onclick="selectPlan('growth')">
+                            <span>Get Started</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Pro Plan -->
+                <div class="pricing-card animate-on-scroll" data-plan="pro" data-delay="200">
+                    <div class="card-glow"></div>
+                    <div class="card-content">
+                        <div class="plan-info">
+                            <div class="plan-header">
+                                <h3>Professional</h3>
+                                <p>Large venues and organizations</p>
+                            </div>
+                            <div class="plan-price">
+                                <span class="currency">£</span>
+                                <span class="amount">179.99</span>
+                                <span class="period">/month</span>
+                            </div>
+                        </div>
+                        
+                        <ul class="features-list">
+                            <li><span class="feature-check">✓</span> 8 pitches</li>
+                            <li><span class="feature-check">✓</span> 50 referees</li>
+                            <li><span class="feature-check">✓</span> 10 divisions</li>
+                            <li><span class="feature-check">✓</span> 5 leagues per division</li>
+                            <li><span class="feature-check">✓</span> 80 teams</li>
+                        </ul>
+                        
+                        <button class="plan-button" data-plan="pro" onclick="selectPlan('pro')">
+                            <span>Get Started</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Registration Modal -->
+    <div id="registrationModal" class="premium-modal">
+        <div class="modal-backdrop"></div>
+        <div class="modal-container">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="header-content">
+                        <h2>Create Your Account</h2>
+                        <p>Join the future of football venue management</p>
+                    </div>
+                    <button class="close-modal">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <line x1="18" y1="6" x2="6" y2="18"></line>
+                            <line x1="6" y1="6" x2="18" y2="18"></line>
+                        </svg>
+                    </button>
+                </div>
+                
+                <form id="registrationForm" class="registration-form">
+                    <div class="form-progress">
+                        <div class="progress-bar">
+                            <div class="progress-fill"></div>
+                        </div>
+                        <div class="progress-steps">
+                            <div class="progress-step active" data-step="1">
+                                <div class="step-circle">1</div>
+                                <span>Account</span>
+                            </div>
+                            <div class="progress-step" data-step="2">
+                                <div class="step-circle">2</div>
+                                <span>Venue</span>
+                            </div>
+                            <div class="progress-step" data-step="3">
+                                <div class="step-circle">3</div>
+                                <span>Payment</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 1: Account Information -->
+                    <div class="form-step active" data-step="1">
+                        <div class="step-content">
+                            <h3>Your Account Details</h3>
+                            <p>Create your account to get started</p>
+                            
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label for="firstName">First Name</label>
+                                    <input type="text" id="firstName" name="firstName" required autocomplete="off">
+                                    <span class="error-message"></span>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="lastName">Last Name</label>
+                                    <input type="text" id="lastName" name="lastName" required autocomplete="off">
+                                    <span class="error-message"></span>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="email">Email Address</label>
+                                    <input type="email" id="email" name="email" required autocomplete="off">
+                                    <span class="error-message"></span>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="phone">Phone Number</label>
+                                    <input type="tel" id="phone" name="phone" placeholder="+44 20 1234 5678" autocomplete="off">
+                                    <span class="error-message"></span>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="password">Password</label>
+                                    <input type="password" id="password" name="password" required minlength="8" autocomplete="new-password">
+                                    <div class="password-requirements">Must be 8+ characters with at least one number</div>
+                                    <div class="password-strength"></div>
+                                    <span class="error-message"></span>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="confirmPassword">Confirm Password</label>
+                                    <input type="password" id="confirmPassword" name="confirmPassword" required autocomplete="new-password">
+                                    <span class="error-message"></span>
+                                </div>
+                            </div>
+
+                            <button type="button" class="continue-btn">Continue</button>
+                        </div>
+                    </div>
+
+                    <!-- Step 2: Venue Information -->
+                    <div class="form-step" data-step="2">
+                        <div class="step-content">
+                            <h3>Venue Information</h3>
+                            <p>Tell us about your football venue</p>
+                            
+                            <div class="form-grid">
+                                <div class="form-group full-width">
+                                    <label for="venueName">Venue Name</label>
+                                    <input type="text" id="venueName" name="venueName" required autocomplete="off">
+                                    <span class="error-message"></span>
+                                </div>
+
+                                <div class="form-group full-width">
+                                    <label for="venueAddress">Venue Address</label>
+                                    <input type="text" id="venueAddress" name="venueAddress" autocomplete="off">
+                                    <span class="error-message"></span>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="city">City</label>
+                                    <input type="text" id="city" name="city" autocomplete="off">
+                                    <span class="error-message"></span>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="postcode">Postcode</label>
+                                    <input type="text" id="postcode" name="postcode" autocomplete="off">
+                                    <span class="error-message"></span>
+                                </div>
+
+                            </div>
+
+                            <div class="selected-plan-summary">
+                                <div class="plan-icon growth-plan" id="selectedPlanIcon">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                                        <path d="M12 2L8 12h3v8h2v-8h3L12 2z"/>
+                                    </svg>
+                                </div>
+                                <div class="plan-details">
+                                    <div class="plan-name" id="selectedPlanName">Growth Plan</div>
+                                    <div class="plan-price" id="selectedPlanPrice">£99.99/month</div>
+                                </div>
+                                <div class="plan-actions">
+                                    <button type="button" class="view-details-btn" onclick="openPlanDetailsModal()">View Details</button>
+                                    <button type="button" class="change-plan-btn" onclick="changePlan()">Change</button>
+                                </div>
+                            </div>
+
+                            <div class="form-buttons">
+                                <button type="button" class="back-btn">Back</button>
+                                <button type="button" class="continue-btn">Continue</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 3: Payment Information -->
+                    <div class="form-step" data-step="3">
+                        <div class="step-content">
+                            <h3>Payment Information</h3>
+                            <p>Secure payment processing by Stripe</p>
+                            
+                            <div class="payment-security">
+                                <div class="security-badges">
+                                    <div class="security-badge">
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                                            <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/>
+                                        </svg>
+                                        <span>SSL Encrypted</span>
+                                    </div>
+                                    <div class="security-badge">
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                                            <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                        </svg>
+                                        <span>PCI Compliant</span>
+                                    </div>
+                                    <div class="security-badge">
+                                        <span class="stripe-badge">Powered by Stripe</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="payment-notice">
+                                <div class="notice-content">
+                                    <div class="notice-icon">🔒</div>
+                                    <div class="notice-text">
+                                        <strong>Secure Payment</strong>
+                                        <p>You'll be redirected to Stripe's secure payment page to complete your subscription.</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" id="terms" name="terms" required>
+                                    <span class="checkmark"></span>
+                                    <span class="checkbox-text">I agree to the <a href="/website/terms-of-service.html" target="_blank">Terms of Service</a> and <a href="/website/privacy-policy.html" target="_blank">Privacy Policy</a></span>
+                                </label>
+                            </div>
+
+                            <div class="order-summary">
+                                <div class="summary-header">
+                                    <h4>Order Summary</h4>
+                                </div>
+                                <div class="summary-content">
+                                    <div class="summary-line">
+                                        <span>Plan:</span>
+                                        <span id="summaryPlan">Growth</span>
+                                    </div>
+                                    <div class="summary-line total">
+                                        <span>Monthly Total:</span>
+                                        <span id="summaryPrice">£99.99</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-buttons">
+                                <button type="button" class="back-btn">Back</button>
+                                <button type="submit" class="submit-btn" id="submitBtn">
+                                    <span class="btn-content">
+                                        <svg class="btn-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                            <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                        </svg>
+                                        <span class="btn-text">Start Subscription</span>
+                                    </span>
+                                    <div class="btn-loader">
+                                        <div class="spinner"></div>
+                                        <span>Processing...</span>
+                                    </div>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div id="successModal" class="premium-modal">
+        <div class="modal-backdrop"></div>
+        <div class="modal-container success-container">
+            <div class="success-content">
+                <div class="success-animation">
+                    <div class="success-checkmark">
+                        <svg width="80" height="80" viewBox="0 0 80 80">
+                            <circle cx="40" cy="40" r="38" fill="none" stroke="#10b981" stroke-width="2" opacity="0.3"/>
+                            <path class="checkmark-path" d="M20 40L35 55L60 25" stroke="#10b981" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </div>
+                </div>
+                
+                <h2>Welcome to 5ive Trackr!</h2>
+                <p>Your account has been created and your subscription is active.</p>
+                
+                <div class="success-details">
+                    <div class="detail-item">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                        </svg>
+                        <span>Confirmation sent to <strong id="confirmEmail"></strong></span>
+                    </div>
+                    <div class="detail-item">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                        <span>Subscription activated successfully</span>
+                    </div>
+                </div>
+                
+                <button onclick="console.log('Account created, please verify email')" class="success-btn">
+                    <span>Access Your Dashboard</span>
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                        <path d="M8 1l7 7-7 7M1 8h14"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Plan Selection Modal -->
+    <div class="premium-modal" id="planSelectionModal">
+        <div class="modal-backdrop" onclick="closePlanSelectionModal()"></div>
+        <div class="modal-container plan-selection-modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>Choose Your Plan</h3>
+                    <button class="close-modal" onclick="closePlanSelectionModal()">×</button>
+                </div>
+                
+                <div class="plan-selection-content">
+                    <div class="simple-plans-grid">
+                        <div class="simple-plan-card" data-plan="starter" onclick="selectPlanFromModal('starter')">
+                            <div class="plan-title">Starter</div>
+                            <div class="plan-price">£49.99<span>/month</span></div>
+                            <div class="plan-limits">1 pitch • 10 referees • 1 division • 15 teams</div>
+                            <button class="simple-select-btn">Select</button>
+                        </div>
+                        
+                        <div class="simple-plan-card popular" data-plan="growth" onclick="selectPlanFromModal('growth')">
+                            <div class="popular-label">Popular</div>
+                            <div class="plan-title">Growth</div>
+                            <div class="plan-price">£99.99<span>/month</span></div>
+                            <div class="plan-limits">3 pitches • 25 referees • 5 divisions • 150 teams</div>
+                            <button class="simple-select-btn primary">Select</button>
+                        </div>
+                        
+                        <div class="simple-plan-card" data-plan="pro" onclick="selectPlanFromModal('pro')">
+                            <div class="plan-title">Professional</div>
+                            <div class="plan-price">£179.99<span>/month</span></div>
+                            <div class="plan-limits">8 pitches • 50 referees • 10 divisions • 500 teams</div>
+                            <button class="simple-select-btn">Select</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Plan Details Modal -->
+    <div class="premium-modal" id="planDetailsModal">
+        <div class="modal-backdrop" onclick="closePlanDetailsModal()"></div>
+        <div class="modal-container">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 id="planDetailsTitle">Plan Details</h3>
+                    <button class="close-modal" onclick="closePlanDetailsModal()">×</button>
+                </div>
+                
+                <div class="plan-details-content">
+                    <div class="plan-overview">
+                        <div class="plan-name-large" id="planNameLarge">Growth Plan</div>
+                        <div class="plan-price-large" id="planPriceLarge">£99.99/month</div>
+                    </div>
+                    
+                    <div class="plan-features">
+                        <h4>What's included:</h4>
+                        <ul class="features-list" id="planFeaturesList">
+                            <li><span class="feature-check">✓</span> 3 pitches</li>
+                            <li><span class="feature-check">✓</span> 25 referees</li>
+                            <li><span class="feature-check">✓</span> 3 divisions</li>
+                            <li><span class="feature-check">✓</span> 3 leagues per division</li>
+                            <li><span class="feature-check">✓</span> 50 teams</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="plan-actions-bottom">
+                        <button type="button" onclick="closePlanDetailsModal()" class="continue-btn">Continue with this Plan</button>
+                        <button type="button" onclick="closePlanDetailsModal(); closeRegistrationModal();" class="change-plan-btn">Choose Different Plan</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/website/js/signup.js"></script>
+</body>
+</html>
