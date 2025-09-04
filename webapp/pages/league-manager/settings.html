@@ -1,0 +1,1707 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings - League Manager - 5ive Trackr</title>
+    <meta name="author" content="5ive Trackr">
+    <meta name="copyright" content="Â© 2025 5ive Trackr. All rights reserved.">
+    <meta name="robots" content="noarchive, noimageindex">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    
+    <!-- Consolidated Dashboard Master CSS -->
+    <link rel="stylesheet" href="../../css/dashboard-master.css?v=consolidated-2025">
+    <style>
+    /* Safe system font stack - no external dependencies */
+    body, * {
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, "Helvetica Neue", Helvetica, Arial, Roboto, "Noto Sans", "Liberation Sans", sans-serif;
+    }
+</style>
+    <!-- League Manager Sidebar Styles - Load immediately to prevent layout shifts -->
+    <link rel="stylesheet" href="../../css/league-manager-sidebar.css">
+    <!-- League Manager Header Styles - Load immediately to prevent layout shifts -->
+    <link rel="stylesheet" href="../../css/league-manager-header.css">
+    
+    <style>
+        /* Settings-specific styles */
+        .settings-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .settings-header {
+            background: linear-gradient(135deg, #2e6417 0%, #1e4009 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-size: 28px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 30px;
+        }
+        
+        .settings-sections {
+            display: grid;
+            gap: 30px;
+        }
+        
+        .settings-section {
+            background: #ffffff;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            border: 1px solid #e5e7eb;
+        }
+        
+        .section-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid #f3f4f6;
+        }
+        
+        .section-icon {
+            font-size: 24px;
+            margin-right: 12px;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .section-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: #2e6417;
+            margin: 0;
+        }
+        
+        .section-description {
+            color: #6b7280;
+            font-size: 14px;
+            margin-top: 4px;
+            margin-bottom: 0;
+        }
+        
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group:last-child {
+            margin-bottom: 0;
+        }
+        
+        .form-label {
+            display: block;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 6px;
+            font-size: 14px;
+        }
+        
+        .form-input {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 14px;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            font-family: 'Inter', sans-serif;
+        }
+        
+        .form-input:focus {
+            outline: none;
+            border-color: #2e6417;
+            box-shadow: 0 0 0 3px rgba(46, 100, 23, 0.1);
+        }
+        
+        .form-input[readonly] {
+            background-color: #f9fafb;
+            color: #6b7280;
+            cursor: not-allowed;
+        }
+        
+        .form-help {
+            color: #6b7280;
+            font-size: 12px;
+            margin-top: 4px;
+            display: block;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #2e6417 0%, #1e4009 100%);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(46, 100, 23, 0.3);
+        }
+        
+        .btn-primary:active {
+            transform: translateY(0);
+        }
+        
+        .form-select {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 14px;
+            background-color: white;
+            font-family: 'Inter', sans-serif;
+        }
+        
+        .form-textarea {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 14px;
+            resize: vertical;
+            min-height: 80px;
+            font-family: 'Inter', sans-serif;
+        }
+        
+        .checkbox-group {
+            display: grid;
+            gap: 12px;
+        }
+        
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .checkbox-item input[type="checkbox"] {
+            width: 16px;
+            height: 16px;
+            accent-color: #2e6417;
+        }
+        
+        .checkbox-item label {
+            font-size: 14px;
+            color: #374151;
+            cursor: pointer;
+            margin: 0;
+        }
+        
+        .number-input-group {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 16px;
+        }
+        
+        .number-input-item {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .number-input-item label {
+            font-size: 12px;
+            font-weight: 600;
+            color: #6b7280;
+            margin-bottom: 4px;
+        }
+        
+        .number-input-item input {
+            padding: 8px 10px;
+            border: 1px solid #d1d5db;
+            border-radius: 4px;
+            text-align: center;
+            font-weight: 600;
+        }
+        
+        .settings-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+            padding-top: 20px;
+            border-top: 1px solid #e5e7eb;
+            margin-top: 30px;
+        }
+        
+        .btn {
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            border: none;
+            font-family: 'Inter', sans-serif;
+        }
+        
+        .btn-primary {
+            background-color: #2e6417;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background-color: #1e4009;
+        }
+        
+        .btn-secondary {
+            background-color: #f3f4f6;
+            color: #374151;
+            border: 1px solid #d1d5db;
+        }
+        
+        .btn-secondary:hover {
+            background-color: #e5e7eb;
+        }
+        
+        .btn-danger {
+            background-color: #dc2626;
+            color: white;
+        }
+        
+        .btn-danger:hover {
+            background-color: #b91c1c;
+        }
+        
+        .settings-info {
+            background-color: #f0f9ff;
+            border: 1px solid #0284c7;
+            border-radius: 6px;
+            padding: 12px;
+            margin-bottom: 20px;
+        }
+        
+        .settings-info-text {
+            color: #0369a1;
+            font-size: 13px;
+            margin: 0;
+        }
+        
+        .warning-section {
+            background-color: #fef3c7;
+            border: 1px solid #f59e0b;
+            border-radius: 6px;
+            padding: 16px;
+            margin-top: 20px;
+        }
+        
+        .warning-text {
+            color: #92400e;
+            font-size: 14px;
+            margin: 0;
+            font-weight: 500;
+        }
+        
+        .success-message {
+            background-color: #d1fae5;
+            border: 1px solid #10b981;
+            border-radius: 6px;
+            padding: 12px;
+            margin-bottom: 20px;
+            display: none;
+        }
+        
+        .success-text {
+            color: #047857;
+            font-size: 14px;
+            margin: 0;
+        }
+        
+        .error-message {
+            background-color: #fee2e2;
+            border: 1px solid #ef4444;
+            border-radius: 6px;
+            padding: 12px;
+            margin-bottom: 20px;
+            display: none;
+        }
+        
+        .error-text {
+            color: #dc2626;
+            font-size: 14px;
+            margin: 0;
+        }
+
+        /* Venue Selector Styles */
+        .venue-selector-container {
+            padding: 0 15px 20px 15px;
+            border-bottom: 1px solid #e2e8f0;
+            margin-bottom: 16px;
+            position: relative;
+            overflow: visible;
+        }
+
+        .venue-selector-btn {
+            width: 100% !important;
+            background: linear-gradient(135deg, #2e6417 0%, #1e4009 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 12px 16px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: none !important;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 2px 4px rgba(46, 100, 23, 0.2);
+            position: relative;
+            box-sizing: border-box !important;
+            margin: 0 !important;
+            user-select: none !important;
+            -webkit-user-select: none !important;
+            -moz-user-select: none !important;
+            -ms-user-select: none !important;
+        }
+
+        .venue-selector-btn:hover {
+            transform: none !important;
+            box-shadow: 0 2px 4px rgba(46, 100, 23, 0.2) !important;
+        }
+
+        .venue-selector-btn:active {
+            transform: none !important;
+        }
+
+        .venue-selector-content {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            flex: 1;
+        }
+
+        .venue-selector-label {
+            font-size: 0.7rem;
+            opacity: 0.9;
+            margin-bottom: 2px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .venue-selector-name {
+            font-size: 0.875rem;
+            font-weight: 700;
+            line-height: 1.2;
+        }
+
+        .venue-selector-icon {
+            font-size: 1rem;
+            margin-left: 8px;
+            transition: none !important;
+        }
+
+        .venue-selector-btn.active .venue-selector-icon {
+            transform: rotate(180deg) !important;
+            transition: none !important;
+        }
+
+        .venue-selector-btn.active {
+            border-radius: 8px 8px 0 0 !important;
+            border-bottom: none !important;
+            box-shadow: 0 2px 4px rgba(46, 100, 23, 0.2) !important;
+            transition: none !important;
+        }
+
+        .venue-dropdown {
+            position: absolute;
+            top: calc(100% - 1px);
+            left: 0;
+            right: 0;
+            background: linear-gradient(135deg, #2e6417 0%, #1e4009 100%);
+            border: none !important;
+            border-radius: 0 0 8px 8px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25);
+            z-index: 9999 !important;
+            margin-top: 0;
+            transform: none !important;
+            transition: none !important;
+            display: none;
+            max-height: 300px;
+            overflow-y: auto;
+            color: white;
+            outline: none !important;
+        }
+
+        .venue-dropdown.show {
+            display: block !important;
+            transition: none !important;
+        }
+
+        /* Venue Selector Overlay - Only darken area outside dropdown */
+        .venue-selector-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.3);
+            z-index: 9998 !important;
+            display: none;
+            transition: none !important;
+        }
+
+        .venue-selector-overlay.show {
+            display: block !important;
+            transition: none !important;
+        }
+
+        .venue-option {
+            padding: 12px 16px;
+            cursor: pointer;
+            transition: none !important;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            color: white;
+            background: transparent;
+        }
+
+        .venue-option:last-child {
+            border-bottom: none;
+        }
+
+        .venue-option:hover {
+            background: rgba(255, 255, 255, 0.1) !important;
+            transition: none !important;
+        }
+
+        .venue-option.selected {
+            background: rgba(255, 255, 255, 0.2) !important;
+            color: white;
+            font-weight: 700;
+            transition: none !important;
+        }
+
+        .venue-option-details {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .venue-option-name {
+            font-weight: 600;
+            font-size: 0.875rem;
+            margin-bottom: 2px;
+            color: white;
+        }
+
+        .venue-option-address {
+            font-size: 0.7rem;
+            color: rgba(255, 255, 255, 0.8);
+            opacity: 0.9;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .venue-option-check {
+            color: white;
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+
+        /* Navigation Icon Fixes */
+        body[data-role="league-manager"] .sidebar .nav-icon[data-icon="referee"],
+        .sidebar .nav-icon[data-icon="referee"] {
+            background-image: url('../../img/referee-icon.svg') !important;
+            background-size: 18px 18px !important;
+            background-repeat: no-repeat !important;
+            background-position: center !important;
+            width: 20px !important;
+            height: 20px !important;
+            display: inline-block !important;
+        }
+
+        body[data-role="league-manager"] .sidebar .nav-icon[data-icon="shirt"],
+        .sidebar .nav-icon[data-icon="shirt"] {
+            background-image: url('../../img/shirt-icon.svg') !important;
+            background-size: 18px 18px !important;
+            background-repeat: no-repeat !important;
+            background-position: center !important;
+            width: 20px !important;
+            height: 20px !important;
+            display: inline-block !important;
+        }
+
+        /* Navigation Sizing Fix Applied: Consistent padding (14px 20px) for all nav items via league-manager-sidebar.css */
+    </style>
+    <\!-- SPA Redirect Handler -->
+    <script src="../../js/core/spa-redirect.js"></script>
+</head>
+<body data-page="settings" data-role="league-manager">
+    
+    <!-- Sidebar - Static content with dynamic enhancement -->
+    <aside class="sidebar">
+        <!-- Static sidebar content that loads immediately -->
+        <div class="sidebar-header">
+            <div class="logo-container">
+                <img src="../../img/header-logo.svg" alt="5ive Trackr" class="logo">
+            </div>
+        </div>
+
+        <!-- Navigation Menu -->
+        <nav class="sidebar-nav">
+            <!-- Venue Selector -->
+            <div class="venue-selector-container">
+                <div class="venue-selector-btn" id="venue-selector-btn" onclick="toggleVenueDropdown()">
+                    <div class="venue-selector-content">
+                        <div class="venue-selector-label">Current Venue</div>
+                        <div class="venue-selector-name" id="selected-venue-name">Loading...</div>
+                    </div>
+                    <span class="venue-selector-icon">â–¼</span>
+                    <div class="venue-dropdown" id="venue-dropdown">
+                        <!-- Data will be loaded dynamically based on logged-in user -->
+                        <div class="venue-option" data-venue-id="VEN002" onclick="selectVenue('VEN002', 'Elite Sports Center', '456 Championship Drive', event)">
+                            <div class="venue-option-details">
+                                <div class="venue-option-name">Elite Sports Center</div>
+                                <div class="venue-option-address">456 Championship Drive</div>
+                            </div>
+                            <span class="venue-option-check" style="display: none;">âœ“</span>
+                        </div>
+                        <div class="venue-option" data-venue-id="VEN003" onclick="selectVenue('VEN003', 'Premier League Complex', '789 Victory Boulevard', event)">
+                            <div class="venue-option-details">
+                                <div class="venue-option-name">Premier League Complex</div>
+                                <div class="venue-option-address">789 Victory Boulevard</div>
+                            </div>
+                            <span class="venue-option-check" style="display: none;">âœ“</span>
+                        </div>
+                        <div class="venue-option" data-venue-id="VEN001" onclick="selectVenue('VEN001', 'Sports Arena West', '123 Athletic Avenue', event)">
+                            <div class="venue-option-details">
+                                <div class="venue-option-name">Sports Arena West</div>
+                                <div class="venue-option-address">123 Athletic Avenue</div>
+                            </div>
+                            <span class="venue-option-check" style="display: none;">âœ“</span>
+                        </div>
+                        <!-- END MOCK DATA -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Venue Selector Overlay -->
+            <div class="venue-selector-overlay" id="venue-selector-overlay" onclick="closeVenueDropdown()"></div>
+
+            <ul class="nav-menu">
+                <li class="nav-item" data-page="dashboard">
+                    <a href="dashboard.html" class="nav-link">
+                        <span class="nav-icon">ðŸ“Š</span>
+                        <span class="link-text">Dashboard</span>
+                    </a>
+                </li>
+                
+                <li class="nav-item" data-page="fixtures">
+                    <a href="fixtures.html" class="nav-link">
+                        <span class="nav-icon">ðŸ“…</span>
+                        <span class="link-text">Fixtures</span>
+                    </a>
+                </li>
+                
+                <li class="nav-item" data-page="referees">
+                    <a href="referees.html" class="nav-link">
+                        <span class="nav-icon" data-icon="referee"></span>
+                        <span class="link-text">Referees</span>
+                    </a>
+                </li>
+                
+                <li class="nav-item" data-page="divisions">
+                    <a href="divisions.html" class="nav-link">
+                        <span class="nav-icon">ðŸ“‹</span>
+                        <span class="link-text">Divisions</span>
+                    </a>
+                </li>
+                
+                <li class="nav-item" data-page="leagues">
+                    <a href="leagues.html" class="nav-link">
+                        <span class="nav-icon">ðŸ†</span>
+                        <span class="link-text">Leagues</span>
+                    </a>
+                </li>
+                
+                <li class="nav-item" data-page="teams">
+                    <a href="teams.html" class="nav-link">
+                        <span class="nav-icon" data-icon="shirt"></span>
+                        <span class="link-text">Teams</span>
+                    </a>
+                </li>
+                
+                <li class="nav-item" data-page="pitches">
+                    <a href="pitches.html" class="nav-link">
+                        <span class="nav-icon">ðŸ¥…</span>
+                        <span class="link-text">Pitches</span>
+                    </a>
+                </li>
+                
+                <li class="nav-item" data-page="venues">
+                    <a href="venues.html" class="nav-link">
+                        <span class="nav-icon">ðŸŸï¸</span>
+                        <span class="link-text">Venues</span>
+                    </a>
+                </li>
+                
+                <li class="nav-item" data-page="payments">
+                    <a href="team-payments.html" class="nav-link">
+                        <span class="nav-icon">ðŸ’³</span>
+                        <span class="link-text">Team Payments</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+
+        <!-- Sidebar Footer -->
+        <div class="sidebar-footer">
+            <div class="footer-section footer-actions">
+                <a href="settings.html" class="footer-link active">
+                    <span class="footer-icon">âš™ï¸</span>
+                    <span class="footer-text">Settings</span>
+                </a>
+                <a href="#" class="footer-link" onclick="handleLogout(event)">
+                    <span class="footer-icon">ðŸšª</span>
+                    <span class="footer-text">Logout</span>
+                </a>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Dynamic Header - Static content with dynamic enhancement -->
+    <header class="main-header">
+        <!-- Static header content that loads immediately -->
+        <div class="header-left">
+            <h1 class="page-title" data-page-title>Settings</h1>
+        </div>
+
+        <div class="header-right">
+            <!-- User Info Section -->
+            <div class="user-info"> data-user-name
+                <div class="user-avatar" data-user-initials> data-user-name--</div>
+                <div class="user-details"> data-user-name
+                    <div class="user-name" data-user-name> data-user-nameLoading...</div>
+                    <div class="user-role" data-user-role> data-user-role data-user-nameLoading...</div>
+                </div>
+            </div>
+
+            <!-- Header Actions -->
+            <div class="header-actions">
+                <a href="notifications.html" class="header-btn">
+                    <span class="btn-icon">ðŸ””</span>
+                    <span class="btn-text">Notifications</span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="main-content">
+        <div class="content-area">
+            <div class="settings-container">
+                
+                <!-- Success/Error Messages -->
+                <div class="success-message" id="success-message">
+                    <p class="success-text" id="success-text">Settings saved successfully!</p>
+                </div>
+                
+                <div class="error-message" id="error-message">
+                    <p class="error-text" id="error-text">Error saving settings. Please try again.</p>
+                </div>
+                
+                <!-- Settings Header -->
+                <h1 class="settings-header">League Manager Settings</h1>
+                
+                <!-- Settings Form -->
+                <form id="settings-form">
+                    <div class="settings-sections">
+                        
+                        <!-- Account Settings -->
+                        <section class="settings-section">
+                            <div class="section-header">
+                                <span class="section-icon">ðŸ‘¤</span>
+                                <div>
+                                    <h2 class="section-title">Account Settings</h2>
+                                    <p class="section-description">Manage your personal account information and preferences</p>
+                                </div>
+                            </div>
+                            
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label class="form-label" for="full-name">Full Name</label>
+                                    <input type="text" id="full-name" name="fullName" class="form-input" value="" required>
+                                    <small class="form-help">You can edit your display name</small>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label class="form-label" for="email">Email Address</label>
+                                    <input type="email" id="email" name="email" class="form-input" value="" readonly>
+                                    <small class="form-help">Email address cannot be changed from here</small>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label class="form-label" for="phone">Phone Number</label>
+                                    <input type="tel" id="phone" name="phone" class="form-input" placeholder="+44 1234 567890">
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label class="form-label" for="organization">Organization</label>
+                                    <input type="text" id="organization" name="organization" class="form-input" placeholder="Sports Club or Organization">
+                                </div>
+                            </div>
+                            
+                            <div class="section-actions" style="margin-top: 20px; padding-top: 20px; border-top: 1px solid #e5e7eb;">
+                                <button type="button" id="save-profile-btn" class="btn-primary">
+                                    Save Account Changes
+                                </button>
+                            </div>
+                        </section>
+                        
+                        <!-- League Management Preferences -->
+                        <section class="settings-section">
+                            <div class="section-header">
+                                <span class="section-icon">ðŸ†</span>
+                                <div>
+                                    <h2 class="section-title">League Management Preferences</h2>
+                                    <p class="section-description">Configure default settings for league creation and management</p>
+                                </div>
+                            </div>
+                            
+                            <div class="settings-info">
+                                <p class="settings-info-text">
+                                    These settings will be used as defaults when creating new leagues. You can override them for individual leagues.
+                                </p>
+                            </div>
+                            
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label class="form-label" for="default-match-duration">Default Match Duration (minutes)</label>
+                                    <select id="default-match-duration" name="defaultMatchDuration" class="form-select">
+                                        <option value="30">30 minutes</option>
+                                        <option value="40" selected>40 minutes</option>
+                                        <option value="60">60 minutes</option>
+                                        <option value="80">80 minutes</option>
+                                        <option value="90">90 minutes</option>
+                                        <option value="120">120 minutes</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label class="form-label" for="default-half-time">Default Half-Time Duration (minutes)</label>
+                                    <select id="default-half-time" name="defaultHalfTimeDuration" class="form-select">
+                                        <option value="0">No half-time</option>
+                                        <option value="5" selected>5 minutes</option>
+                                        <option value="10">10 minutes</option>
+                                        <option value="15">15 minutes</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label class="form-label" for="default-max-teams">Default Maximum Teams per League</label>
+                                    <select id="default-max-teams" name="defaultMaxTeams" class="form-select">
+                                        <option value="6">6 teams</option>
+                                        <option value="8">8 teams</option>
+                                        <option value="10" selected>10 teams</option>
+                                        <option value="12">12 teams</option>
+                                        <option value="14">14 teams</option>
+                                        <option value="16">16 teams</option>
+                                        <option value="20">20 teams</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label class="form-label" for="default-players-per-team">Default Players per Team</label>
+                                    <select id="default-players-per-team" name="defaultPlayersPerTeam" class="form-select">
+                                        <option value="5" selected>5-a-side</option>
+                                        <option value="7">7-a-side</option>
+                                        <option value="9">9-a-side</option>
+                                        <option value="11">11-a-side</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label">Default Points System</label>
+                                <div class="number-input-group">
+                                    <div class="number-input-item">
+                                        <label for="points-win">Win</label>
+                                        <input type="number" id="points-win" name="pointsForWin" min="0" max="5" value="3">
+                                    </div>
+                                    <div class="number-input-item">
+                                        <label for="points-draw">Draw</label>
+                                        <input type="number" id="points-draw" name="pointsForDraw" min="0" max="3" value="1">
+                                    </div>
+                                    <div class="number-input-item">
+                                        <label for="points-loss">Loss</label>
+                                        <input type="number" id="points-loss" name="pointsForLoss" min="0" max="2" value="0">
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label">Default League Settings</label>
+                                <div class="checkbox-group">
+                                    <div class="checkbox-item">
+                                        <input type="checkbox" id="auto-scheduling" name="autoScheduling" checked>
+                                        <label for="auto-scheduling">Enable automatic fixture scheduling</label>
+                                    </div>
+                                    <div class="checkbox-item">
+                                        <input type="checkbox" id="substitutes-allowed" name="substitutesAllowed" checked>
+                                        <label for="substitutes-allowed">Allow substitutes during matches</label>
+                                    </div>
+                                    <div class="checkbox-item">
+                                        <input type="checkbox" id="publish-results" name="publishResults" checked>
+                                        <label for="publish-results">Publish match results immediately</label>
+                                    </div>
+                                    <div class="checkbox-item">
+                                        <input type="checkbox" id="registration-open" name="registrationOpen">
+                                        <label for="registration-open">Open team registration by default</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                        
+                        <!-- Notification Settings -->
+                        <section class="settings-section">
+                            <div class="section-header">
+                                <span class="section-icon">ðŸ””</span>
+                                <div>
+                                    <h2 class="section-title">Notification Settings</h2>
+                                    <p class="section-description">Control when and how you receive notifications</p>
+                                </div>
+                            </div>
+                            
+                            <div class="settings-info">
+                                <p class="settings-info-text">
+                                    As per system design, league managers receive notifications only for fixture cancellations and friendly match confirmations to prevent notification overload.
+                                </p>
+                            </div>
+                            
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label class="form-label">Email Notifications</label>
+                                    <div class="checkbox-group">
+                                        <div class="checkbox-item">
+                                            <input type="checkbox" id="email-fixture-cancellations" name="emailFixtureCancellations" checked>
+                                            <label for="email-fixture-cancellations">Fixture cancellations</label>
+                                        </div>
+                                        <div class="checkbox-item">
+                                            <input type="checkbox" id="email-friendly-confirmations" name="emailFriendlyConfirmations" checked>
+                                            <label for="email-friendly-confirmations">Friendly match confirmations</label>
+                                        </div>
+                                        <div class="checkbox-item">
+                                            <input type="checkbox" id="email-team-payments" name="emailTeamPayments" checked>
+                                            <label for="email-team-payments">Team payment reminders</label>
+                                        </div>
+                                        <div class="checkbox-item">
+                                            <input type="checkbox" id="email-referee-assignments" name="emailRefereeAssignments" checked>
+                                            <label for="email-referee-assignments">Referee assignment updates</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label class="form-label">In-App Notifications</label>
+                                    <div class="checkbox-group">
+                                        <div class="checkbox-item">
+                                            <input type="checkbox" id="app-fixture-cancellations" name="appFixtureCancellations" checked>
+                                            <label for="app-fixture-cancellations">Fixture cancellations</label>
+                                        </div>
+                                        <div class="checkbox-item">
+                                            <input type="checkbox" id="app-friendly-confirmations" name="appFriendlyConfirmations" checked>
+                                            <label for="app-friendly-confirmations">Friendly match confirmations</label>
+                                        </div>
+                                        <div class="checkbox-item">
+                                            <input type="checkbox" id="app-team-registrations" name="appTeamRegistrations" checked>
+                                            <label for="app-team-registrations">New team registrations</label>
+                                        </div>
+                                        <div class="checkbox-item">
+                                            <input type="checkbox" id="app-match-results" name="appMatchResults" checked>
+                                            <label for="app-match-results">Match result submissions</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                        
+                        <!-- Match Management Settings -->
+                        <section class="settings-section">
+                            <div class="section-header">
+                                <span class="section-icon">âš½</span>
+                                <div>
+                                    <h2 class="section-title">Match Management Settings</h2>
+                                    <p class="section-description">Configure default rules and handling for matches</p>
+                                </div>
+                            </div>
+                            
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label class="form-label" for="cancellation-penalty">Match Cancellation Penalty</label>
+                                    <select id="cancellation-penalty" name="cancellationPenalty" class="form-select">
+                                        <option value="automatic-loss" selected>Automatic loss for cancelling team</option>
+                                        <option value="draw-both">Draw (0-0) if both teams cancel</option>
+                                        <option value="custom-margin">Custom win margin for opponent</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label class="form-label" for="default-win-margin">Default Win Margin (if custom selected)</label>
+                                    <input type="number" id="default-win-margin" name="defaultWinMargin" class="form-input" min="1" max="10" value="3" placeholder="e.g., 3 for 3-0 win">
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label class="form-label" for="result-verification">Match Result Verification</label>
+                                    <select id="result-verification" name="resultVerification" class="form-select">
+                                        <option value="automatic" selected>Automatic (publish immediately)</option>
+                                        <option value="manual">Manual verification required</option>
+                                        <option value="team-confirmation">Require both teams to confirm</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label class="form-label" for="friendly-match-approval">Friendly Match Requests</label>
+                                    <select id="friendly-match-approval" name="friendlyMatchApproval" class="form-select">
+                                        <option value="automatic" selected>Automatic approval if venue available</option>
+                                        <option value="manual">Manual approval required</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label">Fee Handling</label>
+                                <div class="checkbox-group">
+                                    <div class="checkbox-item">
+                                        <input type="checkbox" id="fee-cancelling-team" name="feeCancellingTeam" checked>
+                                        <label for="fee-cancelling-team">Cancelling team still liable for match fees</label>
+                                    </div>
+                                    <div class="checkbox-item">
+                                        <input type="checkbox" id="fee-annual-teams" name="feeAnnualTeams" checked>
+                                        <label for="fee-annual-teams">Different fee handling for annual vs. pay-weekly teams</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                        
+                        <!-- Display & Interface Settings -->
+                        <section class="settings-section">
+                            <div class="section-header">
+                                <span class="section-icon">ðŸŽ¨</span>
+                                <div>
+                                    <h2 class="section-title">Display & Interface Settings</h2>
+                                    <p class="section-description">Customize your dashboard appearance and preferences</p>
+                                </div>
+                            </div>
+                            
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label class="form-label" for="theme-preference">Theme Preference</label>
+                                    <select id="theme-preference" name="themePreference" class="form-select">
+                                        <option value="light" selected>Light</option>
+                                        <option value="dark">Dark</option>
+                                        <option value="auto">Auto (system preference)</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label class="form-label" for="date-format">Date Format</label>
+                                    <select id="date-format" name="dateFormat" class="form-select">
+                                        <option value="dd/mm/yyyy" selected>DD/MM/YYYY (UK)</option>
+                                        <option value="mm/dd/yyyy">MM/DD/YYYY (US)</option>
+                                        <option value="yyyy-mm-dd">YYYY-MM-DD (ISO)</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label class="form-label" for="time-format">Time Format</label>
+                                    <select id="time-format" name="timeFormat" class="form-select">
+                                        <option value="24hour" selected>24-hour (19:00)</option>
+                                        <option value="12hour">12-hour (7:00 PM)</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label class="form-label" for="items-per-page">Items per Page</label>
+                                    <select id="items-per-page" name="itemsPerPage" class="form-select">
+                                        <option value="10">10</option>
+                                        <option value="20" selected>20</option>
+                                        <option value="50">50</option>
+                                        <option value="100">100</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label">Dashboard Preferences</label>
+                                <div class="checkbox-group">
+                                    <div class="checkbox-item">
+                                        <input type="checkbox" id="show-action-cards" name="showActionCards" checked>
+                                        <label for="show-action-cards">Show action required cards on dashboard</label>
+                                    </div>
+                                    <div class="checkbox-item">
+                                        <input type="checkbox" id="auto-refresh" name="autoRefresh" checked>
+                                        <label for="auto-refresh">Auto-refresh dashboard data</label>
+                                    </div>
+                                    <div class="checkbox-item">
+                                        <input type="checkbox" id="compact-view" name="compactView">
+                                        <label for="compact-view">Use compact view for tables</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                        
+                        <!-- Security Settings -->
+                        <section class="settings-section">
+                            <div class="section-header">
+                                <span class="section-icon">ðŸ”’</span>
+                                <div>
+                                    <h2 class="section-title">Security Settings</h2>
+                                    <p class="section-description">Manage your account security and access preferences</p>
+                                </div>
+                            </div>
+                            
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label class="form-label" for="session-timeout">Session Timeout</label>
+                                    <select id="session-timeout" name="sessionTimeout" class="form-select">
+                                        <option value="30">30 minutes</option>
+                                        <option value="60" selected>1 hour</option>
+                                        <option value="120">2 hours</option>
+                                        <option value="240">4 hours</option>
+                                        <option value="480">8 hours</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label class="form-label" for="password-change">Change Password</label>
+                                    <button type="button" id="change-password-btn" class="btn btn-secondary">
+                                        ðŸ”‘ Change Password
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label">Security Preferences</label>
+                                <div class="checkbox-group">
+                                    <div class="checkbox-item">
+                                        <input type="checkbox" id="remember-device" name="rememberDevice" checked>
+                                        <label for="remember-device">Remember this device</label>
+                                    </div>
+                                    <div class="checkbox-item">
+                                        <input type="checkbox" id="login-notifications" name="loginNotifications" checked>
+                                        <label for="login-notifications">Email notifications for new logins</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                        
+                        <!-- Data Management -->
+                        <section class="settings-section">
+                            <div class="section-header">
+                                <span class="section-icon">ðŸ’¾</span>
+                                <div>
+                                    <h2 class="section-title">Data Management</h2>
+                                    <p class="section-description">Export and backup your league data</p>
+                                </div>
+                            </div>
+                            
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label class="form-label">Export Data</label>
+                                    <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+                                        <button type="button" id="export-leagues" class="btn btn-secondary">
+                                            ðŸ“Š Export Leagues
+                                        </button>
+                                        <button type="button" id="export-fixtures" class="btn btn-secondary">
+                                            ðŸ“… Export Fixtures
+                                        </button>
+                                        <button type="button" id="export-teams" class="btn btn-secondary">
+                                            ðŸ‘¥ Export Teams
+                                        </button>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label class="form-label">Backup Settings</label>
+                                    <div class="checkbox-group">
+                                        <div class="checkbox-item">
+                                            <input type="checkbox" id="auto-backup" name="autoBackup" checked>
+                                            <label for="auto-backup">Enable automatic weekly backups</label>
+                                        </div>
+                                        <div class="checkbox-item">
+                                            <input type="checkbox" id="backup-notifications" name="backupNotifications">
+                                            <label for="backup-notifications">Notify when backups are created</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="warning-section">
+                                <p class="warning-text">
+                                    âš ï¸ Exported data includes sensitive information. Please handle with care and ensure compliance with data protection regulations.
+                                </p>
+                            </div>
+                        </section>
+                        
+                    </div>
+                    
+                    <!-- Settings Actions -->
+                    <div class="settings-actions">
+                        <button type="button" id="reset-defaults" class="btn btn-secondary">
+                            ðŸ”„ Reset to Defaults
+                        </button>
+                        <button type="button" id="save-settings" class="btn btn-primary">
+                            ðŸ’¾ Save Settings
+                        </button>
+                    </div>
+                    
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <!-- Load Dynamic Components -->
+    <script src="../../js/core/auth.js"></script>`n    <script src="../../js/core/session-manager.js"></script>
+    <!-- <script src="../../js/core/session-protection.js"></script> -->
+    <script src="../../js/components/league-manager-sidebar.js"></script>
+    <script src="../../js/components/league-manager-header.js"></script>
+    
+    <script>
+        // Venue Selector JavaScript Functions
+        let currentVenueId = null;
+        let currentVenueName = null;
+
+        // Data loaded from server based on user permissions`n        const mockVenues = [
+            { id: 'VEN001', name: 'Sports Arena West', address: '123 Athletic Avenue' },
+            { id: 'VEN002', name: 'Elite Sports Center', address: '456 Championship Drive' },
+            { id: 'VEN003', name: 'Premier League Complex', address: '789 Victory Boulevard' }
+        ];
+
+        function initializeVenueSelector() {
+            console.log('Initializing venue selector for settings page');
+            // Data loaded from server based on user permissions`n            const sortedVenues = mockVenues.sort((a, b) => a.name.localeCompare(b.name));
+            if (sortedVenues.length > 0) {
+                const firstVenue = sortedVenues[0];
+                selectVenue(firstVenue.id, firstVenue.name, firstVenue.address, null, false);
+            }
+        }
+
+        function toggleVenueDropdown() {
+            const dropdown = document.getElementById('venue-dropdown');
+            const btn = document.getElementById('venue-selector-btn');
+            const overlay = document.getElementById('venue-selector-overlay');
+            
+            console.log('Toggle clicked', dropdown, btn, overlay); // Debug log
+            
+            if (dropdown && dropdown.classList.contains('show')) {
+                console.log('Closing dropdown'); // Debug log
+                closeVenueDropdown();
+            } else {
+                console.log('Opening dropdown'); // Debug log
+                if (dropdown) dropdown.classList.add('show');
+                if (btn) btn.classList.add('active');
+                if (overlay) overlay.classList.add('show');
+            }
+        }
+
+        function closeVenueDropdown() {
+            const dropdown = document.getElementById('venue-dropdown');
+            const btn = document.getElementById('venue-selector-btn');
+            const overlay = document.getElementById('venue-selector-overlay');
+            
+            console.log('Closing dropdown function called'); // Debug log
+            
+            if (dropdown) dropdown.classList.remove('show');
+            if (btn) btn.classList.remove('active');
+            if (overlay) overlay.classList.remove('show');
+        }
+
+        function selectVenue(venueId, venueName, venueAddress, event, closeDropdown = true) {
+            // Prevent event bubbling to parent button
+            if (event) {
+                event.stopPropagation();
+                event.preventDefault();
+            }
+            
+            // Update selected venue
+            currentVenueId = venueId;
+            currentVenueName = venueName;
+            
+            // Update button text
+            document.getElementById('selected-venue-name').textContent = venueName;
+            
+            // Update option selection states
+            document.querySelectorAll('.venue-option').forEach(option => {
+                const checkmark = option.querySelector('.venue-option-check');
+                if (option.dataset.venueId === venueId) {
+                    option.classList.add('selected');
+                    checkmark.style.display = 'block';
+                } else {
+                    option.classList.remove('selected');
+                    checkmark.style.display = 'none';
+                }
+            });
+            
+            // Close dropdown if requested
+            if (closeDropdown) {
+                closeVenueDropdown();
+            }
+            
+            // Filter data based on selected venue
+            filterDataByVenue(venueId);
+            
+            console.log('Venue changed to:', venueName, '(ID:', venueId, ')');
+        }
+
+        function filterDataByVenue(venueId) {
+            // This function would filter the settings data based on selected venue
+            // Data loaded from server based on user permissions`n            console.log('Filtering settings data for venue:', venueId);
+            
+            // Example: Show/hide setting sections based on venue
+            // In a real implementation, this would filter venue-specific settings
+            console.log('Showing settings data for venue:', venueId);
+            
+            // You could update the settings form here to show only relevant data
+            // updateSettingsForm(venueId);
+        }
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(event) {
+            const dropdown = document.getElementById('venue-dropdown');
+            const btn = document.getElementById('venue-selector-btn');
+            const overlay = document.getElementById('venue-selector-overlay');
+            
+            if (dropdown && btn && overlay &&
+                !dropdown.contains(event.target) && 
+                !btn.contains(event.target) &&
+                !overlay.contains(event.target)) {
+                closeVenueDropdown();
+            }
+        });
+
+        // Settings page initialization
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize venue selector first
+            initializeVenueSelector();
+            
+            console.log('Settings page loaded');
+            
+            // Listen for sidebar load completion
+            document.addEventListener('sidebarLoaded', function(e) {
+                console.log('Dynamic sidebar loaded successfully:', e.detail);
+                
+                // Set active page for settings
+                if (window.leagueManagerSidebar) {
+                    setTimeout(() => {
+                        window.leagueManagerSidebar.setActive('settings');
+                        console.log('Settings set as active');
+                    }, 100);
+                }
+            });
+            
+            // Listen for header load completion
+            document.addEventListener('headerLoaded', function(e) {
+                console.log('Dynamic header loaded successfully:', e.detail);
+                
+                // Update header page title for settings
+                if (window.leagueManagerHeader) {
+                    setTimeout(() => {
+                        window.leagueManagerHeader.updatePageTitle('settings');
+                        console.log('Header title set to Settings');
+                    }, 100);
+                }
+            });
+            
+            // Initialize settings functionality
+            initializeSettings();
+        });
+        
+        function initializeSettings() {
+            // Load saved settings and user data
+            loadUserSettings();
+            loadUserData();
+            
+            // Set up event listeners
+            setupEventListeners();
+        }
+        
+        async function loadUserData() {
+            try {
+                // Get API base URL
+                const apiBase = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' 
+                    ? 'http://localhost:8002/api'
+                    : 'https://five-trackr-yq6ly.ondigitalocean.app/api';
+                
+                // First try to load from Python server API with JWT auth
+                try {
+                    const token = localStorage.getItem('auth_token');
+                    if (!token) {
+                        throw new Error('No authentication token found');
+                    }
+                    
+                    const response = await fetch(`${apiBase}/users/profile`, {
+                        method: 'GET',
+                        headers: {
+                            'Authorization': `Bearer ${token}`,
+                            'Content-Type': 'application/json'
+                        }
+                    });
+                    
+                    if (response.ok) {
+                        const result = await response.json();
+                        const user = result.user || result;
+                        if (user) {
+                            // Use current user data
+                            document.getElementById('full-name').value = user.full_name || user.fullName || user.name || '';
+                            document.getElementById('email').value = user.email || '';
+                            console.log('User data loaded from Python server');
+                            return;
+                        }
+                    }
+                } catch (apiError) {
+                    console.warn('Could not load from Python API, trying local session:', apiError);
+                }
+                
+                // Fallback: Get current user from auth system
+                if (typeof Auth !== 'undefined' && Auth.getCurrentUser) {
+                    const currentUser = Auth.getCurrentUser();
+                    if (currentUser) {
+                        // Use data from current session
+                        document.getElementById('full-name').value = currentUser.fullName || currentUser.name || '';
+                        document.getElementById('email').value = currentUser.email || '';
+                        console.log('User data loaded from local session');
+                        return;
+                    }
+                }
+                
+                // Final fallback: Try session check endpoint
+                const token = localStorage.getItem('auth_token');
+                if (token) {
+                    const sessionResponse = await fetch(`${apiBase}/auth/check-session`, {
+                        method: 'GET',
+                        headers: {
+                            'Authorization': `Bearer ${token}`,
+                            'Content-Type': 'application/json'
+                        }
+                    });
+                    
+                    if (sessionResponse.ok) {
+                        const sessionData = await sessionResponse.json();
+                        if (sessionData.success && sessionData.valid && sessionData.user) {
+                            document.getElementById('full-name').value = sessionData.user.full_name || sessionData.user.fullName || '';
+                            document.getElementById('email').value = sessionData.user.email || '';
+                            console.log('User data loaded from session check');
+                        }
+                    }
+                }
+            } catch (error) {
+                console.error('Error loading user data:', error);
+            }
+        }
+        
+        function loadUserSettings() {
+            // Load settings from localStorage or use defaults
+            const savedSettings = localStorage.getItem('leagueManagerSettings');
+            
+            if (savedSettings) {
+                try {
+                    const settings = JSON.parse(savedSettings);
+                    
+                    // Populate form fields with saved values
+                    Object.keys(settings).forEach(key => {
+                        const element = document.querySelector(`[name="${key}"]`);
+                        if (element) {
+                            if (element.type === 'checkbox') {
+                                element.checked = settings[key];
+                            } else {
+                                element.value = settings[key];
+                            }
+                        }
+                    });
+                    
+                    console.log('Settings loaded successfully');
+                } catch (error) {
+                    console.error('Error loading settings:', error);
+                }
+            }
+        }
+        
+        function setupEventListeners() {
+            // Save settings button
+            const saveButton = document.getElementById('save-settings');
+            if (saveButton) {
+                saveButton.addEventListener('click', saveSettings);
+            }
+            
+            // Save profile button (separate from settings)
+            const saveProfileBtn = document.getElementById('save-profile-btn');
+            if (saveProfileBtn) {
+                saveProfileBtn.addEventListener('click', saveUserProfile);
+            }
+            
+            // Reset defaults button
+            const resetButton = document.getElementById('reset-defaults');
+            if (resetButton) {
+                resetButton.addEventListener('click', resetToDefaults);
+            }
+            
+            // Change password button
+            const changePasswordBtn = document.getElementById('change-password-btn');
+            if (changePasswordBtn) {
+                changePasswordBtn.addEventListener('click', () => {
+                    alert('Password change functionality would be implemented here.');
+                });
+            }
+            
+            // Export buttons
+            document.getElementById('export-leagues')?.addEventListener('click', () => exportData('leagues'));
+            document.getElementById('export-fixtures')?.addEventListener('click', () => exportData('fixtures'));
+            document.getElementById('export-teams')?.addEventListener('click', () => exportData('teams'));
+            
+            // Theme preference change
+            const themeSelect = document.getElementById('theme-preference');
+            if (themeSelect) {
+                themeSelect.addEventListener('change', applyTheme);
+            }
+        }
+        
+        async function saveUserProfile() {
+            try {
+                const fullName = document.getElementById('full-name').value.trim();
+                const email = document.getElementById('email').value.trim();
+                
+                if (!fullName) {
+                    showMessage('error', 'Full name is required.');
+                    return;
+                }
+                
+                // Get current user ID
+                let userId = null;
+                if (typeof Auth !== 'undefined' && Auth.getCurrentUser) {
+                    const currentUser = Auth.getCurrentUser();
+                    userId = currentUser?.id || currentUser?.userId;
+                }
+                
+                if (!userId) {
+                    showMessage('error', 'User session not found. Please log in again.');
+                    return;
+                }
+                
+                // First, try to load the existing users from the live API to update the correct one
+                try {
+                    const response = await fetch('https://five-trackr-yq6ly.ondigitalocean.app/api/data/users', {
+                        method: 'GET',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    });
+                    
+                    if (response.ok) {
+                        const result = await response.json();
+                        const users = result.users || [];
+                        
+                        // Find and update the user
+                        const userIndex = users.findIndex(user => user.id === userId || user.email === email);
+                        
+                        if (userIndex !== -1) {
+                            // Update the user's full name
+                            users[userIndex].fullName = fullName;
+                            users[userIndex].name = fullName; // Update both fields
+                            
+                            // Send the updated users array back to the API
+                            const updateResponse = await fetch('https://five-trackr-yq6ly.ondigitalocean.app/api/data/users', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json'
+                                },
+                                body: JSON.stringify({ users: users })
+                            });
+                            
+                            if (updateResponse.ok) {
+                                // Update local auth session if available
+                                if (typeof Auth !== 'undefined' && Auth.getCurrentUser) {
+                                    const currentUser = Auth.getCurrentUser();
+                                    if (currentUser) {
+                                        currentUser.fullName = fullName;
+                                        currentUser.name = fullName;
+                                        // Save updated session
+                                        if (typeof Auth.saveSession === 'function') {
+                                            Auth.saveSession(currentUser);
+                                        }
+                                    }
+                                }
+                                
+                                showMessage('success', 'Profile updated successfully in live database!');
+                                console.log('Profile updated in live API');
+                            } else {
+                                throw new Error('Failed to save to live API');
+                            }
+                        } else {
+                            throw new Error('User not found in live database');
+                        }
+                    } else {
+                        throw new Error('Failed to fetch users from live API');
+                    }
+                } catch (liveApiError) {
+                    console.warn('Live API update failed, falling back to local:', liveApiError);
+                    
+                    // Fallback to local API
+                    const localResponse = await fetch('/api/admin/users', {
+                        method: 'PUT',
+                        credentials: 'include',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            id: userId,
+                            fullName: fullName,
+                            email: email
+                        })
+                    });
+                    
+                    if (localResponse.ok) {
+                        // Update local auth session
+                        if (typeof Auth !== 'undefined' && Auth.getCurrentUser) {
+                            const currentUser = Auth.getCurrentUser();
+                            if (currentUser) {
+                                currentUser.fullName = fullName;
+                                currentUser.name = fullName;
+                                if (typeof Auth.saveSession === 'function') {
+                                    Auth.saveSession(currentUser);
+                                }
+                            }
+                        }
+                        
+                        showMessage('success', 'Profile updated successfully in local database!');
+                        console.log('Profile updated in local API');
+                    } else {
+                        const errorData = await localResponse.json().catch(() => ({}));
+                        showMessage('error', errorData.message || 'Failed to update profile. Please try again.');
+                    }
+                }
+            } catch (error) {
+                console.error('Error updating profile:', error);
+                showMessage('error', 'Error updating profile. Please try again.');
+            }
+        }
+        
+        function saveSettings() {
+            try {
+                const form = document.getElementById('settings-form');
+                const formData = new FormData(form);
+                const settings = {};
+                
+                // Collect all form data
+                for (let [key, value] of formData.entries()) {
+                    settings[key] = value;
+                }
+                
+                // Handle checkboxes (unchecked checkboxes don't appear in FormData)
+                const checkboxes = form.querySelectorAll('input[type="checkbox"]');
+                checkboxes.forEach(checkbox => {
+                    settings[checkbox.name] = checkbox.checked;
+                });
+                
+                // Save to localStorage
+                localStorage.setItem('leagueManagerSettings', JSON.stringify(settings));
+                
+                // Show success message
+                showMessage('success', 'Settings saved successfully!');
+                
+                console.log('Settings saved:', settings);
+                
+            } catch (error) {
+                console.error('Error saving settings:', error);
+                showMessage('error', 'Error saving settings. Please try again.');
+            }
+        }
+        
+        function resetToDefaults() {
+            if (confirm('Are you sure you want to reset all settings to defaults? This action cannot be undone.')) {
+                // Clear saved settings
+                localStorage.removeItem('leagueManagerSettings');
+                
+                // Reset form to default values
+                const form = document.getElementById('settings-form');
+                form.reset();
+                
+                // Set specific defaults
+                document.getElementById('default-match-duration').value = '40';
+                document.getElementById('default-half-time').value = '5';
+                document.getElementById('default-max-teams').value = '10';
+                document.getElementById('default-players-per-team').value = '5';
+                document.getElementById('points-win').value = '3';
+                document.getElementById('points-draw').value = '1';
+                document.getElementById('points-loss').value = '0';
+                
+                showMessage('success', 'Settings reset to defaults successfully!');
+            }
+        }
+        
+        function exportData(type) {
+            // This would implement actual data export functionality
+            const timestamp = new Date().toISOString().slice(0, 10);
+            const filename = `5ive-trackr-${type}-${timestamp}.csv`;
+            
+            // Data loaded from server based on user permissions`n            console.log(`Exporting ${type} data to ${filename}`);
+            showMessage('success', `${type.charAt(0).toUpperCase() + type.slice(1)} data exported successfully!`);
+        }
+        
+        function applyTheme() {
+            const theme = document.getElementById('theme-preference').value;
+            
+            // Apply theme to body
+            document.body.classList.remove('light-theme', 'dark-theme');
+            
+            if (theme === 'dark') {
+                document.body.classList.add('dark-theme');
+            } else if (theme === 'light') {
+                document.body.classList.add('light-theme');
+            }
+            // 'auto' would use system preference
+            
+            console.log('Theme applied:', theme);
+        }
+        
+        function showMessage(type, message) {
+            const successEl = document.getElementById('success-message');
+            const errorEl = document.getElementById('error-message');
+            
+            // Hide both messages first
+            successEl.style.display = 'none';
+            errorEl.style.display = 'none';
+            
+            if (type === 'success') {
+                document.getElementById('success-text').textContent = message;
+                successEl.style.display = 'block';
+                setTimeout(() => {
+                    successEl.style.display = 'none';
+                }, 5000);
+            } else if (type === 'error') {
+                document.getElementById('error-text').textContent = message;
+                errorEl.style.display = 'block';
+                setTimeout(() => {
+                    errorEl.style.display = 'none';
+                }, 5000);
+            }
+            
+            // Scroll to top to show message
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>
+
+
+

@@ -1,0 +1,331 @@
+<!-- League Manager Dynamic Header Template -->
+<!-- This header will be used across all league manager role pages -->
+
+<style>
+/* League Manager Dynamic Header - Maximum Specificity Override */
+/* This template is completely independent from other CSS files */
+
+/* Global content area padding for consistent alignment */
+body[data-role="league-manager"] .content-area {
+    padding: 24px !important; /* Consistent padding for all league manager pages */
+}
+
+/* Header container styling with maximum specificity */
+body[data-role="league-manager"] .main-header,
+.main-header[data-loaded="league-manager"],
+.header.league-manager-header {
+    background-color: #ffffff !important;
+    border-radius: 0 0 12px 12px !important;
+    padding: 16px 24px !important;
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    width: calc(100% - 250px) !important;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1) !important;
+    position: fixed !important;
+    top: 0 !important;
+    left: 250px !important;
+    z-index: 999 !important;
+    height: 70px !important;
+    box-sizing: border-box !important;
+}
+
+/* Header left section - Page title */
+body[data-role="league-manager"] .main-header .header-left,
+.main-header[data-loaded="league-manager"] .header-left {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    flex: 1 !important;
+    height: 100% !important;
+    padding-left: 24px !important; /* Align with main content page titles */
+}
+
+body[data-role="league-manager"] .main-header .page-title,
+.main-header[data-loaded="league-manager"] .page-title {
+    font-size: 28px !important;
+    font-weight: 800 !important;
+    text-transform: uppercase !important;
+    color: #2e6417 !important;
+    margin: 0 !important;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Helvetica, Arial, Roboto, 'Noto Sans', sans-serif !important;
+    letter-spacing: 0.08em !important;
+    line-height: 1 !important;
+    display: flex !important;
+    align-items: center !important;
+    text-shadow: 0 1px 2px rgba(46, 100, 23, 0.1) !important;
+    background: linear-gradient(135deg, #2e6417 0%, #1e4009 100%) !important;
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+    background-clip: text !important;
+    position: relative !important;
+    margin-left: 0 !important; /* Ensure perfect alignment with content titles */
+}
+
+/* Header right section - User info and actions */
+body[data-role="league-manager"] .main-header .header-right,
+.main-header[data-loaded="league-manager"] .header-right {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-end !important;
+    gap: 16px !important;
+    height: 100% !important;
+}
+
+/* User info section */
+body[data-role="league-manager"] .main-header .user-info,
+.main-header[data-loaded="league-manager"] .user-info {
+    display: flex !important;
+    align-items: center !important;
+    gap: 12px !important;
+    padding: 8px 16px !important;
+    background-color: #f8f9fa !important;
+    border-radius: 8px !important;
+    border: 1px solid #e9ecef !important;
+    height: auto !important;
+}
+
+body[data-role="league-manager"] .main-header .user-avatar,
+.main-header[data-loaded="league-manager"] .user-avatar {
+    width: 32px !important;
+    height: 32px !important;
+    border-radius: 50% !important;
+    background-color: #2e6417 !important;
+    color: white !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    font-weight: 600 !important;
+    font-size: 14px !important;
+}
+
+body[data-role="league-manager"] .main-header .user-details,
+.main-header[data-loaded="league-manager"] .user-details {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: flex-start !important;
+}
+
+body[data-role="league-manager"] .main-header .user-name,
+.main-header[data-loaded="league-manager"] .user-name {
+    font-size: 14px !important;
+    font-weight: 600 !important;
+    color: #495057 !important;
+    margin: 0 !important;
+    line-height: 1.2 !important;
+}
+
+body[data-role="league-manager"] .main-header .user-role,
+.main-header[data-loaded="league-manager"] .user-role {
+    font-size: 12px !important;
+    color: #6c757d !important;
+    margin: 0 !important;
+    line-height: 1.2 !important;
+}
+
+/* Header actions */
+body[data-role="league-manager"] .main-header .header-actions,
+.main-header[data-loaded="league-manager"] .header-actions {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 8px !important;
+    height: 100% !important;
+}
+
+body[data-role="league-manager"] .main-header .header-btn,
+.main-header[data-loaded="league-manager"] .header-btn {
+    padding: 8px 12px !important;
+    background-color: #e9ecef !important;
+    border: 1px solid #ced4da !important;
+    border-radius: 6px !important;
+    text-decoration: none !important;
+    color: #495057 !important;
+    font-size: 13px !important;
+    font-weight: 500 !important;
+    transition: all 0.3s ease !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 6px !important;
+    height: auto !important;
+    line-height: 1 !important;
+}
+
+body[data-role="league-manager"] .main-header .header-btn:hover,
+.main-header[data-loaded="league-manager"] .header-btn:hover {
+    background-color: #dee2e6 !important;
+    color: #2e6417 !important;
+    border-color: #2e6417 !important;
+}
+
+body[data-role="league-manager"] .main-header .btn-icon,
+.main-header[data-loaded="league-manager"] .btn-icon {
+    font-size: 14px !important;
+}
+</style>
+
+<!-- Header Content -->
+<div class="header-left">
+    <h1 class="page-title" data-page-title>Dashboard</h1>
+</div>
+
+<div class="header-right">
+    <!-- User Info Section -->
+    <div class="user-info">
+        <div class="user-avatar" data-user-initials>--</div>
+        <div class="user-details">
+            <div class="user-name" data-user-name>Loading...</div>
+            <div class="user-role" data-user-role>Loading...</div>
+        </div>
+    </div>
+
+    <!-- Header Actions -->
+    <div class="header-actions">
+        <a href="notifications.html" class="header-btn">
+            <span class="btn-icon">🔔</span>
+            <span class="btn-text">Notifications</span>
+        </a>
+    </div>
+</div>
+
+<script>
+// League Manager Header Dynamic User Data Loading
+(function() {
+    'use strict';
+    
+    // Load user data and update header
+    async function loadUserData() {
+        try {
+            // Check if UserDataManager is available
+            if (typeof window.UserDataManager !== 'undefined') {
+                const userData = await window.UserDataManager.load();
+                if (userData && userData.currentUser) {
+                    updateUserDisplay(userData.currentUser);
+                    return;
+                }
+            }
+            
+            // Fallback: Try to load from localStorage
+            const currentUser = localStorage.getItem('currentUser');
+            if (currentUser) {
+                const user = JSON.parse(currentUser);
+                updateUserDisplay(user);
+                return;
+            }
+            
+            // Final fallback: Use session data or default
+            const sessionData = localStorage.getItem('sessionData');
+            if (sessionData) {
+                const session = JSON.parse(sessionData);
+                if (session.user) {
+                    updateUserDisplay(session.user);
+                    return;
+                }
+            }
+            
+            // Default fallback data
+            updateUserDisplay({
+                name: 'League Manager',
+                role: 'Administrator',
+                initials: 'LM'
+            });
+            
+        } catch (error) {
+            console.error('Error loading user data:', error);
+            // Use default data on error
+            updateUserDisplay({
+                name: 'League Manager',
+                role: 'Administrator', 
+                initials: 'LM'
+            });
+        }
+    }
+    
+    // Update user display elements
+    function updateUserDisplay(user) {
+        // Update user name
+        const userNameElements = document.querySelectorAll('[data-user-name]');
+        userNameElements.forEach(element => {
+            element.textContent = user.name || user.username || 'League Manager';
+        });
+        
+        // Update user role
+        const userRoleElements = document.querySelectorAll('[data-user-role]');
+        userRoleElements.forEach(element => {
+            element.textContent = user.role || 'Administrator';
+        });
+        
+        // Update user initials
+        const userInitialsElements = document.querySelectorAll('[data-user-initials]');
+        userInitialsElements.forEach(element => {
+            const initials = user.initials || generateInitials(user.name || user.username || 'League Manager');
+            element.textContent = initials;
+        });
+    }
+    
+    // Generate initials from name
+    function generateInitials(name) {
+        if (!name) return 'LM';
+        
+        const nameParts = name.trim().split(' ');
+        if (nameParts.length === 1) {
+            return nameParts[0].substring(0, 2).toUpperCase();
+        } else {
+            return (nameParts[0].charAt(0) + nameParts[nameParts.length - 1].charAt(0)).toUpperCase();
+        }
+    }
+    
+    // Update page title if data-page-title attribute exists
+    function updatePageTitle() {
+        const pageTitleElement = document.querySelector('[data-page-title]');
+        if (pageTitleElement) {
+            // Get the current page name from the URL or document title
+            const currentPage = getCurrentPageName();
+            if (currentPage) {
+                pageTitleElement.textContent = currentPage;
+            }
+        }
+    }
+    
+    // Get current page name from URL
+    function getCurrentPageName() {
+        const path = window.location.pathname;
+        const filename = path.split('/').pop();
+        const pageName = filename.replace('.html', '');
+        
+        // Convert filename to display name
+        const pageNames = {
+            'dashboard': 'DASHBOARD',
+            'teams': 'TEAMS',
+            'leagues': 'LEAGUES',
+            'divisions': 'DIVISIONS',
+            'fixtures': 'FIXTURES',
+            'referees': 'REFEREES',
+            'pitches': 'PITCHES',
+            'team-payments': 'TEAM PAYMENTS',
+            'settings': 'SETTINGS'
+        };
+        
+        return pageNames[pageName] || pageName.toUpperCase();
+    }
+    
+    // Initialize when DOM is ready
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', function() {
+            loadUserData();
+            updatePageTitle();
+        });
+    } else {
+        loadUserData();
+        updatePageTitle();
+    }
+    
+    // Also load data when this script runs (for dynamic template loading)
+    setTimeout(() => {
+        loadUserData();
+        updatePageTitle();
+    }, 100);
+    
+})();
+</script>

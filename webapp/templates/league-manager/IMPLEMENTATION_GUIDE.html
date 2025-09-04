@@ -1,0 +1,42 @@
+<!-- 
+EXAMPLE: How to implement the dynamic header template in any league manager page
+
+1. Add the header container in your HTML:
+-->
+<header class="main-header" id="header-container">
+    <!-- Template content will be loaded here automatically -->
+</header>
+
+<!-- 
+2. Include the header template loader script:
+-->
+<script src="../../js/components/header-template-loader.js"></script>
+
+<!-- 
+3. Listen for the template to load and initialize your page:
+-->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Listen for header template to be loaded
+    document.addEventListener('headerTemplateLoaded', function() {
+        console.log('Header template loaded, page ready');
+        
+        // Your page-specific initialization here
+        // Example: Set active navigation, update content, etc.
+    });
+});
+</script>
+
+<!-- 
+BENEFITS:
+- Any changes to header-template.html automatically update ALL pages
+- No need to manually update each page when template changes
+- Consistent header across all league manager pages
+- Easy to maintain and extend
+
+AUTOMATIC FEATURES:
+- Page title automatically detected and set
+- User data automatically loaded and displayed
+- All header functionality included
+- Fallback content if template fails to load
+-->

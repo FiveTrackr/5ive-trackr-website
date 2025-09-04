@@ -1,0 +1,370 @@
+<!-- League Manager Dynamic Sidebar Template -->
+<!-- Starting fresh - will build step by step -->
+
+<style>
+/* League Manager Dynamic Sidebar - Maximum Specificity Override */
+/* This template is completely independent from dashboard-master.css */
+
+/* Gray sidebar color scheme with maximum specificity */
+body[data-role="league-manager"] aside.sidebar,
+aside.sidebar[data-loaded="league-manager"],
+.sidebar.league-manager-sidebar {
+    background-color: #f8f9fa !important;
+    border-right: 1px solid #dee2e6 !important;
+    color: #495057 !important;
+    transition: all 0.3s ease !important;
+    /* Isolation parameters */
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 250px !important;
+    height: 100vh !important;
+    z-index: 1000 !important;
+    overflow-x: hidden !important;
+    overflow-y: auto !important;
+    display: flex !important;
+    flex-direction: column !important;
+    contain: layout style paint !important;
+    isolation: isolate !important;
+    box-sizing: border-box !important;
+}
+
+/* Centered logo styling with maximum specificity */
+body[data-role="league-manager"] .sidebar .sidebar-header,
+.sidebar[data-loaded="league-manager"] .sidebar-header,
+.sidebar .sidebar-header.league-manager-header {
+    background-color: #e9ecef !important;
+    padding: 14px 20px !important;
+    text-align: center !important;
+    border-bottom: 1px solid #dee2e6 !important;
+    position: relative !important;
+    z-index: 49 !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    width: 100% !important;
+}
+
+body[data-role="league-manager"] .sidebar .logo-container,
+.sidebar[data-loaded="league-manager"] .logo-container {
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    width: 100% !important;
+    text-align: center !important;
+}
+
+body[data-role="league-manager"] .sidebar .logo,
+.sidebar[data-loaded="league-manager"] .logo {
+    max-width: 96px !important;
+    width: 96px !important;
+    height: auto !important;
+    display: block !important;
+    margin: 0 auto !important;
+}
+
+/* Navigation menu styling with maximum specificity */
+body[data-role="league-manager"] .sidebar .sidebar-nav,
+.sidebar[data-loaded="league-manager"] .sidebar-nav {
+    padding: 20px 0 !important;
+    background-color: #e9ecef !important;
+    flex: 1 !important;
+}
+
+body[data-role="league-manager"] .sidebar .nav-menu,
+.sidebar[data-loaded="league-manager"] .nav-menu {
+    list-style: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+body[data-role="league-manager"] .sidebar .nav-item,
+.sidebar[data-loaded="league-manager"] .nav-item {
+    margin: 0 !important;
+}
+
+body[data-role="league-manager"] .sidebar .nav-link,
+.sidebar[data-loaded="league-manager"] .nav-link {
+    display: flex !important;
+    align-items: center !important;
+    padding: 14px 20px !important;
+    color: #495057 !important;
+    text-decoration: none !important;
+    transition: all 0.3s ease !important;
+    border-left: 3px solid transparent !important;
+    position: relative !important;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Helvetica, Arial, Tahoma, Geneva, Verdana, sans-serif !important;
+    font-size: 15px !important;
+    font-weight: 500 !important;
+    letter-spacing: 0.02em !important;
+    margin: 2px 8px !important;
+    border-radius: 8px !important;
+}
+
+body[data-role="league-manager"] .sidebar .nav-link:hover,
+.sidebar[data-loaded="league-manager"] .nav-link:hover {
+    background-color: #e9ecef !important;
+    color: #2e6417 !important;
+    border-left-color: #2e6417 !important;
+    font-weight: bold !important;
+    border-radius: 8px !important;
+}
+
+body[data-role="league-manager"] .sidebar .nav-item.active .nav-link,
+.sidebar[data-loaded="league-manager"] .nav-item.active .nav-link {
+    background-color: #2e6417 !important;
+    color: white !important;
+    border-left-color: #2e6417 !important;
+    font-weight: 600 !important;
+    border-radius: 8px !important;
+    margin: 2px 8px !important;
+    padding: 12px 16px !important;
+}
+
+body[data-role="league-manager"] .sidebar .nav-icon,
+.sidebar[data-loaded="league-manager"] .nav-icon {
+    margin-right: 12px !important;
+    font-size: 18px !important;
+    width: 20px !important;
+    height: 20px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    flex-shrink: 0 !important;
+}
+
+body[data-role="league-manager"] .sidebar .nav-icon img,
+.sidebar[data-loaded="league-manager"] .nav-icon img {
+    display: none !important;
+}
+
+/* Specific styling for referee icon */
+body[data-role="league-manager"] .sidebar .nav-icon[data-icon="referee"],
+.sidebar[data-loaded="league-manager"] .nav-icon[data-icon="referee"] {
+    background-image: url('/webapp/img/referee-icon.svg') !important;
+    background-size: 18px 18px !important;
+    background-repeat: no-repeat !important;
+    background-position: center !important;
+}
+
+/* Specific styling for shirt icon */
+body[data-role="league-manager"] .sidebar .nav-icon[data-icon="shirt"],
+.sidebar[data-loaded="league-manager"] .nav-icon[data-icon="shirt"] {
+    background-image: url('/webapp/img/shirt-icon.svg') !important;
+    background-size: 18px 18px !important;
+    background-repeat: no-repeat !important;
+    background-position: center !important;
+}
+
+body[data-role="league-manager"] .sidebar .nav-item.active .nav-icon img,
+.sidebar[data-loaded="league-manager"] .nav-item.active .nav-icon img {
+    filter: opacity(1) !important;
+}
+
+body[data-role="league-manager"] .sidebar .link-text,
+.sidebar[data-loaded="league-manager"] .link-text {
+    font-size: 15px !important;
+    font-weight: 500 !important;
+    letter-spacing: 0.02em !important;
+    color: inherit !important;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Helvetica, Arial, Tahoma, Geneva, Verdana, sans-serif !important;
+}
+
+body[data-role="league-manager"] .sidebar .nav-item.active .link-text,
+.sidebar[data-loaded="league-manager"] .nav-item.active .link-text {
+    font-weight: 600 !important;
+}
+
+/* Sidebar Footer Styling */
+body[data-role="league-manager"] .sidebar .sidebar-footer,
+.sidebar[data-loaded="league-manager"] .sidebar-footer {
+    margin-top: auto !important;
+    background-color: #dee2e6 !important;
+    border-top: 1px solid #ced4da !important;
+    padding: 16px !important;
+    color: #495057 !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+}
+
+body[data-role="league-manager"] .sidebar .footer-section,
+.sidebar[data-loaded="league-manager"] .footer-section {
+    margin: 0 !important;
+}
+
+/* Footer Actions */
+body[data-role="league-manager"] .sidebar .footer-actions,
+.sidebar[data-loaded="league-manager"] .footer-actions {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    gap: 8px !important;
+}
+
+body[data-role="league-manager"] .sidebar .footer-link,
+.sidebar[data-loaded="league-manager"] .footer-link {
+    display: flex !important;
+    align-items: center !important;
+    padding: 8px 12px !important;
+    background-color: #f8f9fa !important;
+    border-radius: 6px !important;
+    text-decoration: none !important;
+    color: #495057 !important;
+    justify-content: center !important;
+    transition: all 0.3s ease !important;
+    font-size: 13px !important;
+    width: 120px !important;
+}
+
+body[data-role="league-manager"] .sidebar .footer-link:hover,
+.sidebar[data-loaded="league-manager"] .footer-link:hover {
+    background-color: #e9ecef !important;
+    color: #2e6417 !important;
+}
+
+body[data-role="league-manager"] .sidebar .footer-icon,
+.sidebar[data-loaded="league-manager"] .footer-icon {
+    margin-right: 6px !important;
+    font-size: 14px !important;
+}
+
+body[data-role="league-manager"] .sidebar .footer-text,
+.sidebar[data-loaded="league-manager"] .footer-text {
+    font-weight: 500 !important;
+}
+
+/* Page layout isolation - ensure main content respects sidebar space and header */
+body[data-role="league-manager"] {
+    margin-left: 250px !important;
+    padding-top: 70px !important;
+    min-height: 100vh !important;
+    box-sizing: border-box !important;
+}
+
+body[data-role="league-manager"] .main-content,
+body[data-role="league-manager"] main,
+body[data-role="league-manager"] .content-area {
+    margin-left: 0 !important;
+    padding-left: 20px !important;
+    padding-top: 20px !important;
+    width: calc(100vw - 250px) !important;
+    box-sizing: border-box !important;
+    min-height: 100vh !important;
+}
+
+body[data-role="league-manager"] .main-header,
+body[data-role="league-manager"] header[class*="header"] {
+    margin-left: 0 !important;
+    width: calc(100vw - 250px) !important;
+    position: fixed !important;
+    top: 0 !important;
+    left: 250px !important;
+    z-index: 999 !important;
+    box-sizing: border-box !important;
+}
+
+/* Prevent sidebar content from being affected by external styles */
+body[data-role="league-manager"] .sidebar *,
+.sidebar[data-loaded="league-manager"] * {
+    box-sizing: border-box !important;
+    position: relative !important;
+}
+
+body[data-role="league-manager"] .sidebar,
+.sidebar[data-loaded="league-manager"] {
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Helvetica, Arial, Tahoma, Geneva, Verdana, sans-serif !important;
+    line-height: 1.5 !important;
+}
+
+/* Ensure no external content can interfere with sidebar */
+body[data-role="league-manager"] .sidebar::before,
+body[data-role="league-manager"] .sidebar::after,
+.sidebar[data-loaded="league-manager"]::before,
+.sidebar[data-loaded="league-manager"]::after {
+    content: none !important;
+    display: none !important;
+}
+</style>
+
+<!-- Sidebar Header -->
+<div class="sidebar-header">
+    <div class="logo-container">
+        <img src="/img/header-logo.svg" alt="5ive Trackr" class="logo">
+    </div>
+</div>
+
+<!-- Navigation Menu -->
+<nav class="sidebar-nav">
+    <ul class="nav-menu">
+        <li class="nav-item" data-page="dashboard">
+            <a href="dashboard.html" class="nav-link">
+                <span class="nav-icon">📊</span>
+                <span class="link-text">Dashboard</span>
+            </a>
+        </li>
+        
+        <li class="nav-item" data-page="fixtures">
+            <a href="fixtures.html" class="nav-link">
+                <span class="nav-icon">📅</span>
+                <span class="link-text">Fixtures</span>
+            </a>
+        </li>
+        
+        <li class="nav-item" data-page="referees">
+            <a href="referees.html" class="nav-link">
+                <span class="nav-icon" data-icon="referee"></span>
+                <span class="link-text">Referees</span>
+            </a>
+        </li>
+        
+        <li class="nav-item" data-page="divisions">
+            <a href="divisions.html" class="nav-link">
+                <span class="nav-icon">📋</span>
+                <span class="link-text">Divisions</span>
+            </a>
+        </li>
+        
+        <li class="nav-item" data-page="leagues">
+            <a href="leagues.html" class="nav-link">
+                <span class="nav-icon">🏆</span>
+                <span class="link-text">Leagues</span>
+            </a>
+        </li>
+        
+        <li class="nav-item" data-page="teams">
+            <a href="teams.html" class="nav-link">
+                <span class="nav-icon" data-icon="shirt"></span>
+                <span class="link-text">Teams</span>
+            </a>
+        </li>
+        
+        <li class="nav-item" data-page="pitches">
+            <a href="pitches.html" class="nav-link">
+                <span class="nav-icon">🥅</span>
+                <span class="link-text">Pitches</span>
+            </a>
+        </li>
+        
+        <li class="nav-item" data-page="payments">
+            <a href="team-payments.html" class="nav-link">
+                <span class="nav-icon">💳</span>
+                <span class="link-text">Team Payments</span>
+            </a>
+        </li>
+    </ul>
+</nav>
+
+<!-- Sidebar Footer -->
+<div class="sidebar-footer">
+    <div class="footer-section footer-actions">
+        <a href="settings.html" class="footer-link">
+            <span class="footer-icon">⚙️</span>
+            <span class="footer-text">Settings</span>
+        </a>
+        <a href="#" class="footer-link" onclick="handleLogout(event)">
+            <span class="footer-icon">🚪</span>
+            <span class="footer-text">Logout</span>
+        </a>
+    </div>
+</div>

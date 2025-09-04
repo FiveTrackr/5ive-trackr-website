@@ -1,0 +1,85 @@
+{
+  "user-005": {
+    "pitches": {
+      "data": [
+        {
+          "id": "pitch-001",
+          "name": "Main Stadium Pitch",
+          "status": "available",
+          "pitchSize": "5-a-side",
+          "capacity": "500 spectators",
+          "kickOffTimes": [
+            "09:00",
+            "11:00",
+            "13:00",
+            "15:00",
+            "17:00",
+            "19:00"
+          ],
+          "availability": {
+            "monday": true,
+            "tuesday": true,
+            "wednesday": true,
+            "thursday": true,
+            "friday": true,
+            "saturday": true,
+            "sunday": true
+          },
+          "lighting": true,
+          "drainage": "Excellent"
+        },
+        {
+          "id": "pitch-002",
+          "name": "Training Ground A",
+          "status": "available",
+          "pitchSize": "6-a-side",
+          "capacity": "200 spectators",
+          "kickOffTimes": [
+            "08:00",
+            "10:00",
+            "12:00",
+            "14:00",
+            "16:00",
+            "18:00"
+          ],
+          "availability": {
+            "monday": true,
+            "tuesday": true,
+            "wednesday": false,
+            "thursday": true,
+            "friday": true,
+            "saturday": true,
+            "sunday": false
+          },
+          "lighting": true,
+          "drainage": "Good"
+        },
+        {
+          "id": "pitch-003",
+          "name": "Community Pitch",
+          "status": "maintenance",
+          "pitchSize": "7-a-side",
+          "capacity": "100 spectators",
+          "kickOffTimes": [
+            "10:00",
+            "14:00",
+            "16:00"
+          ],
+          "availability": {
+            "monday": false,
+            "tuesday": false,
+            "wednesday": false,
+            "thursday": false,
+            "friday": false,
+            "saturday": true,
+            "sunday": true
+          },
+          "lighting": false,
+          "drainage": "Fair"
+        }
+      ],
+      "lastModified": "2025-07-27T12:49:04.587Z",
+      "version": 507
+    }
+  }
+}

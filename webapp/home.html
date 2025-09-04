@@ -1,0 +1,381 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>5ive Trackr</title>
+    <!-- 5ive Trackr - Proprietary Software - Unauthorized use prohibited -->
+    <meta name="author" content="5ive Trackr">
+    <meta name="copyright" content=" 2025 5ive Trackr. All rights reserved.">
+    <meta name="robots" content="noarchive, noimageindex">
+    
+    <!-- Mobile Detection & Redirect - Load First -->
+    <script src="js/mobile-redirect-config.js?v=20250807001"></script>
+    <script src="js/mobile-redirect.js?v=20250807001"></script>
+    
+    <!-- Security headers -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; font-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; connect-src 'self' https://five-trackr-yq6ly.ondigitalocean.app http://localhost:8002;">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <!-- Web App Manifest -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#4CAF50">
+    <!-- Prevent copying -->
+    <!--
+    <style>
+        body {
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+    </style>
+    -->
+    <!-- Custom fonts (original implementation) -->
+    <link rel="stylesheet" href="css/fonts.css">
+    <link rel="stylesheet" href="css/icons.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/subscription.css">
+    
+    <!-- Layout Adjustments for Simplified Login -->
+    <style>
+        /* Logo positioning - between top of page and login modal */
+        .app-logo {
+            position: fixed;
+            top: 15vh;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 100;
+        }
+        
+        /* Center the simple login button */
+        .simple-login-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 50;
+        }
+        
+        /* Style for the main login button */
+        .login-btn.primary {
+            padding: 15px 40px;
+            font-size: 18px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            transition: all 0.3s ease;
+        }
+        
+        .login-btn.primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(0,0,0,0.2);
+        }
+        
+        /* Login modal adjustments */
+        .login-modal {
+            max-width: 320px;
+            margin-top: 20vh;
+            width: 90%;
+        }
+        
+        /* Override login form styles for modal */
+        .login-modal .login-form {
+            position: static !important;
+            transform: none !important;
+            opacity: 1 !important;
+            visibility: visible !important;
+            display: flex !important;
+            pointer-events: auto !important;
+            background: transparent !important;
+            box-shadow: none !important;
+            padding: 0 !important;
+            min-width: auto !important;
+            max-width: none !important;
+            transition: none !important;
+            gap: 1rem;
+        }
+        
+        /* Modal overlay styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(4px);
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            z-index: 1000;
+            animation: fadeIn 0.3s ease-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        @keyframes slideIn {
+            from { 
+                opacity: 0;
+                transform: translateY(-20px) scale(0.95);
+            }
+            to { 
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+        
+        .modal-content {
+            background: var(--bg-card, white);
+            border-radius: var(--radius-lg, 12px);
+            padding: 1.75rem;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15), 0 5px 20px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            animation: slideIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        
+        /* Enhanced form field styling */
+        .login-modal .form-field {
+            margin-bottom: 1rem;
+        }
+        
+        .login-modal .form-field label {
+            display: block;
+            margin-bottom: 0.375rem;
+            font-weight: 600;
+            color: var(--text-color, #1e293b);
+            font-size: 0.875rem;
+            letter-spacing: 0.025em;
+        }
+        
+        .login-modal .form-field input {
+            width: 100%;
+            padding: 0.75rem 0.875rem;
+            border: 2px solid #e2e8f0;
+            border-radius: var(--radius-md, 8px);
+            font-size: 1rem;
+            transition: all 0.2s ease;
+            background: white;
+            box-sizing: border-box;
+        }
+        
+        .login-modal .form-field input:focus {
+            outline: none;
+            border-color: var(--primary-color, #2563eb);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+            background: #fafbfc;
+        }
+        
+        .login-modal .form-field input::placeholder {
+            color: #94a3b8;
+        }
+        
+        /* Professional button styling */
+        .login-modal .login-btn {
+            padding: 0.75rem 1.25rem;
+            border-radius: var(--radius-md, 8px);
+            font-weight: 600;
+            font-size: 0.9rem;
+            letter-spacing: 0.025em;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 42px;
+        }
+        
+        .login-modal .login-btn.submit {
+            background: var(--primary-color, #2563eb);
+            color: white;
+            width: 100%;
+            margin-bottom: 0.25rem;
+        }
+        
+        .login-modal .login-btn.submit:hover {
+            background: var(--primary-hover, #1d4ed8);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+        }
+        
+        .login-modal .login-btn.cancel {
+            background: transparent;
+            color: var(--text-light, #64748b);
+            border: 1px solid #e2e8f0;
+            width: 100%;
+        }
+        
+        .login-modal .login-btn.cancel:hover {
+            background: #f8fafc;
+            border-color: #cbd5e1;
+            color: var(--text-color, #1e293b);
+        }
+        
+        /* Error message styling - matches form field width exactly */
+        .login-modal .form-error {
+            background: #fef2f2;
+            border: 1px solid #fecaca;
+            color: #dc2626;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 13px;
+            margin-top: 8px;
+            margin-bottom: 0;
+            display: none;
+            width: 100%;
+            box-sizing: border-box;
+            word-wrap: break-word;
+        }
+        
+        /* Mobile responsiveness */
+        @media (max-width: 480px) {
+            .modal-content {
+                margin: 1rem;
+                padding: 1.5rem;
+                width: calc(100% - 2rem);
+                max-width: none;
+            }
+            
+            .login-modal {
+                margin-top: 10vh;
+                max-width: none;
+                width: 100%;
+            }
+        }
+        
+        /* Ensure development notice stays at bottom */
+        .development-notice {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            text-align: center;
+            z-index: 10;
+        }
+    </style>
+    
+    <!-- Script Loading Monitor -->
+    <!-- <script src="js/core/script-monitor.js"></script> -->
+    
+    <!-- Core Authentication System (Stage 1 Implementation) -->
+    <script src="js/core/session-manager.js"></script>
+    <script src="js/core/auth.js?v=2"></script>
+    
+    <!-- Shared API Configuration -->
+    <script src="/shared-api-config.js"></script>
+    
+    <!-- Data Management Systems -->
+    <script src="js/core/universal-data-manager.js?v=20250805"></script>
+    <script src="js/core/user-data-manager.js"></script>
+    <script src="js/core/file-data-manager.js"></script>
+</head>
+<body>
+    <!-- 5ive Trackr Application - Version 1.0.0 -->
+    <header></header>
+    <main>
+        <div class="app-container">
+            <div class="app-logo centered-title">
+                <img src="img/5ive-trackr-plain.svg" alt="5ive Trackr" class="logo-svg">
+            </div>
+            
+            <div class="login-section">
+                <div class="simple-login-container">
+                    <button class="login-btn primary" id="main-login-btn">Login</button>
+                </div>
+            </div>
+            
+        </div>
+        
+        <div class="development-notice">
+            <p>5ive Trackr - Proprietary Software v1.0.0</p>
+            <p>© 2025 5ive Trackr. All rights reserved. Unauthorized use prohibited.</p>
+            <p id="current-date"></p>
+        </div>
+        
+        <!-- Login Modal -->
+        <div id="loginModal" class="modal-overlay" style="display: none;">
+            <div class="modal-content login-modal">
+                <form id="loginForm" class="login-form">
+                    <div class="form-fields">
+                        <div class="form-field">
+                            <label for="email">Email</label>
+                            <input type="email" id="email" name="email" placeholder="Enter your email" required autocomplete="email" />
+                        </div>
+                        <div class="form-field">
+                            <label for="password">Password</label>
+                            <input type="password" id="password" name="password" placeholder="Enter your password" required autocomplete="current-password" />
+                        </div>
+                        <div class="form-error" id="loginError" style="display: none;"></div>
+                    </div>
+                    <button type="submit" id="loginButton" class="login-btn submit">Login</button>
+                    <button type="button" class="login-btn cancel" id="cancel-login-btn">Cancel</button>
+                </form>
+            </div>
+        </div>
+        
+        <!-- Custom Notification System -->
+        <div class="notification-container">
+            <!-- Success Notification -->
+            <div class="notification success">
+                <div class="notification-icon">
+                    <img src="img/success-icon.svg" alt="Success">
+                </div>
+                <div class="notification-content">
+                    <h3>Success</h3>
+                    <p>Operation completed successfully.</p>
+                </div>
+                <button class="notification-close">&times;</button>
+            </div>
+            
+            <!-- Error Notification -->
+            <div class="notification error">
+                <div class="notification-icon">
+                    <img src="img/error-icon.svg" alt="Error">
+                </div>
+                <div class="notification-content">
+                    <h3>Error</h3>
+                    <p>Something went wrong.</p>
+                </div>
+                <button class="notification-close">&times;</button>
+            </div>
+        </div>
+        
+        <!-- Session Warning Modal -->
+        <div id="sessionWarningModal" class="modal-overlay" style="display: none;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>Session Already Active</h3>
+                </div>
+                <div class="modal-body">
+                    <p>Someone is already logged in from another session:</p>
+                    <p><strong id="existingUserName"></strong></p>
+                    <p>Would you like to force logout the existing session and login?</p>
+                </div>
+                <div class="modal-footer">
+                    <button id="forceLoginBtn" class="login-btn submit">Force Login</button>
+                    <button id="cancelLoginBtn" class="login-btn cancel">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <!-- Application Core -->
+    <script src="js/modules/app.js"></script>
+    <script src="js/modules/login.js?v=3"></script>
+    
+    <!-- Data Management Core -->
+    <script src="js/core/data-manager.js"></script>
+    
+    <!-- Security & Protection (original implementations only) -->
+    <!-- <script src="js/core/integrity.js"></script> -->
+    <!-- <script src="js/modules/obfuscation.js"></script> -->
+    <!-- <script src="js/security/anti-debug.js"></script> -->
+</body>
+</html>

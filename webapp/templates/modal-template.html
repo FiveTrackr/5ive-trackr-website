@@ -1,0 +1,403 @@
+<!-- 5ive Trackr Standardized Modal Template -->
+<!-- Copy this template for all new modals to ensure consistent styling and behavior -->
+
+<!-- Modal Overlay - Replace MODAL_ID with unique identifier -->
+<div class="modal-overlay" id="MODAL_ID">
+    <div class="standard-modal">
+        <!-- Modal Header with Green Gradient (consistent across app) -->
+        <div class="modal-header">
+            <h2 class="modal-title">MODAL_TITLE</h2>
+            <button class="modal-close" onclick="closeModal('MODAL_ID')">&times;</button>
+        </div>
+        
+        <!-- Modal Body - Scrollable Content Area -->
+        <div class="modal-body">
+            <!-- REPLACE THIS SECTION with your specific modal content -->
+            <!-- Examples of common content patterns: -->
+            
+            <!-- Form Section Example -->
+            <div class="form-section">
+                <h3 class="section-header">Section Title</h3>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label class="form-label" for="field-id">Field Label</label>
+                        <input type="text" id="field-id" class="form-input" placeholder="Enter value" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="field-id-2">Field Label 2</label>
+                        <input type="text" id="field-id-2" class="form-input" placeholder="Enter value" required>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Side-by-side fields (following UI/UX standards) -->
+            <div class="form-section">
+                <h3 class="section-header">Size & Status</h3>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label" for="size-field">Size</label>
+                        <select id="size-field" class="form-input">
+                            <option value="">Select size</option>
+                            <option value="small">Small</option>
+                            <option value="medium">Medium</option>
+                            <option value="large">Large</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="status-field">Status</label>
+                        <select id="status-field" class="form-input">
+                            <option value="">Select status</option>
+                            <option value="active">Active</option>
+                            <option value="inactive">Inactive</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- END REPLACEABLE CONTENT -->
+        </div>
+        
+        <!-- Modal Footer with Standard Button Layout -->
+        <div class="modal-footer">
+            <!-- Optional: Delete button (far left) -->
+            <button type="button" class="btn btn-delete" onclick="handleDelete()" style="display: none;">Delete Item</button>
+            
+            <!-- Standard Cancel and Submit buttons (right aligned) -->
+            <button type="button" class="btn btn-outline" onclick="closeModal('MODAL_ID')">Cancel</button>
+            <button type="button" class="btn btn-primary" onclick="handleSubmit()">Save Changes</button>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Template CSS - Add this to your page or include in main CSS -->
+<style>
+/* Standardized Modal Styles - Based on correctly styled venue modal */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 10000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    animation: fadeIn 0.2s ease-out;
+}
+
+.modal-overlay.active {
+    display: flex;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.standard-modal {
+    background: white;
+    border-radius: 16px;
+    width: 90%;
+    max-width: 600px;
+    max-height: 90vh;
+    overflow: hidden; /* Prevents corner issues */
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+    animation: slideIn 0.3s ease-out;
+    display: flex;
+    flex-direction: column;
+}
+
+@keyframes slideIn {
+    from { 
+        transform: translateY(-20px) scale(0.95);
+        opacity: 0;
+    }
+    to { 
+        transform: translateY(0) scale(1);
+        opacity: 1;
+    }
+}
+
+/* Modal Header - Green gradient consistent with UI standards */
+.modal-header {
+    background: linear-gradient(135deg, #2e6417 0%, #1e4009 50%, #0f2a04 100%) !important;
+    color: white !important;
+    padding: 24px 24px 16px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 16px 16px 0 0;
+    /* Fix for white corners */
+    margin: -1px -1px 0 -1px;
+    transform: scale(1.01);
+}
+
+.modal-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: white !important;
+    margin: 0;
+}
+
+.modal-close {
+    background: none !important;
+    border: none;
+    font-size: 28px;
+    font-weight: 300;
+    color: white !important;
+    cursor: pointer;
+    padding: 0;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: all 0.2s ease;
+}
+
+.modal-close:hover {
+    background: rgba(255, 255, 255, 0.1) !important;
+    transform: scale(1.1);
+}
+
+/* Modal Body - Scrollable content area */
+.modal-body {
+    padding: 24px;
+    overflow-y: auto;
+    max-height: calc(85vh - 160px); /* Accounts for header and footer */
+    flex: 1;
+}
+
+/* Form Sections */
+.form-section {
+    margin-bottom: 24px;
+}
+
+.form-section:last-child {
+    margin-bottom: 0;
+}
+
+.section-header {
+    font-size: 16px;
+    font-weight: 600;
+    color: #374151;
+    margin: 0 0 16px 0;
+    padding-bottom: 8px;
+    border-bottom: 2px solid #e5e7eb;
+}
+
+/* Form Layout - Following UI/UX standards */
+.form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
+.form-row {
+    display: flex;
+    gap: 16px;
+}
+
+.form-group {
+    flex: 1;
+}
+
+.form-label {
+    display: block;
+    font-size: 14px;
+    font-weight: 600;
+    color: #374151;
+    margin-bottom: 6px;
+}
+
+.form-input {
+    width: 100%;
+    padding: 12px 16px;
+    border: 2px solid #e5e7eb;
+    border-radius: 8px;
+    font-size: 14px;
+    transition: all 0.2s ease;
+    box-sizing: border-box;
+}
+
+.form-input:focus {
+    outline: none;
+    border-color: #2e6417;
+    box-shadow: 0 0 0 3px rgba(46, 100, 23, 0.1);
+}
+
+/* Modal Footer - Standard button layout */
+.modal-footer {
+    padding: 16px 24px 24px 24px;
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    border-top: 1px solid #e5e7eb;
+    background: #fafbfc !important;
+}
+
+/* Button Styles - Following UI/UX standards */
+.modal .btn {
+    padding: 8px 16px;
+    font-size: 13px;
+    font-weight: 600;
+    border-radius: 6px;
+    border: 2px solid transparent;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    min-width: 80px;
+}
+
+.modal .btn-outline {
+    background: transparent;
+    color: #6b7280;
+    border-color: #6b7280;
+}
+
+.modal .btn-outline:hover {
+    background: #f9fafb;
+    transform: translateY(-1px);
+}
+
+.modal .btn-primary {
+    background: #2e6417;
+    color: white;
+    border-color: #2e6417;
+}
+
+.modal .btn-primary:hover {
+    background: #1e4009;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(46, 100, 23, 0.3);
+}
+
+.modal .btn-delete {
+    background: #dc2626;
+    color: white;
+    border-color: #dc2626;
+    margin-right: auto; /* Pushes to far left */
+}
+
+.modal .btn-delete:hover {
+    background: #b91c1c;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(220, 38, 38, 0.3);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .standard-modal {
+        width: 95%;
+        max-width: none;
+        margin: 20px;
+    }
+    
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .form-row {
+        flex-direction: column;
+    }
+    
+    .modal-footer {
+        flex-direction: column-reverse;
+        gap: 8px;
+    }
+    
+    .modal .btn-delete {
+        margin-right: 0;
+        order: -1;
+    }
+}
+</style>
+
+<!-- JavaScript Template Functions -->
+<script>
+// Standard modal functions - customize as needed
+
+/**
+ * Open modal with fade-in animation
+ * @param {string} modalId - ID of the modal to open
+ */
+function openModal(modalId) {
+    const modal = document.getElementById(modalId);
+    if (modal) {
+        modal.classList.add('active');
+        // Focus trap for accessibility
+        const firstFocusable = modal.querySelector('input, select, textarea, button');
+        if (firstFocusable) {
+            setTimeout(() => firstFocusable.focus(), 100);
+        }
+    }
+}
+
+/**
+ * Close modal with fade-out animation
+ * @param {string} modalId - ID of the modal to close
+ */
+function closeModal(modalId) {
+    const modal = document.getElementById(modalId);
+    if (modal) {
+        modal.classList.remove('active');
+        // Clear form data if needed
+        const form = modal.querySelector('form');
+        if (form) {
+            form.reset();
+        }
+    }
+}
+
+/**
+ * Handle modal overlay clicks (close on outside click)
+ */
+document.addEventListener('click', function(e) {
+    if (e.target.classList.contains('modal-overlay')) {
+        e.target.classList.remove('active');
+    }
+});
+
+/**
+ * Handle escape key to close modals
+ */
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+        const activeModal = document.querySelector('.modal-overlay.active');
+        if (activeModal) {
+            activeModal.classList.remove('active');
+        }
+    }
+});
+
+// Placeholder functions - replace with actual functionality
+function handleSubmit() {
+    console.log('Handle form submission here');
+    // Add your form submission logic
+}
+
+function handleDelete() {
+    console.log('Handle delete action here');
+    // Add your delete logic with confirmation
+}
+</script>
+
+<!-- Usage Instructions:
+1. Copy this template to your page
+2. Replace MODAL_ID with unique identifier (e.g., "add-team-modal")
+3. Replace MODAL_TITLE with your modal title (e.g., "Add New Team")
+4. Replace modal-body content with your specific form fields
+5. Update button onclick handlers with your functions
+6. Customize handleSubmit() and handleDelete() functions
+7. Remove unused CSS if needed (like delete button styles if not used)
+
+This template ensures:
+✅ Consistent green gradient headers
+✅ Proper scrollable body sections  
+✅ Standard button layouts and styling
+✅ Responsive design for mobile
+✅ Accessibility features (focus trap, escape key)
+✅ Smooth animations and transitions
+✅ Professional form field layouts
+-->

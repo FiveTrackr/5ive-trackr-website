@@ -1,0 +1,924 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Divisions - 5ive Trackr</title>
+    <meta name="author" content="5ive Trackr">
+    <meta name="copyright" content="Â© 2025 5ive Trackr. All rights reserved.">
+    <meta name="robots" content="noarchive, noimageindex">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    
+    <!-- Mobile Detection & Redirect - Load First -->
+    <script src="../../js/mobile-redirect-config.js?v=<?php echo time(); ?>"></script>
+    <script src="../../js/mobile-redirect.js?v=<?php echo time(); ?>"></script>
+    
+    <script src="../../js/toggle-remover.js"></script>
+    <!-- Consolidated Dashboard Master CSS -->
+    <link rel="stylesheet" href="../../css/dashboard-master.css?v=consolidated-2025">
+    <style>
+    /* Safe system font stack - no external dependencies */
+    body, * {
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, "Helvetica Neue", Helvetica, Arial, Roboto, "Noto Sans", "Liberation Sans", sans-serif;
+    }
+</style>
+    <!-- League Manager Sidebar Styles - Load immediately to prevent layout shifts -->
+    <link rel="stylesheet" href="../../css/league-manager-sidebar.css">
+    <!-- League Manager Header Styles - Load immediately to prevent layout shifts -->
+    <link rel="stylesheet" href="../../css/league-manager-header.css">
+    
+    <style>
+        /* Header Template Styles */
+        .main-header[data-loaded="league-manager"] {
+            background-color: #ffffff !important;
+            border-radius: 0 0 12px 12px !important;
+            padding: 16px 24px !important;
+            display: flex !important;
+            justify-content: space-between !important;
+            align-items: center !important;
+            width: calc(100% - 250px) !important;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1) !important;
+            position: fixed !important;
+            top: 0 !important;
+            left: 250px !important;
+            z-index: 999 !important;
+            height: 70px !important;
+            box-sizing: border-box !important;
+        }
+
+        /* Notifications Button Styling */
+        .notifications-btn {
+            position: relative;
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: #dc2626;
+            color: white;
+            border-radius: 50%;
+            padding: 0;
+            font-size: 10px;
+            font-weight: 600;
+            width: 18px;
+            height: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            line-height: 1;
+            border: 2px solid white;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+        }
+
+        .notification-badge.hidden {
+            display: none;
+        }
+
+        /* Notifications Panel Styling */
+        .notifications-panel {
+            position: fixed;
+            top: 80px;
+            right: 20px;
+            width: 400px;
+            max-width: 90vw;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            z-index: 1001;
+            max-height: 70vh;
+            display: none;
+            flex-direction: column;
+            border: 1px solid #e0e0e0;
+        }
+
+        .notifications-panel.active {
+            display: flex;
+        }
+
+        .notifications-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.3);
+            z-index: 1000;
+            display: none;
+        }
+
+        .notifications-overlay.active {
+            display: block;
+        }
+
+        .notifications-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 20px;
+            border-bottom: 1px solid #e0e0e0;
+            background: #f8f9fa;
+            border-radius: 12px 12px 0 0;
+        }
+
+        .notifications-header h3 {
+            margin: 0;
+            font-size: 18px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .notifications-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .mark-all-read {
+            color: #2e6417;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 500;
+        }
+
+        .mark-all-read:hover {
+            text-decoration: underline;
+        }
+
+        .close-panel {
+            background: none;
+            border: none;
+            font-size: 24px;
+            color: #666;
+            cursor: pointer;
+            padding: 0;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .close-panel:hover {
+            color: #333;
+        }
+
+        .notifications-content {
+            flex: 1;
+            overflow-y: auto;
+            max-height: calc(70vh - 80px);
+        }
+
+        .notifications-list {
+            padding: 8px 0;
+        }
+
+        /* Divisions Page Specific Styles - Matching other pages */
+        
+        /* Header Title Styling */
+        .main-header .page-title {
+            font-size: 28px !important;
+            font-weight: 800 !important;
+            text-transform: uppercase !important;
+            color: #2e6417 !important;
+            margin: 0 !important;
+            font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif !important;
+            letter-spacing: 0.08em !important;
+            line-height: 1 !important;
+            display: flex !important;
+            align-items: center !important;
+            text-shadow: 0 1px 2px rgba(46, 100, 23, 0.1) !important;
+            background: linear-gradient(135deg, #2e6417 0%, #1e4009 100%) !important;
+            -webkit-background-clip: text !important;
+            -webkit-text-fill-color: transparent !important;
+            background-clip: text !important;
+        }
+        
+        /* Content Area Styling */
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 2px solid #f3f4f6;
+        }
+        
+        .page-title-section {
+            flex: 1;
+        }
+        
+        .page-title, .content-title {
+            font-size: 28px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #2e6417 0%, #1e4009 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin: 0 0 4px 0;
+        }
+        
+        .page-subtitle {
+            color: #6b7280;
+            font-size: 14px;
+            font-weight: 500;
+            margin: 0;
+        }
+        
+        .content-wrapper {
+            padding: 20px;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #6b7280;
+        }
+        
+        .empty-state h3 {
+            font-size: 24px;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 12px;
+        }
+        
+        .empty-state p {
+            font-size: 16px;
+            max-width: 500px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        /* Venue Selector Styles */
+        .venue-selector-container {
+            padding: 0 15px 20px 15px;
+            border-bottom: 1px solid #e2e8f0;
+            margin-bottom: 16px;
+            position: relative;
+            overflow: visible;
+        }
+
+        .venue-selector-btn {
+            width: 100% !important;
+            background: linear-gradient(135deg, #2e6417 0%, #1e4009 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 12px 16px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: none !important;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 2px 4px rgba(46, 100, 23, 0.2);
+            position: relative;
+            box-sizing: border-box !important;
+            margin: 0 !important;
+            user-select: none !important;
+            -webkit-user-select: none !important;
+            -moz-user-select: none !important;
+            -ms-user-select: none !important;
+        }
+
+        .venue-selector-btn:hover {
+            transform: none !important;
+            box-shadow: 0 2px 4px rgba(46, 100, 23, 0.2) !important;
+        }
+
+        .venue-selector-btn:active {
+            transform: none !important;
+        }
+
+        .venue-selector-content {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            flex: 1;
+        }
+
+        .venue-selector-label {
+            font-size: 0.7rem;
+            opacity: 0.9;
+            margin-bottom: 2px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .venue-selector-name {
+            font-size: 0.875rem;
+            font-weight: 700;
+            line-height: 1.2;
+        }
+
+        .venue-selector-icon {
+            font-size: 1rem;
+            margin-left: 8px;
+            transition: none !important;
+        }
+
+        .venue-selector-btn.active .venue-selector-icon {
+            transform: rotate(180deg) !important;
+            transition: none !important;
+        }
+
+        .venue-selector-btn.active {
+            border-radius: 8px 8px 0 0 !important;
+            border-bottom: none !important;
+            box-shadow: 0 2px 4px rgba(46, 100, 23, 0.2) !important;
+            transition: none !important;
+        }
+
+        .venue-dropdown {
+            position: absolute;
+            top: calc(100% - 1px);
+            left: 0;
+            right: 0;
+            background: linear-gradient(135deg, #2e6417 0%, #1e4009 100%);
+            border: none !important;
+            border-radius: 0 0 8px 8px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25);
+            z-index: 9999 !important;
+            margin-top: 0;
+            transform: none !important;
+            transition: none !important;
+            display: none;
+            max-height: 300px;
+            overflow-y: auto;
+            color: white;
+            outline: none !important;
+        }
+
+        .venue-dropdown.show {
+            display: block !important;
+            transition: none !important;
+        }
+
+        /* Venue Selector Overlay - Only darken area outside dropdown */
+        .venue-selector-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.3);
+            z-index: 9998 !important;
+            display: none;
+            transition: none !important;
+        }
+
+        .venue-selector-overlay.show {
+            display: block !important;
+            transition: none !important;
+        }
+
+        .venue-option {
+            padding: 12px 16px;
+            cursor: pointer;
+            transition: none !important;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            color: white;
+            background: transparent;
+        }
+
+        .venue-option:last-child {
+            border-bottom: none;
+        }
+
+        .venue-option:hover {
+            background: rgba(255, 255, 255, 0.1) !important;
+            transition: none !important;
+        }
+
+        .venue-option.selected {
+            background: rgba(255, 255, 255, 0.2) !important;
+            color: white;
+            font-weight: 700;
+            transition: none !important;
+        }
+
+        .venue-option-details {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .venue-option-name {
+            font-weight: 600;
+            font-size: 0.875rem;
+            margin-bottom: 2px;
+            color: white;
+        }
+
+        .venue-option-address {
+            font-size: 0.7rem;
+            color: rgba(255, 255, 255, 0.8);
+            opacity: 0.9;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .venue-option-check {
+            color: white;
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+
+        /* Navigation Icon Fixes */
+        body[data-role="league-manager"] .sidebar .nav-icon[data-icon="referee"],
+        .sidebar .nav-icon[data-icon="referee"] {
+            background-image: url('../../img/referee-icon.svg') !important;
+            background-size: 18px 18px !important;
+            background-repeat: no-repeat !important;
+            background-position: center !important;
+            width: 20px !important;
+            height: 20px !important;
+            display: inline-block !important;
+        }
+
+        body[data-role="league-manager"] .sidebar .nav-icon[data-icon="shirt"],
+        .sidebar .nav-icon[data-icon="shirt"] {
+            background-image: url('../../img/shirt-icon.svg') !important;
+            background-size: 18px 18px !important;
+            background-repeat: no-repeat !important;
+            background-position: center !important;
+            width: 20px !important;
+            height: 20px !important;
+            display: inline-block !important;
+        }
+
+        /* Navigation Sizing Fix Applied: Consistent padding (14px 20px) for all nav items via league-manager-sidebar.css */
+    </style>
+    <\!-- SPA Redirect Handler -->
+    <script src="../../js/core/spa-redirect.js"></script>
+</head>
+
+<body data-page="divisions" data-role="league-manager">
+    <!-- Sidebar - Static content with dynamic enhancement -->
+    <aside class="sidebar">
+        <!-- Static sidebar content that loads immediately -->
+        <div class="sidebar-header">
+            <div class="logo-container">
+                <img src="../../img/header-logo.svg" alt="5ive Trackr" class="logo">
+            </div>
+        </div>
+
+        <!-- Navigation Menu -->
+        <nav class="sidebar-nav">
+            <!-- Venue Selector -->
+            <div class="venue-selector-container">
+                <div class="venue-selector-btn" id="venue-selector-btn" onclick="toggleVenueDropdown()">
+                    <div class="venue-selector-content">
+                        <div class="venue-selector-label">Current Venue</div>
+                        <div class="venue-selector-name" id="selected-venue-name">Loading...</div>
+                    </div>
+                    <span class="venue-selector-icon">â–¼</span>
+                    <div class="venue-dropdown" id="venue-dropdown">
+                        <!-- Data will be loaded dynamically based on logged-in user -->
+                        <div class="venue-option" data-venue-id="VEN002" onclick="selectVenue('VEN002', 'Elite Sports Center', '456 Championship Drive', event)">
+                            <div class="venue-option-details">
+                                <div class="venue-option-name">Elite Sports Center</div>
+                                <div class="venue-option-address">456 Championship Drive</div>
+                            </div>
+                            <span class="venue-option-check" style="display: none;">âœ“</span>
+                        </div>
+                        <div class="venue-option" data-venue-id="VEN003" onclick="selectVenue('VEN003', 'Premier League Complex', '789 Victory Boulevard', event)">
+                            <div class="venue-option-details">
+                                <div class="venue-option-name">Premier League Complex</div>
+                                <div class="venue-option-address">789 Victory Boulevard</div>
+                            </div>
+                            <span class="venue-option-check" style="display: none;">âœ“</span>
+                        </div>
+                        <div class="venue-option" data-venue-id="VEN001" onclick="selectVenue('VEN001', 'Sports Arena West', '123 Athletic Avenue', event)">
+                            <div class="venue-option-details">
+                                <div class="venue-option-name">Sports Arena West</div>
+                                <div class="venue-option-address">123 Athletic Avenue</div>
+                            </div>
+                            <span class="venue-option-check" style="display: none;">âœ“</span>
+                        </div>
+                        <!-- END MOCK DATA -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Venue Selector Overlay -->
+            <div class="venue-selector-overlay" id="venue-selector-overlay" onclick="closeVenueDropdown()"></div>
+
+            <ul class="nav-menu">
+                <li class="nav-item" data-page="dashboard">
+                    <a href="dashboard.html" class="nav-link">
+                        <span class="nav-icon">ðŸ“Š</span>
+                        <span class="link-text">Dashboard</span>
+                    </a>
+                </li>
+                
+                <li class="nav-item" data-page="fixtures">
+                    <a href="fixtures.html" class="nav-link">
+                        <span class="nav-icon">ðŸ“…</span>
+                        <span class="link-text">Fixtures</span>
+                    </a>
+                </li>
+                
+                <li class="nav-item" data-page="referees">
+                    <a href="referees.html" class="nav-link">
+                        <span class="nav-icon" data-icon="referee"></span>
+                        <span class="link-text">Referees</span>
+                    </a>
+                </li>
+                
+                <li class="nav-item active" data-page="divisions">
+                    <a href="divisions.html" class="nav-link">
+                        <span class="nav-icon">ðŸ“‹</span>
+                        <span class="link-text">Divisions</span>
+                    </a>
+                </li>
+                
+                <li class="nav-item" data-page="leagues">
+                    <a href="leagues.html" class="nav-link">
+                        <span class="nav-icon">ðŸ†</span>
+                        <span class="link-text">Leagues</span>
+                    </a>
+                </li>
+                
+                <li class="nav-item" data-page="teams">
+                    <a href="teams.html" class="nav-link">
+                        <span class="nav-icon" data-icon="shirt"></span>
+                        <span class="link-text">Teams</span>
+                    </a>
+                </li>
+                
+                <li class="nav-item" data-page="pitches">
+                    <a href="pitches.html" class="nav-link">
+                        <span class="nav-icon">ðŸ¥…</span>
+                        <span class="link-text">Pitches</span>
+                    </a>
+                </li>
+                
+                <li class="nav-item" data-page="venues">
+                    <a href="venues.html" class="nav-link">
+                        <span class="nav-icon">ðŸŸï¸</span>
+                        <span class="link-text">Venues</span>
+                    </a>
+                </li>
+                
+                <li class="nav-item" data-page="payments">
+                    <a href="team-payments.html" class="nav-link">
+                        <span class="nav-icon">ðŸ’³</span>
+                        <span class="link-text">Team Payments</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+
+        <!-- Sidebar Footer -->
+        <div class="sidebar-footer">
+            <div class="footer-section footer-actions">
+                <a href="settings.html" class="footer-link">
+                    <span class="footer-icon">âš™ï¸</span>
+                    <span class="footer-text">Settings</span>
+                </a>
+                <a href="#" class="footer-link" onclick="handleLogout(event)">
+                    <span class="footer-icon">ðŸšª</span>
+                    <span class="footer-text">Logout</span>
+                </a>
+            </div>
+        </div>
+    </aside>
+
+    <!-- League Manager Header Template -->
+    <header class="main-header" data-loaded="league-manager">
+        <div class="header-left">
+            <h1 class="page-title" data-page-title>Divisions</h1>
+        </div>
+
+        <div class="header-right">
+            <!-- User Info Section -->
+            <div class="user-info"> data-user-name
+                <div class="user-avatar" data-user-initials> data-user-name--</div>
+                <div class="user-details"> data-user-name
+                    <div class="user-name" data-user-name> data-user-nameLoading...</div>
+                    <div class="user-role" data-user-role> data-user-role data-user-nameLoading...</div>
+                </div>
+            </div>
+
+            <!-- Header Actions -->
+            <div class="header-actions">
+                <button class="header-btn notifications-btn" onclick="toggleNotificationsPanel()">
+                    <span class="btn-icon">ðŸ””</span>
+                    <span class="btn-text">Notifications</span>
+                    <span class="notification-badge" id="notification-count">3</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Notifications Panel -->
+    <div class="notifications-panel" id="notifications-panel">
+        <div class="notifications-header">
+            <h3>Notifications</h3>
+            <div class="notifications-actions">
+                <button class="btn-text mark-all-read" onclick="markAllNotificationsRead()">Mark all as read</button>
+                <button class="close-panel" onclick="closeNotificationsPanel()">&times;</button>
+            </div>
+        </div>
+        <div class="notifications-content">
+            <div class="notifications-list" id="notifications-list">
+                <!-- Notifications will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Notifications Panel Overlay -->
+    <div class="notifications-overlay" id="notifications-overlay" onclick="closeNotificationsPanel()"></div>
+    
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="content-wrapper">
+            <!-- Page Header -->
+            <header class="page-header">
+                <div class="page-title-section">
+                    <h1 class="content-title">Divisions</h1>
+                    <p class="page-subtitle">Manage league divisions and structures</p>
+                </div>
+            </header>
+            
+            <!-- Content Area -->
+            <div class="content-area">
+                <div class="empty-state">
+                    <h3>Divisions Management</h3>
+                    <p>This section will contain tools for managing league divisions, including creating division structures, organizing teams into divisions, and managing division-specific settings.</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Header Template JavaScript Functionality
+        // Load user data and update header
+        async function loadUserData() {
+            try {
+                // Check if UserDataManager is available
+                if (typeof window.UserDataManager !== 'undefined') {
+                    const userData = await window.UserDataManager.load();
+                    if (userData && userData.currentUser) {
+                        updateUserDisplay(userData.currentUser);
+                        return;
+                    }
+                }
+                
+                // Try SessionManager if available
+                if (typeof window.SessionManager !== 'undefined' && window.SessionManager.isLoggedIn()) {
+                    const currentUser = window.SessionManager.getCurrentUser();
+                    if (currentUser) {
+                        updateUserDisplay(currentUser);
+                        return;
+                    }
+                }
+                
+                // Fallback: Try to load from localStorage
+                const currentUser = localStorage.getItem('currentUser');
+                if (currentUser) {
+                    const user = JSON.parse(currentUser);
+                    updateUserDisplay(user);
+                    return;
+                }
+                
+                // Final fallback: Use session data or default
+                const sessionData = localStorage.getItem('sessionData');
+                if (sessionData) {
+                    const session = JSON.parse(sessionData);
+                    if (session.user) {
+                        updateUserDisplay(session.user);
+                        return;
+                    }
+                }
+                
+                // Default fallback data
+                updateUserDisplay({
+                    name: 'League Manager',
+                    role: 'Administrator',
+                    initials: 'LM'
+                });
+                
+            } catch (error) {
+                console.error('Error loading user data in header template:', error);
+                updateUserDisplay({
+                    name: 'League Manager',
+                    role: 'Administrator', 
+                    initials: 'LM'
+                });
+            }
+        }
+        
+        // Update user display elements
+        function updateUserDisplay(user) {
+            // Update user name
+            const userNameElements = document.querySelectorAll('[data-user-name]');
+            userNameElements.forEach(element => {
+                const displayName = user.fullName || user.name || user.firstName || user.username || 'League Manager';
+                element.textContent = displayName;
+            });
+            
+            // Update user role
+            const userRoleElements = document.querySelectorAll('[data-user-role]');
+            userRoleElements.forEach(element => {
+                let displayRole = user.role || user.userRole || user.accountType || 'Administrator';
+                if (displayRole === 'league_manager') {
+                    displayRole = 'League Manager';
+                } else if (displayRole === 'team_manager') {
+                    displayRole = 'Team Manager';
+                } else if (displayRole === 'referee') {
+                    displayRole = 'Referee';
+                } else if (displayRole === 'admin') {
+                    displayRole = 'Administrator';
+                }
+                element.textContent = displayRole;
+            });
+            
+            // Update user initials
+            const userInitialsElements = document.querySelectorAll('[data-user-initials]');
+            userInitialsElements.forEach(element => {
+                const nameForInitials = user.fullName || user.name || user.firstName || user.username || 'League Manager';
+                const initials = user.initials || generateInitials(nameForInitials);
+                element.textContent = initials;
+            });
+        }
+        
+        // Generate initials from name
+        function generateInitials(name) {
+            if (!name) return 'LM';
+            if (name.includes('@')) {
+                return 'LM';
+            }
+            const nameParts = name.trim().split(' ');
+            if (nameParts.length === 1) {
+                return nameParts[0].substring(0, 2).toUpperCase();
+            } else {
+                return (nameParts[0].charAt(0) + nameParts[nameParts.length - 1].charAt(0)).toUpperCase();
+            }
+        }
+        
+        // Simple Notifications System - Placeholder for future implementation
+        function toggleNotificationsPanel() {
+            console.log('Notifications panel clicked - feature coming soon');
+            alert('Notifications feature coming soon!');
+        }
+
+        function closeNotificationsPanel() {
+            console.log('Close notifications panel');
+        }
+
+        function markAllNotificationsRead() {
+            console.log('Mark all notifications as read');
+        }
+
+        // Venue Selector JavaScript Functions
+        let currentVenueId = null;
+        let currentVenueName = null;
+
+        // Data loaded from server based on user permissions`n        const mockVenues = [
+            { id: 'VEN001', name: 'Sports Arena West', address: '123 Athletic Avenue' },
+            { id: 'VEN002', name: 'Elite Sports Center', address: '456 Championship Drive' },
+            { id: 'VEN003', name: 'Premier League Complex', address: '789 Victory Boulevard' }
+        ];
+
+        function initializeVenueSelector() {
+            console.log('Initializing venue selector for divisions page');
+            // Data loaded from server based on user permissions`n            const sortedVenues = mockVenues.sort((a, b) => a.name.localeCompare(b.name));
+            if (sortedVenues.length > 0) {
+                const firstVenue = sortedVenues[0];
+                selectVenue(firstVenue.id, firstVenue.name, firstVenue.address, null, false);
+            }
+        }
+
+        function toggleVenueDropdown() {
+            const dropdown = document.getElementById('venue-dropdown');
+            const btn = document.getElementById('venue-selector-btn');
+            const overlay = document.getElementById('venue-selector-overlay');
+            
+            console.log('Toggle clicked', dropdown, btn, overlay); // Debug log
+            
+            if (dropdown && dropdown.classList.contains('show')) {
+                console.log('Closing dropdown'); // Debug log
+                closeVenueDropdown();
+            } else {
+                console.log('Opening dropdown'); // Debug log
+                if (dropdown) dropdown.classList.add('show');
+                if (btn) btn.classList.add('active');
+                if (overlay) overlay.classList.add('show');
+            }
+        }
+
+        function closeVenueDropdown() {
+            const dropdown = document.getElementById('venue-dropdown');
+            const btn = document.getElementById('venue-selector-btn');
+            const overlay = document.getElementById('venue-selector-overlay');
+            
+            console.log('Closing dropdown function called'); // Debug log
+            
+            if (dropdown) dropdown.classList.remove('show');
+            if (btn) btn.classList.remove('active');
+            if (overlay) overlay.classList.remove('show');
+        }
+
+        function selectVenue(venueId, venueName, venueAddress, event, closeDropdown = true) {
+            // Prevent event bubbling to parent button
+            if (event) {
+                event.stopPropagation();
+                event.preventDefault();
+            }
+            
+            // Update selected venue
+            currentVenueId = venueId;
+            currentVenueName = venueName;
+            
+            // Update button text
+            document.getElementById('selected-venue-name').textContent = venueName;
+            
+            // Update option selection states
+            document.querySelectorAll('.venue-option').forEach(option => {
+                const checkmark = option.querySelector('.venue-option-check');
+                if (option.dataset.venueId === venueId) {
+                    option.classList.add('selected');
+                    checkmark.style.display = 'block';
+                } else {
+                    option.classList.remove('selected');
+                    checkmark.style.display = 'none';
+                }
+            });
+            
+            // Close dropdown if requested
+            if (closeDropdown) {
+                closeVenueDropdown();
+            }
+            
+            // Filter data based on selected venue
+            filterDataByVenue(venueId);
+            
+            console.log('Venue changed to:', venueName, '(ID:', venueId, ')');
+        }
+
+        function filterDataByVenue(venueId) {
+            // This function would filter the divisions data based on selected venue
+            // Data loaded from server based on user permissions`n            console.log('Filtering divisions data for venue:', venueId);
+            
+            // Example: Show/hide division rows based on venue
+            // In a real implementation, this would filter the divisions data
+            console.log('Showing divisions data for venue:', venueId);
+            
+            // You could update the divisions table here to show only relevant data
+            // updateDivisionsTable(venueId);
+        }
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(event) {
+            const dropdown = document.getElementById('venue-dropdown');
+            const btn = document.getElementById('venue-selector-btn');
+            const overlay = document.getElementById('venue-selector-overlay');
+            
+            if (dropdown && btn && overlay &&
+                !dropdown.contains(event.target) && 
+                !btn.contains(event.target) &&
+                !overlay.contains(event.target)) {
+                closeVenueDropdown();
+            }
+        });
+
+        // Set active navigation item
+        document.addEventListener('DOMContentLoaded', async function() {
+            // Initialize venue selector first
+            initializeVenueSelector();
+            
+            // Load user data for header
+            await loadUserData();
+            
+            // Listen for sidebar load completion
+            document.addEventListener('sidebarLoaded', function(e) {
+                console.log('Dynamic sidebar loaded successfully:', e.detail);
+                
+                // Set active page for divisions
+                if (window.leagueManagerSidebar) {
+                    setTimeout(() => {
+                        window.leagueManagerSidebar.setActive('divisions');
+                        console.log('Divisions set as active');
+                    }, 100);
+                }
+            });
+        });
+
+        // Logout handler
+        function handleLogout(event) {
+            event.preventDefault();
+            // Add logout logic here
+            window.location.href = '../../login.html';
+        }
+    </script>
+</body>
+</html>
+
+

@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>5ive Trackr Mobile Redirect Test</title>
+    <style>
+        body {
+            font-family: 'Inter', Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #2e6417 0%, #1e4009 100%);
+            color: white;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 30px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+        }
+        h1 {
+            text-align: center;
+            font-size: 2.5em;
+            margin-bottom: 30px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        .test-section {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        .device-info {
+            background: rgba(0, 0, 0, 0.2);
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            font-family: monospace;
+        }
+        .status {
+            font-size: 1.2em;
+            font-weight: bold;
+            text-align: center;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+        }
+        .mobile { background: #28a745; }
+        .desktop { background: #dc3545; }
+        .tablet { background: #ffc107; color: #000; }
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 8px;
+            font-size: 16px;
+            margin: 10px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        .app-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin: 20px 0;
+        }
+        .app-button {
+            background: #000;
+            color: white;
+            padding: 15px 25px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: transform 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .app-button:hover {
+            transform: scale(1.05);
+        }
+        .ios { background: linear-gradient(135deg, #007AFF 0%, #0051D5 100%); }
+        .android { background: linear-gradient(135deg, #34A853 0%, #137333 100%); }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🏈 5ive Trackr Mobile Test</h1>
+        
+        <div class="test-section">
+            <h2>📱 Device Detection Results</h2>
+            <div id="deviceStatus" class="status">Analyzing device...</div>
+            
+            <div class="device-info">
+                <div><strong>User Agent:</strong> <span id="userAgent"></span></div>
+                <div><strong>Screen Size:</strong> <span id="screenSize"></span></div>
+                <div><strong>Viewport:</strong> <span id="viewport"></span></div>
+                <div><strong>Touch Support:</strong> <span id="touchSupport"></span></div>
+                <div><strong>Platform:</strong> <span id="platform"></span></div>
+                <div><strong>Orientation:</strong> <span id="orientation"></span></div>
+                <div><strong>Connection:</strong> <span id="connection"></span></div>
+            </div>
+        </div>
+
+        <div class="test-section">
+            <h2>🧪 Mobile Redirect Simulation</h2>
+            <p>This simulates what would happen in the real 5ive Trackr app:</p>
+            <div id="redirectSimulation"></div>
+            
+            <div class="app-buttons" id="appButtons" style="display: none;">
+                <a href="#" class="app-button ios" id="iosButton">
+                    <span>📱</span> Download for iOS
+                </a>
+                <a href="#" class="app-button android" id="androidButton">
+                    <span>🤖</span> Download for Android
+                </a>
+            </div>
+            
+            <button onclick="simulateBypass()">Continue to Web App (Bypass)</button>
+        </div>
+
+        <div class="test-section">
+            <h2>🔧 Network Testing Alternatives</h2>
+            <p>Since local network connection isn't working, try these alternatives:</p>
+            <button onclick="testWithNgrok()">📡 Use Ngrok (Recommended)</button>
+            <button onclick="testWithCodepen()">🌐 Test on CodePen</button>
+            <button onclick="testWithJSFiddle()">⚡ Test on JSFiddle</button>
+        </div>
+    </div>
+
+    <script>
+        // Include the mobile redirect logic directly
+        class MobileRedirectTester {
+            constructor() {
+                this.deviceInfo = {
+                    isMobile: false,
+                    isTablet: false,
+                    isDesktop: false,
+                    platform: 'unknown'
+                };
+                this.detectDevice();
+                this.updateDisplay();
+            }
+
+            detectDevice() {
+                const userAgent = navigator.userAgent.toLowerCase();
+                
+                // Mobile OS detection
+                const isMobileOS = /android|webos|iphone|ipad|ipod|blackberry|windows phone|mobile/i.test(userAgent);
+                
+                // Screen size detection
+                const isMobileScreen = window.screen.width <= 768 || window.innerWidth <= 768;
+                
+                // Touch detection
+                const hasTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+                
+                // Combined detection
+                this.deviceInfo.isMobile = isMobileOS && !userAgent.includes('ipad');
+                this.deviceInfo.isTablet = userAgent.includes('ipad') || (hasTouch && window.screen.width >= 768 && window.screen.width <= 1024);
+                this.deviceInfo.isDesktop = !this.deviceInfo.isMobile && !this.deviceInfo.isTablet;
+                
+                // Platform detection
+                if (userAgent.includes('iphone') || userAgent.includes('ipad')) {
+                    this.deviceInfo.platform = 'ios';
+                } else if (userAgent.includes('android')) {
+                    this.deviceInfo.platform = 'android';
+                } else {
+                    this.deviceInfo.platform = 'desktop';
+                }
+            }
+
+            updateDisplay() {
+                // Update device info
+                document.getElementById('userAgent').textContent = navigator.userAgent;
+                document.getElementById('screenSize').textContent = `${window.screen.width}x${window.screen.height}`;
+                document.getElementById('viewport').textContent = `${window.innerWidth}x${window.innerHeight}`;
+                document.getElementById('touchSupport').textContent = ('ontouchstart' in window) ? 'Yes' : 'No';
+                document.getElementById('platform').textContent = navigator.platform;
+                document.getElementById('orientation').textContent = window.screen.orientation ? window.screen.orientation.type : 'Unknown';
+                document.getElementById('connection').textContent = navigator.connection ? navigator.connection.effectiveType : 'Unknown';
+
+                // Update device status
+                const statusDiv = document.getElementById('deviceStatus');
+                if (this.deviceInfo.isMobile) {
+                    statusDiv.textContent = '📱 MOBILE DEVICE DETECTED';
+                    statusDiv.className = 'status mobile';
+                } else if (this.deviceInfo.isTablet) {
+                    statusDiv.textContent = '📟 TABLET DEVICE DETECTED';
+                    statusDiv.className = 'status tablet';
+                } else {
+                    statusDiv.textContent = '🖥️ DESKTOP DEVICE DETECTED';
+                    statusDiv.className = 'status desktop';
+                }
+
+                // Simulate redirect behavior
+                this.simulateRedirect();
+            }
+
+            simulateRedirect() {
+                const simulationDiv = document.getElementById('redirectSimulation');
+                const appButtonsDiv = document.getElementById('appButtons');
+
+                if (this.deviceInfo.isMobile) {
+                    simulationDiv.innerHTML = `
+                        <div style="background: #28a745; color: white; padding: 15px; border-radius: 8px; text-align: center;">
+                            <h3>✅ MOBILE REDIRECT WOULD TRIGGER</h3>
+                            <p>In the real app, you would be redirected to the app store:</p>
+                        </div>
+                    `;
+                    appButtonsDiv.style.display = 'flex';
+                    
+                    // Update app store links
+                    document.getElementById('iosButton').href = 'https://apps.apple.com/app/5ive-trackr/ID_TO_BE_ADDED';
+                    document.getElementById('androidButton').href = 'https://play.google.com/store/apps/details?id=com.fivetrackr.app';
+                    
+                } else if (this.deviceInfo.isTablet) {
+                    simulationDiv.innerHTML = `
+                        <div style="background: #ffc107; color: black; padding: 15px; border-radius: 8px; text-align: center;">
+                            <h3>📟 TABLET DETECTED</h3>
+                            <p>Redirect behavior depends on configuration (currently disabled for tablets)</p>
+                        </div>
+                    `;
+                } else {
+                    simulationDiv.innerHTML = `
+                        <div style="background: #17a2b8; color: white; padding: 15px; border-radius: 8px; text-align: center;">
+                            <h3>🖥️ DESKTOP - NO REDIRECT</h3>
+                            <p>Desktop users access the full web application normally</p>
+                        </div>
+                    `;
+                }
+            }
+        }
+
+        function simulateBypass() {
+            alert('In the real app, this would bypass the mobile redirect and show the web application.');
+        }
+
+        function testWithNgrok() {
+            window.open('https://ngrok.com/', '_blank');
+            alert('Ngrok allows you to expose your local server to the internet securely. Install ngrok, then run: ngrok http 8000');
+        }
+
+        function testWithCodepen() {
+            const code = encodeURIComponent(`
+// Mobile Detection Test
+const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+document.body.innerHTML = \`
+<h1>5ive Trackr Mobile Test</h1>
+<p>Device Type: \${isMobile ? 'MOBILE' : 'DESKTOP'}</p>
+<p>User Agent: \${navigator.userAgent}</p>
+<p>Screen: \${window.screen.width}x\${window.screen.height}</p>
+\`;
+            `);
+            window.open(`https://codepen.io/pen/?editors=1010&prefill=${code}`, '_blank');
+        }
+
+        function testWithJSFiddle() {
+            window.open('https://jsfiddle.net/', '_blank');
+            alert('Copy the mobile detection code to JSFiddle and test it online');
+        }
+
+        // Initialize the tester
+        const tester = new MobileRedirectTester();
+
+        // Update on orientation change
+        window.addEventListener('orientationchange', () => {
+            setTimeout(() => tester.updateDisplay(), 500);
+        });
+        
+        // Update on resize
+        window.addEventListener('resize', () => {
+            tester.updateDisplay();
+        });
+    </script>
+</body>
+</html>

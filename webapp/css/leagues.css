@@ -1,0 +1,441 @@
+/* 5ive Trackr Leagues Styles */
+
+/* Page Actions */
+.page-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.action-button {
+    display: flex;
+    align-items: center;
+    padding: 0.75rem 1.25rem;
+    border: none;
+    border-radius: 0.75rem;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.2s ease;
+    gap: 0.5rem;
+}
+
+.action-button.primary {
+    background: var(--primary-color);
+    color: white;
+}
+
+.action-button.primary:hover {
+    background: var(--primary-dark);
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+}
+
+.search-container {
+    display: flex;
+    align-items: center;
+}
+
+.search-container input {
+    padding: 0.65rem 1rem;
+    border: 1px solid var(--border-color);
+    border-radius: 0.5rem 0 0 0.5rem;
+    width: 200px;
+}
+
+.search-btn {
+    background: var(--background-light);
+    border: 1px solid var(--border-color);
+    border-left: none;
+    border-radius: 0 0.5rem 0.5rem 0;
+    padding: 0.65rem 0.75rem;
+    cursor: pointer;
+}
+
+.filter-container {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.filter-container select {
+    padding: 0.65rem 0.75rem;
+    border: 1px solid var(--border-color);
+    border-radius: 0.5rem;
+    background: white;
+}
+
+/* Leagues Grid */
+.leagues-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 1.5rem;
+}
+
+.league-card {
+    background: white;
+    border-radius: 0.75rem;
+    box-shadow: 0 2px 8px 0 rgba(30,41,59,0.06);
+    overflow: hidden;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    cursor: pointer;
+    /* Optimize text rendering */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.league-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 16px 0 rgba(30,41,59,0.1);
+    /* Only apply hardware acceleration during hover */
+    will-change: transform, box-shadow;
+    backface-visibility: hidden;
+}
+
+.league-card-header {
+    padding: 1.25rem 1.5rem;
+    border-bottom: 1px solid var(--border-color);
+    position: relative;
+}
+
+.league-card-header.active {
+    background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+    color: white;
+}
+
+.league-card-header.upcoming {
+    background: linear-gradient(135deg, #3B82F6 0%, #2563EB 100%);
+    color: white;
+}
+
+.league-card-header.completed {
+    background: linear-gradient(135deg, #6B7280 0%, #4B5563 100%);
+    color: white;
+}
+
+.league-card-header.archived {
+    background: linear-gradient(135deg, #9CA3AF 0%, #6B7280 100%);
+    color: white;
+}
+
+.league-status {
+    position: absolute;
+    top: 1.25rem;
+    right: 1.5rem;
+    font-size: 0.75rem;
+    padding: 0.25rem 0.5rem;
+    border-radius: 1rem;
+    font-weight: 500;
+}
+
+.league-status.active {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.league-status.upcoming {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.league-status.completed {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.league-status.archived {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.league-name {
+    margin: 0 0 0.25rem 0;
+    font-size: 1.2rem;
+    font-weight: 600;
+}
+
+.league-season {
+    font-size: 0.9rem;
+    opacity: 0.9;
+}
+
+.league-card-body {
+    padding: 1.25rem 1.5rem;
+}
+
+.league-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    text-align: center;
+    margin-bottom: 1.25rem;
+}
+
+.league-stat {
+    padding: 0.5rem;
+}
+
+.league-stat-value {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+}
+
+.league-stat-label {
+    font-size: 0.8rem;
+    color: #64748b;
+}
+
+.league-dates {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.85rem;
+    color: #64748b;
+}
+
+/* Modal Styles */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    overflow: auto;
+}
+
+.modal.active {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-content {
+    background: white;
+    border-radius: 0.75rem;
+    width: 90%;
+    max-width: 800px;
+    max-height: 90vh;
+    overflow: auto;
+    box-shadow: 0 4px 24px 0 rgba(30,41,59,0.15);
+    animation: modal-appear 0.3s ease;
+}
+
+@keyframes modal-appear {
+    from {
+        opacity: 0;
+        transform: translateY(-30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.modal-header h3 {
+    margin: 0;
+    font-size: 1.25rem;
+}
+
+.close-button {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    line-height: 1;
+}
+
+.modal-body {
+    padding: 1.5rem;
+}
+
+/* Form Styles */
+.form-group {
+    margin-bottom: 1.25rem;
+}
+
+.form-row {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1.25rem;
+}
+
+.form-row .form-group {
+    flex: 1;
+    margin-bottom: 0;
+}
+
+label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+}
+
+input[type="text"],
+input[type="date"],
+input[type="number"],
+select,
+textarea {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--border-color);
+    border-radius: 0.5rem;
+    font-size: 1rem;
+    font-family: inherit;
+}
+
+textarea {
+    resize: vertical;
+}
+
+.checkbox-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.checkbox-group label {
+    display: flex;
+    align-items: center;
+    font-weight: normal;
+    gap: 0.5rem;
+}
+
+.points-settings {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+}
+
+.points-settings label {
+    font-size: 0.85rem;
+    margin-bottom: 0.25rem;
+}
+
+.points-settings input {
+    width: 100%;
+    text-align: center;
+}
+
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    margin-top: 1.5rem;
+}
+
+.cancel-button {
+    background: var(--background-light);
+    border: 1px solid var(--border-color);
+    border-radius: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    cursor: pointer;
+    font-weight: 500;
+}
+
+.submit-button {
+    background: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    cursor: pointer;
+    font-weight: 500;
+}
+
+.submit-button:hover {
+    background: var(--primary-dark);
+}
+
+/* Tab Navigation */
+.tab-container {
+    margin-top: 1.5rem;
+}
+
+.tabs {
+    display: flex;
+    border-bottom: 1px solid var(--border-color);
+    margin-bottom: 1.5rem;
+    overflow-x: auto;
+}
+
+.tab {
+    padding: 0.75rem 1.25rem;
+    cursor: pointer;
+    font-weight: 500;
+    white-space: nowrap;
+}
+
+.tab.active {
+    border-bottom: 2px solid var(--primary-color);
+    color: var(--primary-color);
+}
+
+.tab-pane {
+    display: none;
+}
+
+.tab-pane.active {
+    display: block;
+}
+
+/* Standings Table */
+.table-container {
+    overflow-x: auto;
+}
+
+.standings-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.standings-table th {
+    text-align: left;
+    padding: 0.75rem 1rem;
+    border-bottom: 2px solid var(--border-color);
+    font-weight: 600;
+}
+
+.standings-table td {
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.standings-table tr:hover {
+    background: var(--background-light);
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+    .page-actions {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .filter-container {
+        flex-direction: column;
+        width: 100%;
+    }
+    
+    .search-container {
+        width: 100%;
+    }
+    
+    .search-container input {
+        flex: 1;
+    }
+    
+    .form-row {
+        flex-direction: column;
+        gap: 1.25rem;
+    }
+    
+    .points-settings {
+        grid-template-columns: 1fr;
+    }
+}

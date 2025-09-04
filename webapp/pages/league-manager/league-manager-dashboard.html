@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>League Manager Dashboard - 5ive Trackr</title>
+    <meta name="author" content="5ive Trackr">
+    <meta name="copyright" content="© 2025 5ive Trackr. All rights reserved.">
+    <meta name="robots" content="noarchive, noimageindex">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    
+    <!-- Consolidated Dashboard Master CSS -->
+    <link rel="stylesheet" href="../../css/dashboard-master.css?v=consolidated-2025">
+    <style>
+    /* Safe system font stack - no external dependencies */
+    body, * {
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, "Helvetica Neue", Helvetica, Arial, Roboto, "Noto Sans", "Liberation Sans", sans-serif;
+    }
+</style>
+    <!-- League Manager Sidebar Styles - Load immediately to prevent layout shifts -->
+    <link rel="stylesheet" href="../../css/league-manager-sidebar.css">
+    <!-- League Manager Header Styles - Load immediately to prevent layout shifts -->
+    <link rel="stylesheet" href="../../css/league-manager-header.css">
+</head>
+
+<body data-page="dashboard" data-role="league-manager">
+    <!-- Dynamic Sidebar Template - Loaded via JavaScript -->
+    <div id="sidebar-placeholder"></div>
+    
+    <!-- Dynamic Header Template - Loaded via JavaScript -->
+    <div id="header-placeholder"></div>
+    
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Content will be added here -->
+    </main>
+
+    <!-- Template Loading Scripts -->
+    <script>
+        // Load header template
+        async function loadHeader() {
+            try {
+                const response = await fetch('../../templates/league-manager-header.html');
+                const headerHTML = await response.text();
+                document.getElementById('header-placeholder').innerHTML = headerHTML;
+            } catch (error) {
+                console.error('Failed to load header template:', error);
+            }
+        }
+
+        // Load sidebar template
+        async function loadSidebar() {
+            try {
+                const response = await fetch('../../templates/league-manager-sidebar.html');
+                const sidebarHTML = await response.text();
+                document.getElementById('sidebar-placeholder').innerHTML = sidebarHTML;
+                
+                // Set active navigation item
+                setActiveNavItem('dashboard');
+            } catch (error) {
+                console.error('Failed to load sidebar template:', error);
+            }
+        }
+
+        // Set active navigation item
+        function setActiveNavItem(pageId) {
+            setTimeout(() => {
+                document.querySelectorAll('.nav-item').forEach(item => {
+                    item.classList.remove('active');
+                });
+                
+                const currentNavItem = document.querySelector(`[data-page="${pageId}"]`);
+                if (currentNavItem) {
+                    currentNavItem.classList.add('active');
+                }
+            }, 100);
+        }
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', async function() {
+            await loadHeader();
+            await loadSidebar();
+        });
+
+        // Logout handler (if needed by header)
+        function handleLogout(event) {
+            event.preventDefault();
+            window.location.href = '../../login.html';
+        }
+    </script>
+</body>
+</html>

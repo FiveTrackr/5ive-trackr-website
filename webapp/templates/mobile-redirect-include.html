@@ -1,0 +1,53 @@
+<!-- 
+    5ive Trackr Mobile Redirect Include
+    
+    Include this snippet in the <head> section of all HTML pages
+    to enable mobile device detection and app store redirection.
+    
+    Place immediately after meta tags and before any other scripts.
+    
+    Usage:
+    For pages in root directory (home.html):
+    Copy the "Root Directory" section below
+    
+    For pages in subdirectories (pages/league-manager/):
+    Copy the "Subdirectory" section below
+-->
+
+<!-- ROOT DIRECTORY PAGES (home.html, dashboard.html, etc.) -->
+<!-- 
+    <script src="./js/mobile-redirect-config.js?v=<?php echo time(); ?>"></script>
+    <script src="./js/mobile-redirect.js?v=<?php echo time(); ?>"></script>
+-->
+
+<!-- SUBDIRECTORY PAGES (pages/league-manager/*.html) -->
+<!-- 
+    <script src="/webapp/src/js/mobile-redirect-config.js?v=<?php echo time(); ?>"></script>
+    <script src="/webapp/src/js/mobile-redirect.js?v=<?php echo time(); ?>"></script>
+-->
+
+<!-- DEEP SUBDIRECTORY PAGES (adjust path as needed) -->
+<!-- 
+    <script src="/webapp/src/js/mobile-redirect-config.js?v=<?php echo time(); ?>"></script>
+    <script src="/webapp/src/js/mobile-redirect.js?v=<?php echo time(); ?>"></script>
+-->
+
+<!-- 
+    CONFIGURATION NOTES:
+    
+    1. The mobile-redirect-config.js file contains all settings
+    2. Update app store URLs in mobile-redirect-config.js when ready
+    3. The system automatically redirects mobile users to app stores
+    4. Desktop users get optimized experience with enhanced features
+    5. Users can bypass redirect if needed (for testing/edge cases)
+    
+    WHEN APPS ARE PUBLISHED:
+    Update the URLs in mobile-redirect-config.js:
+    
+    window.updateAppStoreUrls({
+        iosAppStoreUrl: 'https://apps.apple.com/app/5ive-trackr/id1234567890',
+        androidPlayStoreUrl: 'https://play.google.com/store/apps/details?id=com.fivetrackr.app'
+    });
+    
+    Or edit the file directly.
+-->

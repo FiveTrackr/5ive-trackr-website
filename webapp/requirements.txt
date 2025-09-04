@@ -1,0 +1,7 @@
+# 5ive Trackr Python Dependencies
+# Compliant with .github data handling requirements
+# JWT authentication as per AUTHENTICATION-SYSTEM-STAGE1.md
+PyJWT==2.8.0
+
+# Production deployment
+gunicorn==21.2.0

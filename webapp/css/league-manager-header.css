@@ -1,0 +1,167 @@
+/* League Manager Header Styles - Immediate Loading */
+/* This file ensures the header displays correctly from the initial page load */
+
+/* Global content area padding for consistent alignment */
+body[data-role="league-manager"] .content-area {
+    padding: 24px !important; /* Consistent padding for all league manager pages */
+}
+
+/* Header container styling with maximum specificity */
+body[data-role="league-manager"] .main-header,
+.main-header[data-loaded="league-manager"],
+.header.league-manager-header {
+    background-color: #ffffff !important;
+    border-radius: 0 0 12px 12px !important;
+    padding: 16px 24px !important;
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    width: calc(100% - 250px) !important;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1) !important;
+    position: fixed !important;
+    top: 0 !important;
+    left: 250px !important;
+    z-index: 999 !important;
+    height: 70px !important;
+    box-sizing: border-box !important;
+}
+
+/* Header left section - Page title */
+body[data-role="league-manager"] .main-header .header-left,
+.main-header[data-loaded="league-manager"] .header-left {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    flex: 1 !important;
+    height: 100% !important;
+    padding-left: 24px !important; /* Align with main content page titles */
+}
+
+body[data-role="league-manager"] .main-header .page-title,
+.main-header[data-loaded="league-manager"] .page-title {
+    font-size: 28px !important;
+    font-weight: 600 !important;
+    text-transform: uppercase !important;
+    margin: 0 !important;
+    font-family: 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'Helvetica Neue', 'Helvetica', 'Arial', 'Roboto', 'Noto Sans', 'Liberation Sans', sans-serif !important;
+    letter-spacing: 0.05em !important; /* Match static headers */
+    line-height: 1 !important;
+    display: flex !important;
+    align-items: center !important;
+    background: linear-gradient(135deg, #2e6417 0%, #1e4009 100%) !important;
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+    background-clip: text !important;
+    position: relative !important;
+    margin-left: 0 !important; /* Ensure perfect alignment with content titles */
+    /* Add fallback for browsers that don't support gradient text */
+    color: #2e6417 !important;
+}
+
+/* Header right section - User info and actions */
+body[data-role="league-manager"] .main-header .header-right,
+.main-header[data-loaded="league-manager"] .header-right {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-end !important;
+    gap: 16px !important;
+    height: 100% !important;
+}
+
+/* User info section */
+body[data-role="league-manager"] .main-header .user-info,
+.main-header[data-loaded="league-manager"] .user-info {
+    display: flex !important;
+    align-items: center !important;
+    gap: 12px !important;
+    padding: 8px 16px !important;
+    background-color: #f8f9fa !important;
+    border-radius: 8px !important;
+    border: 1px solid #e9ecef !important;
+    height: auto !important;
+}
+
+body[data-role="league-manager"] .main-header .user-avatar,
+.main-header[data-loaded="league-manager"] .user-avatar {
+    width: 32px !important;
+    height: 32px !important;
+    border-radius: 50% !important;
+    background-color: #2e6417 !important;
+    color: white !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    font-weight: 600 !important;
+    font-size: 14px !important;
+}
+
+body[data-role="league-manager"] .main-header .user-details,
+.main-header[data-loaded="league-manager"] .user-details {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: flex-start !important;
+}
+
+body[data-role="league-manager"] .main-header .user-name,
+.main-header[data-loaded="league-manager"] .user-name {
+    font-size: 14px !important;
+    font-weight: 600 !important;
+    color: #495057 !important;
+    margin: 0 !important;
+    line-height: 1.2 !important;
+}
+
+body[data-role="league-manager"] .main-header .user-role,
+.main-header[data-loaded="league-manager"] .user-role {
+    font-size: 12px !important;
+    color: #6c757d !important;
+    margin: 0 !important;
+    line-height: 1.2 !important;
+}
+
+/* Header actions */
+body[data-role="league-manager"] .main-header .header-actions,
+.main-header[data-loaded="league-manager"] .header-actions {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 8px !important;
+    height: 100% !important;
+}
+
+body[data-role="league-manager"] .main-header .header-btn,
+.main-header[data-loaded="league-manager"] .header-btn {
+    padding: 8px 12px !important;
+    background-color: #e9ecef !important;
+    border: 1px solid #ced4da !important;
+    border-radius: 6px !important;
+    text-decoration: none !important;
+    color: #495057 !important;
+    font-size: 13px !important;
+    font-weight: 500 !important;
+    transition: all 0.3s ease !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 6px !important;
+    height: auto !important;
+    line-height: 1 !important;
+}
+
+body[data-role="league-manager"] .main-header .header-btn:hover,
+.main-header[data-loaded="league-manager"] .header-btn:hover {
+    background-color: #dee2e6 !important;
+    color: #2e6417 !important;
+    border-color: #2e6417 !important;
+}
+
+body[data-role="league-manager"] .main-header .btn-icon,
+.main-header[data-loaded="league-manager"] .btn-icon {
+    font-size: 14px !important;
+}
+
+/* Loading state styling */
+body[data-role="league-manager"] .main-header .header-loading,
+.main-header[data-loaded="league-manager"] .header-loading {
+    display: none !important; /* Hide loading when static content is present */
+}

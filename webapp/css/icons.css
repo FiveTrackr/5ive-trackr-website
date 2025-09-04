@@ -1,0 +1,81 @@
+/**
+ * 5ive Trackr Custom Icons
+ * Original code implementation to replace Font Awesome
+ * 
+ * @copyright 5ive Trackr 2025
+ */
+
+/* Icon font base */
+@font-face {
+  font-family: '5iveIcons';
+  src: url('../fonts/5ive-icons.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+}
+
+.icon {
+  font-family: '5iveIcons' !important;
+  speak: never;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Common icon styles */
+.icon {
+  display: inline-block;
+  font-size: 1.25em;
+  width: 1em;
+  height: 1em;
+  vertical-align: -0.125em;
+}
+
+/* Icon definitions using Unicode private use area */
+.icon-home::before { content: '\e900'; }
+.icon-trophy::before { content: '\e901'; }
+.icon-users::before { content: '\e902'; }
+.icon-running::before { content: '\e903'; }
+.icon-map-marker::before { content: '\e904'; }
+.icon-user-tie::before { content: '\e905'; }
+.icon-chart-bar::before { content: '\e906'; }
+.icon-cog::before { content: '\e907'; }
+.icon-sign-out::before { content: '\e908'; }
+.icon-chevron-left::before { content: '\e909'; }
+.icon-chevron-right::before { content: '\e90a'; }
+.icon-chevron-down::before { content: '\e90b'; }
+.icon-chevron-up::before { content: '\e90c'; }
+.icon-user-circle::before { content: '\e90d'; }
+.icon-arrow-left::before { content: '\e90e'; }
+.icon-calendar::before { content: '\e90f'; }
+.icon-list-ol::before { content: '\e910'; }
+.icon-chart-pie::before { content: '\e911'; }
+.icon-plus::before { content: '\e912'; }
+.icon-search::before { content: '\e913'; }
+.icon-times::before { content: '\e914'; }
+
+/* Fallback using emoji for development */
+.icon-home::before { content: '🏠'; }
+.icon-trophy::before { content: '🏆'; }
+.icon-users::before { content: '👥'; }
+.icon-running::before { content: '🏃'; }
+.icon-map-marker::before { content: '📍'; }
+.icon-user-tie::before { content: '👔'; }
+.icon-chart-bar::before { content: '📊'; }
+.icon-cog::before { content: '⚙️'; }
+.icon-sign-out::before { content: '🚪'; }
+.icon-chevron-left::before { content: '◀️'; }
+.icon-chevron-right::before { content: '▶️'; }
+.icon-chevron-down::before { content: '🔽'; }
+.icon-chevron-up::before { content: '🔼'; }
+.icon-user-circle::before { content: '👤'; }
+.icon-arrow-left::before { content: '⬅️'; }
+.icon-calendar::before { content: '📅'; }
+.icon-list-ol::before { content: '📋'; }
+.icon-chart-pie::before { content: '📈'; }
+.icon-plus::before { content: '➕'; }
+.icon-search::before { content: '🔍'; }
+.icon-times::before { content: '❌'; }

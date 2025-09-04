@@ -1,0 +1,19 @@
+name: five-trackr-webapp
+services:
+- name: five-trackr-webapp
+  environment_slug: python
+  github:
+    branch: main
+    deploy_on_push: true
+    repo: FiveTrackr/5ive-trackr-webapp
+  run_command: python api/server.py $PORT
+  http_port: 8080
+  instance_count: 1
+  instance_size_slug: apps-s-1vcpu-0.5gb
+  routes:
+  - path: /
+  envs:
+  - key: PORT
+    value: "8080"
+  - key: PYTHONPATH
+    value: "/app"

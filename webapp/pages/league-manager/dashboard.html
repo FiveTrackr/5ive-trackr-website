@@ -1,0 +1,1428 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>League Manager Dashboard - 5ive Trackr</title>
+    <meta name="author" content="5ive Trackr">
+    <meta name="copyright" content="Â© 2025 5ive Trackr. All rights reserved.">
+    <meta name="robots" content="noarchive, noimageindex">
+    <!-- <meta http-equiv="Content-Security-Policy" content="default-src 'self'"> -->
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    
+    <!-- Mobile Detection & Redirect - Load First -->
+    <script src="../../js/mobile-redirect-config.js?v=<?php echo time(); ?>"></script>
+    <script src="../../js/mobile-redirect.js?v=<?php echo time(); ?>"></script>
+    
+    <script src="../../js/toggle-remover.js"></script>
+    <!-- Consolidated Dashboard Master CSS - replaces all dashboard-related CSS files -->
+    <link rel="stylesheet" href="../../css/dashboard-master.css?v=consolidated-2025">
+    <!-- We're using our custom layout, so we exclude dashboard-layout.css and fixed-sidebar.css -->
+    
+    <!-- All dashboard styles have been consolidated into dashboard-master.css -->
+    <style>
+    /* Safe system font stack - no external dependencies */
+    body, * {
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, "Helvetica Neue", Helvetica, Arial, Roboto, "Noto Sans", "Liberation Sans", sans-serif;
+    }
+</style>
+    <!-- League Manager Sidebar Styles - Load immediately to prevent layout shifts -->
+    <link rel="stylesheet" href="../../css/league-manager-sidebar.css">
+    <!-- League Manager Header Styles - Load immediately to prevent layout shifts -->
+    <link rel="stylesheet" href="../../css/league-manager-header.css">
+    <!-- All dashboard layout is now handled by dashboard-master.css -->
+    
+    <style>
+        /* Header Template Styles */
+        .main-header[data-loaded="league-manager"] {
+            background-color: #ffffff !important;
+            border-radius: 0 0 12px 12px !important;
+            padding: 16px 24px !important;
+            display: flex !important;
+            justify-content: space-between !important;
+            align-items: center !important;
+            width: calc(100% - 250px) !important;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1) !important;
+            position: fixed !important;
+            top: 0 !important;
+            left: 250px !important;
+            z-index: 999 !important;
+            height: 70px !important;
+            box-sizing: border-box !important;
+        }
+
+        .main-header .header-left {
+            display: flex !important;
+            align-items: center !important;
+            justify-content: flex-start !important;
+            flex: 1 !important;
+            height: 100% !important;
+            padding-left: 24px !important;
+        }
+
+        .main-header .header-right {
+            display: flex !important;
+            align-items: center !important;
+            gap: 16px !important;
+            height: 100% !important;
+        }
+
+        .main-header .user-info {
+            display: flex !important;
+            align-items: center !important;
+            gap: 12px !important;
+        }
+
+        .main-header .user-avatar {
+            width: 40px !important;
+            height: 40px !important;
+            border-radius: 50% !important;
+            background: linear-gradient(135deg, #2e6417 0%, #1e4009 100%) !important;
+            color: white !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            font-weight: 600 !important;
+            font-size: 14px !important;
+        }
+
+        .main-header .user-details {
+            display: flex !important;
+            flex-direction: column !important;
+            align-items: flex-start !important;
+        }
+
+        .main-header .user-name {
+            font-size: 14px !important;
+            font-weight: 600 !important;
+            color: #333 !important;
+            margin: 0 !important;
+        }
+
+        .main-header .user-role {
+            font-size: 12px !important;
+            color: #666 !important;
+            margin: 0 !important;
+        }
+
+        .main-header .header-actions {
+            display: flex !important;
+            align-items: center !important;
+            gap: 12px !important;
+        }
+
+        .main-header .header-btn {
+            display: flex !important;
+            align-items: center !important;
+            gap: 8px !important;
+            padding: 8px 16px !important;
+            background: #2e6417 !important;
+            color: white !important;
+            border: none !important;
+            border-radius: 8px !important;
+            font-size: 14px !important;
+            font-weight: 500 !important;
+            cursor: pointer !important;
+            transition: all 0.2s ease !important;
+            position: relative !important;
+        }
+
+        .main-header .header-btn:hover {
+            background: #1e4009 !important;
+            transform: translateY(-1px) !important;
+        }
+
+        /* Notifications Button Styling */
+        .notifications-btn {
+            position: relative;
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: #dc2626;
+            color: white;
+            border-radius: 50%;
+            padding: 0;
+            font-size: 10px;
+            font-weight: 600;
+            width: 18px;
+            height: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            line-height: 1;
+            border: 2px solid white;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+        }
+
+        .notification-badge.hidden {
+            display: none;
+        }
+
+        /* Notifications Panel Styling */
+        .notifications-panel {
+            position: fixed;
+            top: 80px;
+            right: 20px;
+            width: 400px;
+            max-width: 90vw;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            z-index: 1001;
+            max-height: 70vh;
+            display: none;
+            flex-direction: column;
+            border: 1px solid #e0e0e0;
+        }
+
+        .notifications-panel.active {
+            display: flex;
+        }
+
+        .notifications-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.3);
+            z-index: 1000;
+            display: none;
+        }
+
+        .notifications-overlay.active {
+            display: block;
+        }
+
+        .notifications-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 20px;
+            border-bottom: 1px solid #e0e0e0;
+            background: #f8f9fa;
+            border-radius: 12px 12px 0 0;
+        }
+
+        .notifications-header h3 {
+            margin: 0;
+            font-size: 18px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .notifications-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .mark-all-read {
+            color: #2e6417;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 500;
+        }
+
+        .mark-all-read:hover {
+            text-decoration: underline;
+        }
+
+        .close-panel {
+            background: none;
+            border: none;
+            font-size: 24px;
+            color: #666;
+            cursor: pointer;
+            padding: 0;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .close-panel:hover {
+            color: #333;
+        }
+
+        .notifications-content {
+            flex: 1;
+            overflow-y: auto;
+            max-height: calc(70vh - 80px);
+        }
+
+        .notifications-list {
+            padding: 8px 0;
+        }
+
+        /* Dashboard Page Specific Styles - Matching other pages */
+        
+        /* Header Title Styling */
+        .main-header .page-title {
+            font-size: 28px !important;
+            font-weight: 800 !important;
+            text-transform: uppercase !important;
+            color: #2e6417 !important;
+            margin: 0 !important;
+            font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif !important;
+            letter-spacing: 0.08em !important;
+            line-height: 1 !important;
+            display: flex !important;
+            align-items: center !important;
+            text-shadow: 0 1px 2px rgba(46, 100, 23, 0.1) !important;
+            background: linear-gradient(135deg, #2e6417 0%, #1e4009 100%) !important;
+            -webkit-background-clip: text !important;
+            -webkit-text-fill-color: transparent !important;
+            background-clip: text !important;
+        }
+        
+        /* Content Area Styling */
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 2px solid #f3f4f6;
+        }
+        
+        .page-title-section {
+            flex: 1;
+        }
+        
+        .page-title, .content-title {
+            font-size: 28px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #2e6417 0%, #1e4009 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin: 0 0 4px 0;
+        }
+        
+        .page-subtitle {
+            color: #6b7280;
+            font-size: 14px;
+            font-weight: 500;
+            margin: 0;
+        }
+
+        /* Venue Selector Styles */
+        .venue-selector-container {
+            padding: 0 15px 20px 15px;
+            border-bottom: 1px solid #e2e8f0;
+            margin-bottom: 16px;
+            position: relative;
+            overflow: visible;
+        }
+
+        .venue-selector-btn {
+            width: 100% !important;
+            background: linear-gradient(135deg, #2e6417 0%, #1e4009 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 12px 16px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: none !important;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 2px 4px rgba(46, 100, 23, 0.2);
+            position: relative;
+            box-sizing: border-box !important;
+            margin: 0 !important;
+            user-select: none !important;
+            -webkit-user-select: none !important;
+            -moz-user-select: none !important;
+            -ms-user-select: none !important;
+        }
+
+        .venue-selector-btn:hover {
+            transform: none !important;
+            box-shadow: 0 2px 4px rgba(46, 100, 23, 0.2) !important;
+        }
+
+        .venue-selector-btn:active {
+            transform: none !important;
+        }
+
+        .venue-selector-content {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            flex: 1;
+        }
+
+        .venue-selector-label {
+            font-size: 0.7rem;
+            opacity: 0.9;
+            margin-bottom: 2px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .venue-selector-name {
+            font-size: 0.875rem;
+            font-weight: 700;
+            line-height: 1.2;
+        }
+
+        .venue-selector-icon {
+            font-size: 1rem;
+            margin-left: 8px;
+            transition: none !important;
+        }
+
+        .venue-selector-btn.active .venue-selector-icon {
+            transform: rotate(180deg) !important;
+            transition: none !important;
+        }
+
+        .venue-selector-btn.active {
+            border-radius: 8px 8px 0 0 !important;
+            border-bottom: none !important;
+            box-shadow: 0 2px 4px rgba(46, 100, 23, 0.2) !important;
+            transition: none !important;
+        }
+
+        .venue-dropdown {
+            position: absolute;
+            top: calc(100% - 1px);
+            left: 0;
+            right: 0;
+            background: linear-gradient(135deg, #2e6417 0%, #1e4009 100%);
+            border: none !important;
+            border-radius: 0 0 8px 8px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25);
+            z-index: 9999 !important;
+            margin-top: 0;
+            transform: none !important;
+            transition: none !important;
+            display: none;
+            max-height: 300px;
+            overflow-y: auto;
+            color: white;
+            outline: none !important;
+        }
+
+        .venue-dropdown.show {
+            display: block !important;
+            transition: none !important;
+        }
+
+        /* Venue Selector Overlay - Only darken area outside dropdown */
+        .venue-selector-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.3);
+            z-index: 9998 !important;
+            display: none;
+            transition: none !important;
+        }
+
+        .venue-selector-overlay.show {
+            display: block !important;
+            transition: none !important;
+        }
+
+        .venue-option {
+            padding: 12px 16px;
+            cursor: pointer;
+            transition: none !important;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            color: white;
+            background: transparent;
+        }
+
+        .venue-option:last-child {
+            border-bottom: none;
+        }
+
+        .venue-option:hover {
+            background: rgba(255, 255, 255, 0.1) !important;
+            transition: none !important;
+        }
+
+        .venue-option.selected {
+            background: rgba(255, 255, 255, 0.2) !important;
+            color: white;
+            font-weight: 700;
+            transition: none !important;
+        }
+
+        .venue-option-details {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .venue-option-name {
+            font-weight: 600;
+            font-size: 0.875rem;
+            margin-bottom: 2px;
+            color: white;
+        }
+
+        .venue-option-address {
+            font-size: 0.7rem;
+            color: rgba(255, 255, 255, 0.8);
+            opacity: 0.9;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .venue-option-check {
+            color: white;
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+
+        /* Navigation Icon Fixes */
+        body[data-role="league-manager"] .sidebar .nav-icon[data-icon="referee"],
+        .sidebar .nav-icon[data-icon="referee"] {
+            background-image: url('../../img/referee-icon.svg') !important;
+            background-size: 18px 18px !important;
+            background-repeat: no-repeat !important;
+            background-position: center !important;
+            width: 20px !important;
+            height: 20px !important;
+            display: inline-block !important;
+        }
+
+        body[data-role="league-manager"] .sidebar .nav-icon[data-icon="shirt"],
+        .sidebar .nav-icon[data-icon="shirt"] {
+            background-image: url('../../img/shirt-icon.svg') !important;
+            background-size: 18px 18px !important;
+            background-repeat: no-repeat !important;
+            background-position: center !important;
+            width: 20px !important;
+            height: 20px !important;
+            display: inline-block !important;
+        }
+
+        /* Navigation Sizing Fix Applied: Consistent padding (14px 20px) for all nav items via league-manager-sidebar.css */
+    </style>
+    
+    <script>
+        // Logout handler
+        function handleLogout(event) {
+            event.preventDefault();
+            // Add logout logic here
+            window.location.href = '../../login.html';
+        }
+    </script>
+    
+    <!-- Header Template Loader -->
+    <script src="../../js/components/header-template-loader.js"></script>
+    
+    <!-- SPA Redirect Handler -->
+    <script src="../../js/core/spa-redirect.js"></script>
+</head>
+<body data-page="dashboard" data-role="league-manager">
+    <!-- Loading Screen -->
+    <div id="app-loading-screen" style="
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%);
+        z-index: 9999;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        transition: opacity 0.8s ease-out, visibility 0.8s ease-out;
+    ">
+        <!-- Background Pattern -->
+        <div style="
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 25% 25%, rgba(59, 130, 246, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 75% 75%, rgba(16, 185, 129, 0.1) 0%, transparent 50%);
+            animation: backgroundShift 6s ease-in-out infinite alternate;
+        "></div>
+
+        <!-- Main Logo -->
+        <div style="
+            position: relative;
+            z-index: 2;
+            animation: logoFloat 3s ease-in-out infinite alternate;
+        ">
+            <img src="../../img/5ive-trackr-plain.svg" alt="5ive Trackr" style="
+                width: 200px;
+                height: auto;
+                filter: drop-shadow(0 10px 30px rgba(0, 0, 0, 0.3));
+                animation: logoPulse 2s ease-in-out infinite;
+            ">
+        </div>
+
+        <!-- Loading Text -->
+        <div style="
+            margin-top: 30px;
+            color: white;
+            font-size: 18px;
+            font-weight: 600;
+            text-align: center;
+            animation: textFade 2s ease-in-out infinite alternate;
+            position: relative;
+            z-index: 2;
+        ">
+            Loading Dashboard...
+        </div>
+
+        <!-- Loading Dots -->
+        <div style="
+            margin-top: 20px;
+            display: flex;
+            gap: 8px;
+            position: relative;
+            z-index: 2;
+        ">
+            <div style="
+                width: 8px;
+                height: 8px;
+                background: #3b82f6;
+                border-radius: 50%;
+                animation: dotBounce 1.4s ease-in-out infinite both;
+                animation-delay: 0s;
+            "></div>
+            <div style="
+                width: 8px;
+                height: 8px;
+                background: #10b981;
+                border-radius: 50%;
+                animation: dotBounce 1.4s ease-in-out infinite both;
+                animation-delay: 0.16s;
+            "></div>
+            <div style="
+                width: 8px;
+                height: 8px;
+                background: #f59e0b;
+                border-radius: 50%;
+                animation: dotBounce 1.4s ease-in-out infinite both;
+                animation-delay: 0.32s;
+            "></div>
+        </div>
+
+        <!-- Progress Indicator -->
+        <div style="
+            margin-top: 40px;
+            width: 200px;
+            height: 3px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+            overflow: hidden;
+            position: relative;
+            z-index: 2;
+        ">
+            <div style="
+                width: 0%;
+                height: 100%;
+                background: linear-gradient(90deg, #3b82f6, #10b981, #f59e0b);
+                border-radius: 3px;
+                animation: progressFill 3s ease-in-out infinite;
+            "></div>
+        </div>
+    </div>
+
+    <style>
+        @keyframes logoFloat {
+            0% { transform: translateY(0px) scale(1); }
+            100% { transform: translateY(-10px) scale(1.05); }
+        }
+        
+        @keyframes logoPulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.8; }
+        }
+        
+        @keyframes textFade {
+            0% { opacity: 0.7; }
+            100% { opacity: 1; }
+        }
+        
+        @keyframes dotBounce {
+            0%, 80%, 100% { 
+                transform: scale(0);
+                opacity: 0.5;
+            } 
+            40% { 
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+        
+        @keyframes progressFill {
+            0% { width: 0%; }
+            50% { width: 70%; }
+            100% { width: 100%; }
+        }
+        
+        @keyframes backgroundShift {
+            0% { 
+                background: radial-gradient(circle at 25% 25%, rgba(59, 130, 246, 0.1) 0%, transparent 50%),
+                            radial-gradient(circle at 75% 75%, rgba(16, 185, 129, 0.1) 0%, transparent 50%);
+            }
+            100% { 
+                background: radial-gradient(circle at 75% 25%, rgba(16, 185, 129, 0.1) 0%, transparent 50%),
+                            radial-gradient(circle at 25% 75%, rgba(59, 130, 246, 0.1) 0%, transparent 50%);
+            }
+        }
+
+        /* Hide loading screen when page is loaded */
+        .app-loaded #app-loading-screen {
+            opacity: 0;
+            visibility: hidden;
+        }
+    </style>
+
+    <!-- Sidebar - Static content with dynamic enhancement -->
+    <aside class="sidebar">
+        <!-- Static sidebar content that loads immediately -->
+        <div class="sidebar-header">
+            <div class="logo-container">
+                <img src="../../img/header-logo.svg" alt="5ive Trackr" class="logo">
+            </div>
+        </div>
+
+        <!-- Navigation Menu -->
+        <nav class="sidebar-nav">
+            <!-- Venue Selector -->
+            <div class="venue-selector-container">
+                <div class="venue-selector-btn" id="venue-selector-btn" onclick="toggleVenueDropdown()">
+                    <div class="venue-selector-content">
+                        <div class="venue-selector-label">Current Venue</div>
+                        <div class="venue-selector-name" id="selected-venue-name">Loading...</div>
+                    </div>
+                    <span class="venue-selector-icon">▼</span>
+                    <div class="venue-dropdown" id="venue-dropdown">
+                        <!-- Venues will be loaded dynamically based on logged-in user's data -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Venue Selector Overlay -->
+            <div class="venue-selector-overlay" id="venue-selector-overlay" onclick="closeVenueDropdown()"></div>
+
+            <ul class="nav-menu">
+                <li class="nav-item active" data-page="dashboard">
+                    <a href="dashboard.html" class="nav-link">
+                        <span class="nav-icon">📊</span>
+                        <span class="link-text">Dashboard</span>
+                    </a>
+                </li>
+                
+                <li class="nav-item" data-page="fixtures">
+                    <a href="fixtures.html" class="nav-link">
+                        <span class="nav-icon">📅</span>
+                        <span class="link-text">Fixtures</span>
+                    </a>
+                </li>
+                
+                <li class="nav-item" data-page="referees">
+                    <a href="referees.html" class="nav-link">
+                        <span class="nav-icon" data-icon="referee"></span>
+                        <span class="link-text">Referees</span>
+                    </a>
+                </li>
+                
+                <li class="nav-item" data-page="divisions">
+                    <a href="divisions.html" class="nav-link">
+                        <span class="nav-icon">📋</span>
+                        <span class="link-text">Divisions</span>
+                    </a>
+                </li>
+                
+                <li class="nav-item" data-page="leagues">
+                    <a href="leagues.html" class="nav-link">
+                        <span class="nav-icon">ðŸ†</span>
+                        <span class="link-text">Leagues</span>
+                    </a>
+                </li>
+                
+                <li class="nav-item" data-page="teams">
+                    <a href="teams.html" class="nav-link">
+                        <span class="nav-icon" data-icon="shirt"></span>
+                        <span class="link-text">Teams</span>
+                    </a>
+                </li>
+                
+                <li class="nav-item" data-page="pitches">
+                    <a href="pitches.html" class="nav-link">
+                        <span class="nav-icon">⚽</span>
+                        <span class="link-text">Pitches</span>
+                    </a>
+                </li>
+                
+                <li class="nav-item" data-page="venues">
+                    <a href="venues.html" class="nav-link">
+                        <span class="nav-icon">ðŸŸï¸</span>
+                        <span class="link-text">Venues</span>
+                    </a>
+                </li>
+                
+                <li class="nav-item" data-page="payments">
+                    <a href="team-payments.html" class="nav-link">
+                        <span class="nav-icon">ðŸ’³</span>
+                        <span class="link-text">Team Payments</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+
+        <!-- Sidebar Footer -->
+        <div class="sidebar-footer">
+            <div class="footer-section footer-actions">
+                <a href="settings.html" class="footer-link">
+                    <span class="footer-icon">âš™ï¸</span>
+                    <span class="footer-text">Settings</span>
+                </a>
+                <a href="#" class="footer-link" onclick="handleLogout(event)">
+                    <span class="footer-icon">ðŸšª</span>
+                    <span class="footer-text">Logout</span>
+                </a>
+            </div>
+        </div>
+    </aside>
+
+    <!-- League Manager Header Template -->
+    <header class="main-header" id="header-container" data-loaded="league-manager">
+        <div class="header-left">
+            <h1 class="page-title" data-page-title>Dashboard</h1>
+        </div>
+
+        <div class="header-right">
+            <!-- User Info Section -->
+            <div class="user-info" id="user-info" style="opacity: 0; transition: opacity 0.3s ease;">
+                <div class="user-avatar" data-user-initials>LM</div>
+                <div class="user-details">
+                    <div class="user-name" data-user-name>Loading...</div>
+                    <div class="user-role" data-user-role>Loading...</div>
+                </div>
+            </div>
+
+            <!-- Header Actions -->
+            <div class="header-actions">
+                <button class="header-btn notifications-btn" onclick="toggleNotificationsPanel()">
+                    <span class="btn-icon">ðŸ””</span>
+                    <span class="btn-text">Notifications</span>
+                    <span class="notification-badge" id="notification-count">3</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Notifications Panel -->
+    <div class="notifications-panel" id="notifications-panel">
+        <div class="notifications-header">
+            <h3>Notifications</h3>
+            <div class="notifications-actions">
+                <button class="btn-text mark-all-read" onclick="markAllNotificationsRead()">Mark all as read</button>
+                <button class="close-panel" onclick="closeNotificationsPanel()">&times;</button>
+            </div>
+        </div>
+        <div class="notifications-content">
+            <div class="notifications-list" id="notifications-list">
+                <!-- Notifications will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Notifications Panel Overlay -->
+    <div class="notifications-overlay" id="notifications-overlay" onclick="closeNotificationsPanel()"></div>
+
+    <!-- Main Content Area -->
+    <main class="main-content">
+        <!-- Content Area -->
+        <div class="content-area">
+            
+            <!-- Page Header -->
+            <div class="page-header">
+                <div class="page-title-section">
+                    <h1 class="content-title">League Manager Dashboard</h1>
+                    <p class="page-subtitle">Overview of league activities and pending actions</p>
+                </div>
+            </div>
+            
+            <!-- Action Cards Row -->
+            <div class="action-cards-grid">
+                    <!-- Team Attendance Card -->
+                    <div class="action-card" id="attendance-card">
+                        <div class="action-card-header" data-count="3">
+                            <span class="icon icon-calendar-check"></span>
+                            <h4>Team Attendances</h4>
+                        </div>
+                        <div class="action-card-body">
+                            <div class="action-count">3</div>
+                            <div class="action-label">Teams pending</div>
+                        </div>
+                        <div class="action-card-footer">
+                            <div class="action-description">Next three matches requiring team attendance confirmation</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Referee Allocations Card -->
+                    <div class="action-card" id="referee-card">
+                        <div class="action-card-header" data-count="2">
+                            <span class="icon icon-whistle"></span>
+                            <h4>Referee Allocation</h4>
+                        </div>
+                        <div class="action-card-body">
+                            <div class="action-count">2</div>
+                            <div class="action-label">Fixtures pending</div>
+                        </div>
+                        <div class="action-card-footer">
+                            <div class="action-description">Upcoming matches requiring referee allocation</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Team Payments Card -->
+                    <div class="action-card" id="payments-card">
+                        <div class="action-card-header" data-count="4">
+                            <span class="icon icon-credit-card"></span>
+                            <h4>Payments Due</h4>
+                        </div>
+                        <div class="action-card-body">
+                            <div class="action-count">4</div>
+                            <div class="action-label">Teams overdue</div>
+                        </div>
+                        <div class="action-card-footer">
+                            <div class="action-description">Teams with outstanding payment obligations</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Today's Fixtures Card -->
+                    <div class="action-card" id="fixtures-card">
+                        <div class="action-card-header" data-count="0">
+                            <span class="icon icon-flag"></span>
+                            <h4>Today's Fixtures</h4>
+                        </div>
+                        <div class="action-card-body">
+                            <div class="action-count">0</div>
+                            <div class="action-label">Fixtures today</div>
+                        </div>
+                        <div class="action-card-footer">
+                            <div class="action-description">Today's scheduled matches with confirmation status</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Actions Required Card -->
+                    <div class="action-card" id="actions-card">
+                        <div class="action-card-header" data-count="9">
+                            <span class="icon icon-tasks"></span>
+                            <h4>Actions Required</h4>
+                        </div>
+                        <div class="action-card-body">
+                            <div class="action-count">9</div>
+                            <div class="action-label">Items pending</div>
+                        </div>
+                        <div class="action-card-footer">
+                            <div class="action-description">Outstanding administrative tasks requiring attention</div>
+                        </div>
+                    </div>
+                </div>
+        </div>
+    </main>
+    
+    <!-- Core Scripts -->
+    <!-- <script src="../../js/core/mock-server-api.js"></script> -->
+    <script src="../../js/core/auth.js"></script>
+    <script src="../../js/core/session-manager.js"></script>
+    <script src="../../js/core/data-manager.js"></script>
+    <script src="../../js/core/user-data-manager.js"></script>
+    <script src="../../js/core/venue-selector.js"></script>
+    <script src="../../js/dashboard-controller.js"></script>
+    
+    <!-- Dynamic Template Scripts -->
+    <script src="../../js/components/league-manager-sidebar.js"></script>
+    <script src="../../js/components/league-manager-header.js"></script>
+    
+    <script>
+        // Header Template JavaScript Functionality
+        // Page titles mapping for each league manager page
+        const PAGE_TITLES = {
+            'dashboard': 'Dashboard',
+            'teams': 'Teams',
+            'leagues': 'Leagues', 
+            'divisions': 'Divisions',
+            'fixtures': 'Fixtures',
+            'referees': 'Referees',
+            'pitches': 'Pitches',
+            'team-payments': 'Team Payments',
+            'settings': 'Settings'
+        };
+        
+        // Load user data and update header - optimized for speed
+        async function loadUserData() {
+            try {
+                console.log('Loading user data for header...');
+                
+                // FAST PATH 1: Try cached localStorage data first (fastest)
+                const cachedUser = localStorage.getItem('currentUser');
+                if (cachedUser) {
+                    try {
+                        const user = JSON.parse(cachedUser);
+                        console.log('Using cached user data:', user);
+                        updateUserDisplay(user);
+                        return; // Early return with cached data
+                    } catch (e) {
+                        console.warn('Failed to parse cached user data');
+                    }
+                }
+                
+                // FAST PATH 2: Try FiveTrackrSession (most reliable)
+                const sessionUser = FiveTrackrSession.getCurrentUser();
+                if (sessionUser) {
+                    console.log('Using session user data:', sessionUser);
+                    updateUserDisplay(sessionUser);
+                    return;
+                }
+                
+                // FALLBACK 1: Try Auth system
+                if (typeof window.Auth !== 'undefined' && window.Auth.isLoggedIn()) {
+                    const currentUser = window.Auth.getCurrentUser();
+                    console.log('Auth system user data:', currentUser);
+                    if (currentUser) {
+                        updateUserDisplay(currentUser);
+                        return;
+                    }
+                }
+                
+                // FALLBACK 2: Try SessionManager
+                if (typeof window.SessionManager !== 'undefined' && window.SessionManager.isLoggedIn()) {
+                    const currentUser = window.SessionManager.getCurrentUser();
+                    console.log('SessionManager user data:', currentUser);
+                    if (currentUser) {
+                        updateUserDisplay(currentUser);
+                        return;
+                    }
+                }
+                
+                // Get current user from session manager
+                const user = FiveTrackrSession.getCurrentUser();
+                if (user) {
+                    console.log('User data from session manager:', user);
+                    updateUserDisplay(user);
+                    return;
+                }
+                
+                // Fifth: Try to load from localStorage currentUser
+                const currentUserData = localStorage.getItem('currentUser');
+                if (currentUserData) {
+                    const user = JSON.parse(currentUserData);
+                    console.log('Current user from localStorage:', user);
+                    updateUserDisplay(user);
+                    return;
+                }
+                
+                // Final fallback: Use default data
+                console.warn('No user data found, using fallback');
+                updateUserDisplay({
+                    fullName: 'League Manager',
+                    role: 'Administrator',
+                    email: 'manager@5ivetrackr.com',
+                    initials: 'LM'
+                });
+                
+            } catch (error) {
+                console.error('Error loading user data in header template:', error);
+                // Use default data on error
+                updateUserDisplay({
+                    fullName: 'League Manager',
+                    role: 'Administrator',
+                    email: 'manager@5ivetrackr.com',
+                    initials: 'LM'
+                });
+            }
+        }
+        
+        // Update user display elements
+        function updateUserDisplay(user) {
+            console.log('Updating user display with:', user);
+            
+            // Use session manager to update user displays (which handles all the normalization)
+            FiveTrackrSession.updateUserInfo(user);
+            
+            // Additional dashboard-specific user data updates
+            const userNameElements = document.querySelectorAll('[data-user-name]');
+            userNameElements.forEach(element => {
+                const displayName = user.full_name || user.fullName || user.username || 'User';
+                element.textContent = displayName;
+                console.log('Updated user name to:', displayName);
+            });
+            
+            // Update user role display
+            const userRoleElements = document.querySelectorAll('[data-user-role]');
+            userRoleElements.forEach(element => {
+                let displayRole = user.user_role || user.role || 'User';
+                
+                // Clean up role display (convert snake_case to proper case)
+                if (displayRole === 'league_manager' || displayRole === 'league-manager') {
+                    displayRole = 'League Manager';
+                } else if (displayRole === 'team_manager' || displayRole === 'team-manager') {
+                    displayRole = 'Team Manager';
+                } else if (displayRole === 'referee') {
+                    displayRole = 'Referee';
+                } else if (displayRole === 'admin' || displayRole === 'administrator') {
+                    displayRole = 'Administrator';
+                } else if (displayRole === 'league') {
+                    displayRole = 'League Manager';
+                }
+                
+                element.textContent = displayRole;
+                console.log('Updated user role to:', displayRole);
+            });
+            
+            // Update user initials - use full name for initials, not email
+            const userInitialsElements = document.querySelectorAll('[data-user-initials]');
+            userInitialsElements.forEach(element => {
+                const nameForInitials = user.fullName || user.name || user.firstName || user.username || 'League Manager';
+                const initials = user.initials || generateInitials(nameForInitials);
+                element.textContent = initials;
+                console.log('Updated user initials to:', initials);
+            });
+            
+            // Show the user info section with fade-in animation
+            const userInfoSection = document.getElementById('user-info');
+            if (userInfoSection) {
+                userInfoSection.style.opacity = '1';
+                console.log('User info section made visible');
+            }
+        }
+        
+        // Generate initials from name
+        function generateInitials(name) {
+            if (!name) return 'LM';
+            
+            // Don't generate initials from email addresses
+            if (name.includes('@')) {
+                return 'LM'; // Default to League Manager initials for email addresses
+            }
+            
+            const nameParts = name.trim().split(' ');
+            if (nameParts.length === 1) {
+                return nameParts[0].substring(0, 2).toUpperCase();
+            } else {
+                return (nameParts[0].charAt(0) + nameParts[nameParts.length - 1].charAt(0)).toUpperCase();
+            }
+        }
+        
+        // Simple Notifications System - Placeholder for future implementation
+        function toggleNotificationsPanel() {
+            console.log('Notifications panel clicked - feature coming soon');
+            alert('Notifications feature coming soon!');
+        }
+
+        function closeNotificationsPanel() {
+            console.log('Close notifications panel');
+        }
+
+        function markAllNotificationsRead() {
+            console.log('Mark all notifications as read');
+        }
+    </script>
+    
+    <script>
+        // Venue Selector JavaScript Functions
+        let currentVenueId = null;
+        let currentVenueName = null;
+
+        // Load venues based on user's permissions and tenant data
+        async function loadUserVenues() {
+            const user = FiveTrackrSession.getCurrentUser();
+            if (!user) return;
+            
+            try {
+                const response = await fetch(FiveTrackrSession.getApiUrl('/data/venues'), {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${localStorage.getItem('auth_token')}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+                if (response.ok) {
+                    const result = await response.json();
+                    if (result.success && result.venues) {
+                        updateVenueDropdownOptions(result.venues);
+                        return;
+                    }
+                }
+            } catch (error) {
+                console.error('Failed to load venues:', error);
+            }
+            
+            // No venues found
+            document.getElementById('selected-venue-name').textContent = 'No Venues';
+        }
+        
+        function updateVenueDropdownOptions(venues) {
+            const dropdown = document.getElementById('venue-dropdown');
+            
+            dropdown.innerHTML = '';
+            
+            if (venues.length === 0) {
+                document.getElementById('selected-venue-name').textContent = 'No Venues';
+                // Hide dropdown button functionality when no venues
+                const btn = document.getElementById('venue-selector-btn');
+                if (btn) {
+                    btn.style.cursor = 'default';
+                    btn.onclick = null;
+                }
+                return;
+            }
+            
+            // Enable dropdown button functionality when venues exist
+            const btn = document.getElementById('venue-selector-btn');
+            if (btn) {
+                btn.style.cursor = 'pointer';
+                btn.onclick = toggleVenueDropdown;
+            }
+            
+            // Sort venues alphabetically
+            const sortedVenues = venues.sort((a, b) => a.name.localeCompare(b.name));
+            
+            sortedVenues.forEach(venue => {
+                const option = document.createElement('div');
+                option.className = 'venue-option';
+                option.dataset.venueId = venue.id;
+                option.onclick = (event) => selectVenue(venue.id, venue.name, venue.address || venue.city, event);
+                
+                option.innerHTML = `
+                    <div class="venue-option-details">
+                        <div class="venue-option-name">${venue.name}</div>
+                        <div class="venue-option-address">${venue.address || ''}</div>
+                    </div>
+                    <span class="venue-option-check" style="display: none;">âœ“</span>
+                `;
+                
+                dropdown.appendChild(option);
+            });
+            
+            // Select the first venue by default
+            const firstVenue = sortedVenues[0];
+            selectVenue(firstVenue.id, firstVenue.name, firstVenue.address || firstVenue.city, null, false);
+            console.log(`Default venue selected: ${firstVenue.name}`);
+        }
+
+        function initializeVenueSelector() {
+            console.log('Initializing venue selector for dashboard page');
+            // The shared venue selector will auto-initialize
+            // Set up venue change callback for dashboard-specific actions
+            if (window.VenueSelector) {
+                window.VenueSelector.onVenueChange = (venueData) => {
+                    console.log('Dashboard: Venue changed to', venueData);
+                    // Add any dashboard-specific venue change logic here
+                    // For example, refresh dashboard data for the selected venue
+                };
+            }
+        }
+
+        function toggleVenueDropdown() {
+            const dropdown = document.getElementById('venue-dropdown');
+            const btn = document.getElementById('venue-selector-btn');
+            const overlay = document.getElementById('venue-selector-overlay');
+            
+            console.log('Toggle clicked', dropdown, btn, overlay); // Debug log
+            
+            if (dropdown && dropdown.classList.contains('show')) {
+                console.log('Closing dropdown'); // Debug log
+                closeVenueDropdown();
+            } else {
+                console.log('Opening dropdown'); // Debug log
+                if (dropdown) dropdown.classList.add('show');
+                if (btn) btn.classList.add('active');
+                if (overlay) overlay.classList.add('show');
+            }
+        }
+
+        function closeVenueDropdown() {
+            const dropdown = document.getElementById('venue-dropdown');
+            const btn = document.getElementById('venue-selector-btn');
+            const overlay = document.getElementById('venue-selector-overlay');
+            
+            console.log('Closing dropdown function called'); // Debug log
+            
+            if (dropdown) dropdown.classList.remove('show');
+            if (btn) btn.classList.remove('active');
+            if (overlay) overlay.classList.remove('show');
+        }
+
+        function selectVenue(venueId, venueName, venueAddress, event, closeDropdown = true) {
+            // Prevent event bubbling to parent button
+            if (event) {
+                event.stopPropagation();
+                event.preventDefault();
+            }
+            
+            // Update selected venue
+            currentVenueId = venueId;
+            currentVenueName = venueName;
+            
+            // Update button text
+            document.getElementById('selected-venue-name').textContent = venueName;
+            
+            // Update option selection states
+            document.querySelectorAll('.venue-option').forEach(option => {
+                const checkmark = option.querySelector('.venue-option-check');
+                if (option.dataset.venueId === venueId) {
+                    option.classList.add('selected');
+                    checkmark.style.display = 'block';
+                } else {
+                    option.classList.remove('selected');
+                    checkmark.style.display = 'none';
+                }
+            });
+            
+            // Close dropdown if requested
+            if (closeDropdown) {
+                closeVenueDropdown();
+            }
+            
+            // Filter data based on selected venue
+            filterDataByVenue(venueId);
+            
+            console.log('Venue changed to:', venueName, '(ID:', venueId, ')');
+        }
+
+        function filterDataByVenue(venueId) {
+            // This function would filter the dashboard data based on selected venue
+            // Data loaded from server based on user permissions`n            console.log('Filtering dashboard data for venue:', venueId);
+            
+            // Example: Show/hide dashboard cards based on venue
+            // In a real implementation, this would filter the dashboard data
+            console.log('Showing dashboard data for venue:', venueId);
+            
+            // You could update the dashboard cards here to show only relevant data
+            // updateDashboardData(venueId);
+        }
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(event) {
+            const dropdown = document.getElementById('venue-dropdown');
+            const btn = document.getElementById('venue-selector-btn');
+            const overlay = document.getElementById('venue-selector-overlay');
+            
+            if (dropdown && btn && overlay &&
+                !dropdown.contains(event.target) && 
+                !btn.contains(event.target) &&
+                !overlay.contains(event.target)) {
+                closeVenueDropdown();
+            }
+        });
+    </script>
+    
+    <script>
+        // Load user data immediately (before DOM loaded for faster display)
+        (async function() {
+            if (typeof loadUserData === 'function') {
+                await loadUserData();
+            }
+        })();
+        
+        // Dashboard initialization
+        document.addEventListener('DOMContentLoaded', async function() {
+            console.log('Dashboard initialization started');
+            
+            // Initialize venue selector first
+            initializeVenueSelector();
+            
+            // Load user data for header immediately (if not already loaded)
+            await loadUserData();
+            
+            // Set up auth state listener to refresh user data when login state changes
+            if (typeof window.Auth !== 'undefined') {
+                // Listen for auth state changes
+                window.addEventListener('authStateChanged', async function(event) {
+                    console.log('Auth state changed, refreshing user data:', event.detail);
+                    await loadUserData();
+                });
+            }
+            
+            // Listen for header template to be loaded
+            document.addEventListener('headerTemplateLoaded', function() {
+                console.log('Header template loaded, re-initializing user data');
+                // Reload user data when header template is loaded
+                loadUserData();
+            });
+            
+            // Listen for sidebar load completion
+            document.addEventListener('sidebarLoaded', function(e) {
+                console.log('Dynamic sidebar loaded successfully:', e.detail);
+                
+                // Set active page for dashboard
+                if (window.leagueManagerSidebar) {
+                    setTimeout(() => {
+                        window.leagueManagerSidebar.setActive('dashboard');
+                        console.log('Dashboard set as active');
+                    }, 100);
+                }
+            });
+            
+            // Periodic refresh of user data (every 30 seconds)
+            setInterval(async () => {
+                if (typeof window.Auth !== 'undefined' && window.Auth.isLoggedIn()) {
+                    await loadUserData();
+                }
+            }, 30000);
+
+            // Hide loading screen when dashboard is fully loaded
+            setTimeout(() => {
+                hideLoadingScreen();
+            }, 1500); // Minimum loading time for better UX
+        });
+
+        // Function to hide the loading screen with smooth transition
+        function hideLoadingScreen() {
+            const loadingScreen = document.getElementById('app-loading-screen');
+            if (loadingScreen) {
+                // Add loaded class to body
+                document.body.classList.add('app-loaded');
+                
+                // Remove the loading screen element after transition
+                setTimeout(() => {
+                    if (loadingScreen && loadingScreen.parentNode) {
+                        loadingScreen.parentNode.removeChild(loadingScreen);
+                    }
+                }, 800); // Match the CSS transition duration
+            }
+        }
+
+        // Also hide loading screen when all critical resources are loaded
+        window.addEventListener('load', () => {
+            // Additional delay to ensure all dynamic content is loaded
+            setTimeout(() => {
+                hideLoadingScreen();
+            }, 500);
+        });
+    </script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
