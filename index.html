@@ -11,6 +11,7 @@
         /* Landing Page Specific Styles */
         .landing-container {
             min-height: 100vh;
+            max-height: 100vh;
             background: var(--text-primary);
             color: white;
             position: relative;
@@ -18,8 +19,15 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            /* Prevent horizontal scrolling on mobile */
+            /* Prevent all scrolling on mobile and desktop */
             overflow-x: hidden;
+            overflow-y: hidden;
+        }
+
+        /* Ensure body doesn't scroll on landing page */
+        body {
+            overflow: hidden;
+            height: 100vh;
         }
 
         /* Background Effects - Same as pricing section */
@@ -151,7 +159,21 @@
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            gap: 12px;
+        }
+
+        .portal-btn.with-icon {
+            position: relative;
+        }
+
+        .portal-btn .btn-icon {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            opacity: 0.9;
+            /* Position icon further left to avoid overlapping text */
+            left: calc(50% - 60px);
+            top: 50%;
+            transform: translateY(-50%);
         }
 
         .portal-btn::before {
@@ -208,10 +230,7 @@
             }
 
             .main-subtitle {
-                font-size: 1.1rem;
-                margin-bottom: 40px;
-                padding: 0 10px;
-                line-height: 1.6;
+                display: none;
             }
 
             .portal-buttons {
@@ -261,10 +280,7 @@
             }
 
             .main-subtitle {
-                font-size: 1rem;
-                margin-bottom: 32px;
-                padding: 0 8px;
-                line-height: 1.5;
+                display: none;
             }
 
             .portal-buttons {
@@ -298,8 +314,7 @@
             }
 
             .main-subtitle {
-                font-size: 0.95rem;
-                margin-bottom: 28px;
+                display: none;
             }
 
             .portal-btn {
@@ -371,17 +386,11 @@
 
             <div class="portal-buttons">
                 <a href="signup.html" class="portal-btn primary">
-                    <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4M10 17l5-5-5-5M13.8 12H3"/>
-                    </svg>
                     Explore
                 </a>
                 
                 <a href="webapp/home.html" class="portal-btn">
-                    <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4M10 17l5-5-5-5M1 12h12.5"/>
-                    </svg>
-                    Sign In
+                    Webapp
                 </a>
             </div>
         </div>

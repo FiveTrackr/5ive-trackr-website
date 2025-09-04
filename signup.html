@@ -4,10 +4,401 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>5ive Trackr - Professional Football Management</title>
+    <style>
+        body { background: #1d1d1f; }
+        /* Loading overlay to prevent white flash */
+        #loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #1d1d1f;
+            z-index: 9999;
+            transition: opacity 0.3s ease-out;
+        }
+        /* Style grey text spans */
+        .grey-text {
+            color: #9ca3af !important;
+        }
+        
+        /* Fade in animation for hero title words */
+        @keyframes fadeInWord {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* Typewriter effect for hero description */
+        .typewriter {
+            opacity: 1;
+            color: inherit;
+            min-height: 1.5em; /* Reserve space for text */
+        }
+        
+        .typewriter-cursor {
+            animation: blink-caret 0.75s step-end infinite;
+            color: rgba(255, 255, 255, 0.7);
+        }
+        
+        @keyframes blink-caret {
+            from, to { opacity: 0 }
+            50% { opacity: 1 }
+        }
+        
+        /* Mobile: Hide cursor */
+        @media (max-width: 768px) {
+            .typewriter-cursor {
+                display: none !important;
+            }
+        }
+        
+        /* Smooth transitions for floating nav - matches page background transitions */
+        .floating-nav {
+            background: rgba(29, 29, 31, 0.9); /* Initial dark background to match hero */
+            transition: background 0.6s cubic-bezier(0.4, 0, 0.2, 1) !important;
+            backdrop-filter: blur(20px);
+        }
+        
+        .floating-nav .nav-link,
+        .floating-nav .nav-cta,
+        .floating-nav .nav-menu-btn {
+            transition: all 0.3s ease;
+        }
+        
+        /* Initial text colors for nav - white text for dark background */
+        .floating-nav .nav-link {
+            color: rgba(255, 255, 255, 0.9) !important;
+        }
+        
+        .floating-nav .nav-menu-btn {
+            color: rgba(255, 255, 255, 0.9) !important;
+        }
+        
+        /* Sign In button always green */
+        .floating-nav .nav-cta {
+            background: #4a9d2a !important;
+            color: white !important;
+            padding: 8px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+        }
+        
+        .floating-nav .nav-cta:hover {
+            background: #2e6417 !important;
+            transform: scale(1.05);
+        }
+        
+        /* Navigation dropdown styles - Hide on desktop, show only on mobile */
+        .nav-menu-btn {
+            display: none; /* Hidden on desktop by default */
+        }
+        
+        /* Dropdown that slides from nav bar - Hide on desktop, show only on mobile */
+        .nav-dropdown {
+            display: none; /* Hidden on desktop by default */
+        }
+        
+        .nav-dropdown.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+        
+        /* Content container for dropdown links */
+        .dropdown-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 40px 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        /* Close button for dropdown */
+        .dropdown-close-btn {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            font-size: 28px;
+            color: rgba(255, 255, 255, 0.7);
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            z-index: 9999;
+        }
+        
+        .dropdown-close-btn:hover {
+            color: rgba(255, 255, 255, 1);
+            background: rgba(255, 255, 255, 0.1);
+            transform: rotate(90deg);
+        }
+        
+        .dropdown-link {
+            display: block;
+            padding: 18px 30px;
+            color: rgba(255, 255, 255, 0.9);
+            text-decoration: none;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            font-size: 18px;
+            font-weight: 500;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            margin: 8px 0;
+            width: 100%;
+            max-width: 400px;
+        }
+        
+        .dropdown-link:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateX(10px);
+            color: #ffffff;
+        }
+        
+        .dropdown-link::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 0;
+            height: 2px;
+            background: #4a9d2a;
+            transition: width 0.3s ease;
+        }
+        
+        .dropdown-link:hover::after {
+            width: 100%;
+        }
+        
+        .dropdown-divider {
+            height: 1px;
+            background: rgba(255, 255, 255, 0.2);
+            margin: 20px 0;
+            width: 200px;
+        }
+        
+        .dropdown-cta {
+            background: linear-gradient(135deg, #4a9d2a 0%, #2e6417 100%);
+            color: white !important;
+            text-align: center;
+            margin-top: 15px;
+            padding: 20px 40px;
+            font-size: 18px;
+            font-weight: 600;
+            box-shadow: 0 8px 25px rgba(74, 157, 42, 0.3);
+        }
+        
+        .dropdown-cta:hover {
+            background: linear-gradient(135deg, #2e6417 0%, #1e4009 100%);
+            transform: translateX(0) scale(1.02);
+            box-shadow: 0 10px 30px rgba(74, 157, 42, 0.4);
+        }
+        
+        .dropdown-cta:hover::after {
+            width: 0; /* No underline for CTA */
+        }
+        
+        /* Animation for dropdown items */
+        .nav-dropdown.show .dropdown-link {
+            animation: slideInUp 0.5s ease-out forwards;
+            opacity: 0;
+        }
+        
+        .nav-dropdown.show .dropdown-content .dropdown-link:nth-of-type(1) { animation-delay: 0.1s; }
+        .nav-dropdown.show .dropdown-content .dropdown-link:nth-of-type(2) { animation-delay: 0.15s; }
+        .nav-dropdown.show .dropdown-content .dropdown-link:nth-of-type(3) { animation-delay: 0.2s; }
+        .nav-dropdown.show .dropdown-content .dropdown-link:nth-of-type(4) { animation-delay: 0.25s; }
+        .nav-dropdown.show .dropdown-content .dropdown-link:nth-of-type(5) { animation-delay: 0.3s; }
+        .nav-dropdown.show .dropdown-content .dropdown-link:nth-of-type(6) { animation-delay: 0.35s; }
+        
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* Show menu button on mobile, optional on desktop */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none; /* Hide regular nav links on mobile */
+            }
+            
+            .dropdown-link {
+                font-size: 20px;
+                padding: 15px 25px;
+            }
+            
+            .dropdown-cta {
+                font-size: 18px;
+                padding: 20px 40px;
+            }
+        }
+        
+        /* Mobile features card adjustments */
+        @media (max-width: 768px) {
+            /* Fix hero layout positioning and prevent shifting */
+            .hero-title {
+                margin-bottom: 20px !important;
+                transform: translateY(-10px); /* Raise heading slightly */
+            }
+            
+            .typewriter-container {
+                position: absolute !important;
+                top: 200px !important; /* Position below the heading */
+                left: 50% !important;
+                transform: translateX(-50%) !important; /* Center the container */
+                width: 85% !important; /* Narrower width */
+                max-width: 320px !important; /* Maximum width constraint */
+                z-index: 2 !important;
+            }
+            
+            .hero-description {
+                margin: 0 !important;
+                line-height: 1.4 !important;
+                font-size: 0.9rem !important; /* Smaller font size */
+                text-align: center !important; /* Center align text */
+                white-space: normal !important; /* Ensure text wraps consistently */
+                word-wrap: break-word !important; /* Handle long words properly */
+            }
+            
+            .typewriter-placeholder {
+                opacity: 0 !important; /* Invisible but reserves space */
+                position: relative !important;
+            }
+            
+            .typewriter {
+                position: absolute !important;
+                top: 0 !important;
+                left: 0 !important;
+                right: 0 !important;
+                opacity: 1 !important; /* Visible typing text */
+            }
+            
+            /* Reserve space in hero content so layout doesn't collapse */
+            .hero-content {
+                padding-bottom: 120px !important; /* Reserve space for the absolute positioned text */
+            }
+            
+            /* Add padding between header and subtitle */
+            .section-header .section-subtitle {
+                margin-top: 16px !important;
+            }
+            
+            /* Reduce card size - not full width */
+            .professional-feature-card {
+                max-width: 90% !important;
+                margin: 0 auto 24px auto !important;
+                padding: 24px 20px !important;
+            }
+            
+            /* Hide feature screenshots on mobile */
+            .feature-preview-pro {
+                display: none !important;
+            }
+            
+            /* Adjust grid for smaller cards */
+            .professional-features-grid {
+                display: block !important;
+                padding: 0 5% !important;
+            }
+            
+            /* Reduce pricing card size - not full width */
+            .pricing-card {
+                max-width: 90% !important;
+                margin: 0 auto 24px auto !important;
+                padding: 24px 20px !important;
+            }
+            
+            /* Adjust pricing grid for mobile */
+            .pricing-grid {
+                display: block !important;
+                padding: 0 5% !important;
+                gap: 20px !important;
+            }
+            
+        }
+
+        /* Navigation dropdown only available on mobile */
+        @media (max-width: 768px) {
+            .nav-menu-btn {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                background: transparent;
+                border: none;
+                color: inherit;
+                cursor: pointer;
+                padding: 8px;
+                border-radius: 8px;
+                transition: all 0.3s ease;
+            }
+            
+            .nav-menu-btn:hover {
+                background: rgba(128, 128, 128, 0.1);
+                transform: scale(1.05);
+            }
+            
+            .nav-dropdown {
+                display: block;
+                position: fixed;
+                top: 70px;
+                left: 0;
+                right: 0;
+                background: rgba(29, 29, 31, 1); /* Will be updated by JavaScript */
+                backdrop-filter: blur(20px);
+                box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+                opacity: 0;
+                visibility: hidden;
+                transform: translateY(-100%);
+                transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+                z-index: 9997;
+                max-height: calc(100vh - 70px);
+                overflow-y: auto;
+            }
+            
+            /* Ensure dropdown sign-in button is green */
+            .nav-dropdown .dropdown-cta {
+                background: #4a9d2a !important;
+                color: white !important;
+            }
+            
+            .nav-dropdown .dropdown-cta:hover {
+                background: #2e6417 !important;
+            }
+            
+            .nav-dropdown.show {
+                opacity: 1;
+                visibility: visible;
+                transform: translateY(0);
+            }
+        }
+    </style>
     <link rel="stylesheet" href="css/signup-styles.css">
     <script src="https://js.stripe.com/v3/"></script>
 </head>
 <body>
+    <!-- Loading overlay to prevent white flash and layout shifts -->
+    <div id="loading-overlay"></div>
+    
     <!-- Floating Navigation -->
     <nav class="floating-nav">
         <div class="nav-container">
@@ -20,137 +411,384 @@
                 <a href="#contact" class="nav-link">Contact</a>
                 <a href="webapp/home.html" class="nav-cta">Sign In</a>
             </div>
+            <!-- Menu button for dropdown -->
+            <button class="nav-menu-btn" onclick="toggleNavDropdown()">
+                <svg class="hamburger-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="3" y1="6" x2="21" y2="6"></line>
+                    <line x1="3" y1="12" x2="21" y2="12"></line>
+                    <line x1="3" y1="18" x2="21" y2="18"></line>
+                </svg>
+                <svg class="close-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display: none;">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+            </button>
+            <!-- Dropdown menu overlay -->
+            <div class="nav-dropdown" id="navDropdown">
+                <div class="dropdown-content">
+                    <a href="#hero" class="dropdown-link" onclick="closeNavDropdown()">Home</a>
+                    <a href="#features" class="dropdown-link" onclick="closeNavDropdown()">Features</a>
+                    <a href="#pricing" class="dropdown-link" onclick="closeNavDropdown()">Pricing</a>
+                    <a href="#testimonials" class="dropdown-link" onclick="closeNavDropdown()">Testimonials</a>
+                    <a href="#contact" class="dropdown-link" onclick="closeNavDropdown()">Contact</a>
+                    <div class="dropdown-divider"></div>
+                    <a href="webapp/home.html" class="dropdown-link dropdown-cta">Sign In</a>
+                </div>
+            </div>
         </div>
     </nav>
 
+    <!-- Shared Background for All Sections -->
+    <div class="page-background" id="pageBackground"></div>
+    
     <!-- Hero Section with Clean Design -->
     <section class="hero-section">
         <div class="hero-background">
             <div class="animated-grid"></div>
-            <div class="floating-elements">
-                <div class="floating-card"></div>
-                <div class="floating-card"></div>
-                <div class="floating-card"></div>
-            </div>
         </div>
         
         <div class="hero-content">
-            <div class="hero-badge animate-up">
-                <span class="badge-icon">⚽</span>
-                <span>Trusted by 1000+ football venues</span>
-            </div>
-            
             <h1 class="hero-title animate-up-delay-1">
-                Transform Your
-                <span class="gradient-text">Football Venue</span>
-                Management
+                <span style="opacity: 0; animation: fadeInWord 0.8s ease-out 0.8s forwards;">Transform Your</span>
+                <span class="gradient-text" style="opacity: 0; animation: fadeInWord 0.8s ease-out 1.4s forwards;">Football Venue</span>
+                <span style="opacity: 0; animation: fadeInWord 0.8s ease-out 2.0s forwards;">Management</span>
             </h1>
             
-            <p class="hero-description animate-up-delay-2">
-                The complete platform for professional football venue management.
-                Streamline operations, maximize revenue, and deliver exceptional experiences.
-            </p>
-            
-            <div class="hero-cta animate-up-delay-3">
-                <button class="primary-cta" onclick="scrollToPricing()">
-                    <span>Get Started Today</span>
-                    <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
-                        <path d="M8 1l7 7-7 7M1 8h14"/>
-                    </svg>
-                </button>
-                <button class="secondary-cta" onclick="scrollToFeatures()">
-                    <span>Watch Demo</span>
-                    <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
-                        <polygon points="5,3 15,8 5,13"/>
-                    </svg>
-                </button>
+            <div class="typewriter-container">
+                <p class="hero-description typewriter-placeholder" id="typewriter-placeholder">The complete platform for professional football venue management. Streamline operations, maximize revenue, and deliver exceptional experiences.</p>
+                <p class="hero-description typewriter" id="typewriter-text"></p>
             </div>
         </div>
         
-        <div class="hero-visual animate-up-delay-4">
-            <div class="dashboard-preview">
-                <div class="preview-header">
-                    <div class="window-controls">
-                        <span class="control red"></span>
-                        <span class="control yellow"></span>
-                        <span class="control green"></span>
-                    </div>
-                    <div class="preview-title">5ive Trackr Dashboard</div>
-                </div>
-                <div class="preview-content">
-                    <div class="stats-grid">
-                        <div class="stat-card pulse-1">
-                            <div class="stat-number">247</div>
-                            <div class="stat-label">Active Players</div>
-                        </div>
-                        <div class="stat-card pulse-2">
-                            <div class="stat-number">12</div>
-                            <div class="stat-label">Live Matches</div>
-                        </div>
-                        <div class="stat-card pulse-3">
-                            <div class="stat-number">£15.2K</div>
-                            <div class="stat-label">Monthly Revenue</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <!-- Typewriter effect -->
+        <script>
+            setTimeout(() => {
+                const text = "The complete platform for professional football venue management. Streamline operations, maximize revenue, and deliver exceptional experiences.";
+                const element = document.getElementById('typewriter-text');
+                let index = 0;
+                
+                console.log('🖨️ Starting typewriter effect');
+                
+                if (!element) {
+                    console.log('❌ Element not found');
+                    return;
+                }
+                
+                const typeInterval = setInterval(() => {
+                    // Type into the exact same space as the placeholder
+                    const currentText = text.substring(0, index + 1);
+                    const isMobile = window.innerWidth <= 768;
+                    const cursor = isMobile ? '' : '<span class="typewriter-cursor">|</span>';
+                    
+                    element.innerHTML = currentText + cursor;
+                    index++;
+                    
+                    if (index >= text.length) {
+                        clearInterval(typeInterval);
+                        element.innerHTML = text;
+                        console.log('✅ Typewriter completed');
+                    }
+                }, 17);
+                
+            }, 3000); // Start after 3 seconds
+        </script>
+        
     </section>
 
-    <!-- Features Section with Intersection Animations -->
-    <section id="features" class="features-section">
+    <!-- Professional Features Section -->
+    <section id="features" class="features-section-professional">
         <div class="section-container">
             <div class="section-header animate-on-scroll">
-                <h2 class="section-title">Built for Professional Football Venues</h2>
-                <p class="section-subtitle">Every feature designed to increase efficiency and revenue</p>
+                <h2 class="section-title">Complete Venue Management Platform</h2>
+                <p class="section-subtitle">Professional tools designed for modern football venue operations</p>
             </div>
             
-            <div class="features-grid">
-                <div class="feature-item animate-on-scroll" data-delay="0">
-                    <div class="feature-icon-container">
-                        <div class="feature-icon">📊</div>
-                        <div class="icon-glow"></div>
+            <div class="professional-features-grid">
+                <!-- Venue & Facility Management -->
+                <div class="professional-feature-card animate-on-scroll" data-delay="0">
+                    <div class="feature-card-header">
+                        <div class="feature-icon-pro">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+                                <polyline points="9,22 9,12 15,12 15,22"/>
+                            </svg>
+                        </div>
+                        <div class="feature-meta">
+                            <h3>Venue Management</h3>
+                            <p class="feature-category">Facilities & Operations</p>
+                        </div>
                     </div>
-                    <h3>Advanced Analytics</h3>
-                    <p>Real-time insights into venue performance, revenue tracking, and player engagement metrics.</p>
-                    <div class="feature-preview">
-                        <div class="chart-animation"></div>
+                    
+                    <div class="feature-description">
+                        <p>Complete multi-venue management with intelligent capacity optimization. Real-time facility monitoring, automated maintenance scheduling, and advanced booking analytics across unlimited locations.</p>
+                    </div>
+                    
+                    <div class="feature-preview-pro">
+                        <div class="venue-management-preview">
+                            <div class="preview-header">
+                                <span class="preview-title">Active Venues</span>
+                                <span class="preview-count">3</span>
+                            </div>
+                            <div class="venue-list-preview">
+                                <div class="venue-item-preview">
+                                    <div class="venue-info">
+                                        <span class="venue-name-preview">Stadium Complex</span>
+                                        <span class="venue-status-preview active">Active</span>
+                                    </div>
+                                    <div class="venue-stats-preview">
+                                        <span>8 Pitches</span>
+                                        <span>50 Teams</span>
+                                    </div>
+                                </div>
+                                <div class="venue-item-preview">
+                                    <div class="venue-info">
+                                        <span class="venue-name-preview">Training Ground</span>
+                                        <span class="venue-status-preview active">Active</span>
+                                    </div>
+                                    <div class="venue-stats-preview">
+                                        <span>3 Pitches</span>
+                                        <span>25 Teams</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                
-                <div class="feature-item animate-on-scroll" data-delay="100">
-                    <div class="feature-icon-container">
-                        <div class="feature-icon">⚽</div>
-                        <div class="icon-glow"></div>
+
+                <!-- Pitch Scheduling System -->
+                <div class="professional-feature-card animate-on-scroll" data-delay="100">
+                    <div class="feature-card-header">
+                        <div class="feature-icon-pro">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                                <line x1="16" y1="2" x2="16" y2="6"/>
+                                <line x1="8" y1="2" x2="8" y2="6"/>
+                                <line x1="3" y1="10" x2="21" y2="10"/>
+                            </svg>
+                        </div>
+                        <div class="feature-meta">
+                            <h3>Smart Scheduling</h3>
+                            <p class="feature-category">Pitch & Resource Management</p>
+                        </div>
                     </div>
-                    <h3>Smart Pitch Management</h3>
-                    <p>Automated scheduling, availability optimization, and dynamic pricing for maximum utilization.</p>
-                    <div class="feature-preview">
-                        <div class="pitch-grid-animation"></div>
+                    
+                    <div class="feature-description">
+                        <p>AI-powered pitch scheduling with real-time availability tracking. Advanced conflict resolution, automated referee allocation, and intelligent capacity management with weather-based adjustments.</p>
+                    </div>
+                    
+                    <div class="feature-preview-pro">
+                        <div class="scheduling-preview">
+                            <div class="preview-header">
+                                <span class="preview-title">Today's Schedule</span>
+                                <span class="preview-date">Wed, Sep 4</span>
+                            </div>
+                            <div class="schedule-grid-preview">
+                                <div class="time-slot-preview">
+                                    <div class="time-label">18:00</div>
+                                    <div class="pitch-slots">
+                                        <div class="slot booked">Main Pitch</div>
+                                        <div class="slot available">Pitch 2</div>
+                                        <div class="slot booked">Pitch 3</div>
+                                    </div>
+                                </div>
+                                <div class="time-slot-preview">
+                                    <div class="time-label">19:00</div>
+                                    <div class="pitch-slots">
+                                        <div class="slot available">Main Pitch</div>
+                                        <div class="slot booked">Pitch 2</div>
+                                        <div class="slot available">Pitch 3</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                
-                <div class="feature-item animate-on-scroll" data-delay="200">
-                    <div class="feature-icon-container">
-                        <div class="feature-icon">👥</div>
-                        <div class="icon-glow"></div>
+
+                <!-- League Management System -->
+                <div class="professional-feature-card animate-on-scroll" data-delay="200">
+                    <div class="feature-card-header">
+                        <div class="feature-icon-pro">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/>
+                                <rect x="8" y="2" width="8" height="4" rx="1" ry="1"/>
+                                <line x1="9" y1="14" x2="15" y2="14"/>
+                                <line x1="9" y1="18" x2="15" y2="18"/>
+                            </svg>
+                        </div>
+                        <div class="feature-meta">
+                            <h3>League Operations</h3>
+                            <p class="feature-category">Competition Management</p>
+                        </div>
                     </div>
-                    <h3>League Ecosystem</h3>
-                    <p>Complete league management with automated fixtures, live standings, and player statistics.</p>
-                    <div class="feature-preview">
-                        <div class="league-animation"></div>
+                    
+                    <div class="feature-description">
+                        <p>Professional league administration with intelligent fixture algorithms, real-time standings calculation, and automated payment tracking. Comprehensive team management with detailed performance analytics.</p>
+                    </div>
+                    
+                    <div class="feature-preview-pro">
+                        <div class="league-preview">
+                            <div class="preview-header">
+                                <span class="preview-title">Premier Division</span>
+                                <span class="preview-status">Active</span>
+                            </div>
+                            <div class="league-table-preview">
+                                <div class="table-header-preview">
+                                    <span>Position</span>
+                                    <span>Team</span>
+                                    <span>Pts</span>
+                                </div>
+                                <div class="table-row-preview">
+                                    <span class="position">1</span>
+                                    <span class="team-name">Manchester United</span>
+                                    <span class="points">24</span>
+                                </div>
+                                <div class="table-row-preview">
+                                    <span class="position">2</span>
+                                    <span class="team-name">Arsenal FC</span>
+                                    <span class="points">21</span>
+                                </div>
+                                <div class="table-row-preview">
+                                    <span class="position">3</span>
+                                    <span class="team-name">Chelsea FC</span>
+                                    <span class="points">18</span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                
-                <div class="feature-item animate-on-scroll" data-delay="300">
-                    <div class="feature-icon-container">
-                        <div class="feature-icon">📱</div>
-                        <div class="icon-glow"></div>
+
+                <!-- Team & Player Management -->
+                <div class="professional-feature-card animate-on-scroll" data-delay="300">
+                    <div class="feature-card-header">
+                        <div class="feature-icon-pro">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                                <circle cx="9" cy="7" r="4"/>
+                                <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                                <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                            </svg>
+                        </div>
+                        <div class="feature-meta">
+                            <h3>Team Management</h3>
+                            <p class="feature-category">Players & Registration</p>
+                        </div>
                     </div>
-                    <h3>Mobile First</h3>
-                    <p>Native iOS and Android apps for managers, referees, and players. Works seamlessly offline.</p>
-                    <div class="feature-preview">
-                        <div class="mobile-animation"></div>
+                    
+                    <div class="feature-description">
+                        <p>Complete team ecosystem management with streamlined registration workflows, automated payment processing, and detailed player performance tracking with advanced analytics dashboard.</p>
+                    </div>
+                    
+                    <div class="feature-preview-pro">
+                        <div class="team-preview">
+                            <div class="preview-header">
+                                <span class="preview-title">Team Overview</span>
+                                <span class="preview-count">247 Players</span>
+                            </div>
+                            <div class="team-stats-preview">
+                                <div class="stat-card-preview">
+                                    <div class="stat-number">32</div>
+                                    <div class="stat-label">Active Teams</div>
+                                </div>
+                                <div class="stat-card-preview">
+                                    <div class="stat-number">8</div>
+                                    <div class="stat-label">Pending Payments</div>
+                                </div>
+                                <div class="stat-card-preview">
+                                    <div class="stat-number">94%</div>
+                                    <div class="stat-label">Attendance Rate</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Dashboard & Analytics -->
+                <div class="professional-feature-card animate-on-scroll" data-delay="400">
+                    <div class="feature-card-header">
+                        <div class="feature-icon-pro">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M3 3v18h18"/>
+                                <path d="M7 12l4-4 4 4 5-5"/>
+                                <circle cx="7" cy="12" r="1"/>
+                                <circle cx="11" cy="8" r="1"/>
+                                <circle cx="15" cy="12" r="1"/>
+                                <circle cx="20" cy="7" r="1"/>
+                            </svg>
+                        </div>
+                        <div class="feature-meta">
+                            <h3>Analytics Dashboard</h3>
+                            <p class="feature-category">Insights & Reporting</p>
+                        </div>
+                    </div>
+                    
+                    <div class="feature-description">
+                        <p>Business intelligence suite with real-time revenue analytics, predictive capacity modeling, and comprehensive operational insights. Professional reporting with exportable data visualization.</p>
+                    </div>
+                    
+                    <div class="feature-preview-pro">
+                        <div class="analytics-preview">
+                            <div class="preview-header">
+                                <span class="preview-title">Revenue Overview</span>
+                                <span class="preview-period">This Month</span>
+                            </div>
+                            <div class="metrics-preview">
+                                <div class="metric-item">
+                                    <div class="metric-value">£15,240</div>
+                                    <div class="metric-label">Total Revenue</div>
+                                    <div class="metric-trend positive">+12%</div>
+                                </div>
+                                <div class="revenue-chart-preview">
+                                    <div class="chart-bar" style="height: 40%"></div>
+                                    <div class="chart-bar" style="height: 60%"></div>
+                                    <div class="chart-bar" style="height: 80%"></div>
+                                    <div class="chart-bar" style="height: 65%"></div>
+                                    <div class="chart-bar" style="height: 90%"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Mobile Applications -->
+                <div class="professional-feature-card animate-on-scroll" data-delay="500">
+                    <div class="feature-card-header">
+                        <div class="feature-icon-pro">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="5" y="2" width="14" height="20" rx="2" ry="2"/>
+                                <line x1="12" y1="18" x2="12.01" y2="18"/>
+                            </svg>
+                        </div>
+                        <div class="feature-meta">
+                            <h3>Mobile Apps</h3>
+                            <p class="feature-category">iOS & Android Native</p>
+                        </div>
+                    </div>
+                    
+                    <div class="feature-description">
+                        <p>Native mobile applications for iOS and Android with full offline synchronization, push notifications for bookings, and intuitive touch-first interface designed for venue managers on-the-go.</p>
+                    </div>
+                    
+                    <div class="feature-preview-pro">
+                        <div class="mobile-preview">
+                            <div class="phone-mockup">
+                                <div class="phone-screen">
+                                    <div class="mobile-header">
+                                        <span class="app-title">5ive Trackr</span>
+                                        <span class="notification-badge">3</span>
+                                    </div>
+                                    <div class="mobile-content">
+                                        <div class="mobile-card">
+                                            <span class="mobile-icon">⚽</span>
+                                            <span class="mobile-text">Next Match: 18:00</span>
+                                        </div>
+                                        <div class="mobile-card">
+                                            <span class="mobile-icon">👥</span>
+                                            <span class="mobile-text">Team Attendance</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -160,9 +798,6 @@
     <!-- Pricing Section with Premium Design -->
     <section id="pricing" class="pricing-section">
         <div class="pricing-background">
-            <div class="gradient-orb orb-1"></div>
-            <div class="gradient-orb orb-2"></div>
-            <div class="gradient-orb orb-3"></div>
         </div>
         
         <div class="section-container">
@@ -611,5 +1246,1808 @@
     </div>
 
     <script src="js/signup.js"></script>
+    
+    <!-- Navigation dropdown functionality -->
+    <script>
+        function toggleNavDropdown() {
+            const dropdown = document.getElementById('navDropdown');
+            const hamburgerIcon = document.querySelector('.hamburger-icon');
+            const closeIcon = document.querySelector('.close-icon');
+            
+            dropdown.classList.toggle('show');
+            
+            // Toggle icons
+            if (dropdown.classList.contains('show')) {
+                hamburgerIcon.style.display = 'none';
+                closeIcon.style.display = 'block';
+            } else {
+                hamburgerIcon.style.display = 'block';
+                closeIcon.style.display = 'none';
+            }
+            
+            // Close dropdown when clicking on the overlay background
+            dropdown.addEventListener('click', function closeOnOverlay(e) {
+                if (e.target === dropdown) {
+                    dropdown.classList.remove('show');
+                    hamburgerIcon.style.display = 'block';
+                    closeIcon.style.display = 'none';
+                }
+            });
+        }
+        
+        function closeNavDropdown() {
+            const dropdown = document.getElementById('navDropdown');
+            const hamburgerIcon = document.querySelector('.hamburger-icon');
+            const closeIcon = document.querySelector('.close-icon');
+            
+            dropdown.classList.remove('show');
+            hamburgerIcon.style.display = 'block';
+            closeIcon.style.display = 'none';
+        }
+        
+        // Smooth scroll to sections
+        document.querySelectorAll('.dropdown-link[href^="#"]').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href').substring(1);
+                const targetElement = document.getElementById(targetId) || document.querySelector('.' + targetId + '-section');
+                if (targetElement) {
+                    targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+    </script>
+    
+    <!-- Smooth Background Transitions Script -->
+    <script>
+        
+        // COMPLETELY REBUILT SCROLL SYSTEM - THOROUGH DEBUG VERSION
+        document.addEventListener('DOMContentLoaded', function() {
+            const body = document.body;
+            const isMobile = window.innerWidth <= 768;
+            
+            // Center-Point Trigger System for Smooth Background Transitions
+            const initializeCenterPointTriggers = () => {
+                const centerY = window.innerHeight / 2;
+                const sections = [
+                    { name: 'hero', element: document.querySelector('.hero-section'), bgColor: '#1d1d1f' },
+                    { name: 'features', element: document.querySelector('.features-section-professional'), bgColor: '#ffffff' },
+                    { name: 'pricing', element: document.querySelector('.pricing-section'), bgColor: '#1d1d1f' }
+                ];
+
+                let currentActiveSection = 'hero';
+                
+                const handleSectionTransition = (newSection) => {
+                    if (newSection === currentActiveSection) return;
+                    
+                    const prevSection = currentActiveSection;
+                    currentActiveSection = newSection;
+                    
+                    console.log(`🎯 CENTER TRIGGER: ${prevSection} → ${newSection}`);
+                    
+                    // Update shared background to match active section
+                    const pageBackground = document.getElementById('pageBackground');
+                    const targetSection = sections.find(s => s.name === newSection);
+                    
+                    if (pageBackground && targetSection) {
+                        pageBackground.style.background = targetSection.bgColor;
+                        console.log(`✅ Background changed to ${newSection}: ${targetSection.bgColor}`);
+                    }
+                    
+                    // Hide content of inactive sections
+                    sections.forEach(section => {
+                        const element = section.element;
+                        if (element) {
+                            if (section.name === newSection) {
+                                element.classList.remove('section-hidden');
+                                console.log(`👁️ Show content: ${section.name}`);
+                            } else {
+                                element.classList.add('section-hidden');
+                                console.log(`🫥 Hide content: ${section.name}`);
+                            }
+                        }
+                    });
+                    
+                    // Update navigation
+                    updateNavigationForSection(newSection);
+                };
+                
+                // No overlay transitions needed - much simpler!
+                
+                const updateNavigationForSection = (section) => {
+                    const nav = document.querySelector('.floating-nav');
+                    const navLinks = document.querySelectorAll('.nav-link');
+                    const navMenuBtn = document.querySelector('.nav-menu-btn');
+                    
+                    if (!nav) return;
+                    
+                    // Navigation colors based on section - match page background exactly
+                    const navStyles = {
+                        'hero': {
+                            background: 'rgba(29, 29, 31, 0.9)', // Match dark background
+                            textColor: 'rgba(255, 255, 255, 0.9)'
+                        },
+                        'features': {
+                            background: 'rgba(255, 255, 255, 0.9)', // Match white background
+                            textColor: 'rgba(29, 29, 31, 0.9)'
+                        },
+                        'pricing': {
+                            background: 'rgba(29, 29, 31, 0.9)', // Match dark background
+                            textColor: 'rgba(255, 255, 255, 0.9)'
+                        }
+                    };
+                    
+                    const style = navStyles[section];
+                    if (style) {
+                        console.log(`🧭 Nav updating for ${section}: ${style.background}`);
+                        console.log(`   Current nav background:`, getComputedStyle(nav).backgroundColor);
+                        
+                        nav.style.setProperty('background', style.background, 'important');
+                        
+                        // Update dropdown background to match nav
+                        const dropdown = document.querySelector('.nav-dropdown');
+                        if (dropdown) {
+                            dropdown.style.setProperty('background', style.background.replace('0.9', '1'), 'important');
+                        }
+                        
+                        navLinks.forEach(link => {
+                            if (!link.classList.contains('nav-cta')) {
+                                link.style.color = style.textColor;
+                            }
+                        });
+                        if (navMenuBtn) navMenuBtn.style.color = style.textColor;
+                        
+                        setTimeout(() => {
+                            console.log(`   After update nav background:`, getComputedStyle(nav).backgroundColor);
+                        }, 100);
+                        
+                        console.log(`✅ Nav updated for ${section}: ${style.background}`);
+                    } else {
+                        console.log(`❌ No style found for section: ${section}`);
+                    }
+                };
+                
+                // Boundary-based trigger detection using viewport center crossing section boundaries
+                const handleScroll = () => {
+                    const scrollY = window.scrollY;
+                    const viewportCenterY = scrollY + centerY;
+                    
+                    // Get section positions
+                    const heroSection = document.querySelector('.hero-section');
+                    const featuresSection = document.querySelector('.features-section-professional');
+                    const pricingSection = document.querySelector('.pricing-section');
+                    
+                    if (!heroSection || !featuresSection || !pricingSection) return;
+                    
+                    // Calculate section boundaries
+                    const heroRect = heroSection.getBoundingClientRect();
+                    const featuresRect = featuresSection.getBoundingClientRect();
+                    const pricingRect = pricingSection.getBoundingClientRect();
+                    
+                    const heroTop = scrollY + heroRect.top;
+                    const heroBottom = heroTop + heroRect.height;
+                    const featuresTop = scrollY + featuresRect.top;
+                    const featuresBottom = featuresTop + featuresRect.height;
+                    const pricingTop = scrollY + pricingRect.top;
+                    
+                    // Calculate exact boundary points where sections meet
+                    const heroBoundary = (heroBottom + featuresTop) / 2;
+                    const featuresBoundary = (featuresBottom + pricingTop) / 2;
+                    
+                    // Determine active section based on viewport center position
+                    let activeSection;
+                    if (viewportCenterY < heroBoundary) {
+                        activeSection = 'hero';
+                    } else if (viewportCenterY < featuresBoundary) {
+                        activeSection = 'features';
+                    } else {
+                        activeSection = 'pricing';
+                    }
+                    
+                    // Only trigger if section changed
+                    if (activeSection !== currentActiveSection) {
+                        console.log(`🎯 BOUNDARY CROSSING: ${currentActiveSection} → ${activeSection}`);
+                        console.log(`   Viewport center: ${Math.round(viewportCenterY)}px`);
+                        console.log(`   Hero boundary: ${Math.round(heroBoundary)}px`);
+                        console.log(`   Features boundary: ${Math.round(featuresBoundary)}px`);
+                        handleSectionTransition(activeSection);
+                    }
+                };
+                
+                // Use scroll listener with throttling for performance
+                let scrollTimeout;
+                const throttledScroll = () => {
+                    if (scrollTimeout) return;
+                    scrollTimeout = setTimeout(() => {
+                        handleScroll();
+                        scrollTimeout = null;
+                    }, 16); // ~60fps
+                };
+                
+                window.addEventListener('scroll', throttledScroll, { passive: true });
+                
+                // Initialize with current scroll position
+                setTimeout(() => {
+                    handleScroll(); // This will set the correct initial section based on scroll position
+                }, 100);
+            };
+            
+            // Initialize the trigger system
+            initializeCenterPointTriggers();
+            
+            // Mobile-Enhanced Animation Observer
+            if (isMobile) {
+                const mobileObserverOptions = {
+                    threshold: 0.15,
+                    rootMargin: '0px 0px -50px 0px'
+                };
+
+                const mobileAnimationObserver = new IntersectionObserver((entries) => {
+                    entries.forEach((entry) => {
+                        if (entry.isIntersecting) {
+                            const element = entry.target;
+                            const delay = parseInt(element.dataset.delay) || 0;
+                            
+                            setTimeout(() => {
+                                element.classList.add('animate-visible');
+                                
+                                // Add staggered animation to preview elements
+                                const previews = element.querySelectorAll('.feature-preview-pro');
+                                previews.forEach((preview, index) => {
+                                    setTimeout(() => {
+                                        preview.style.opacity = '1';
+                                        preview.style.transform = 'scale(1) translateY(0)';
+                                    }, 200 + (index * 100));
+                                });
+                            }, delay);
+                        }
+                    });
+                }, mobileObserverOptions);
+
+                // Observe all feature cards and headers
+                const animatedElements = document.querySelectorAll('.features-section-professional .animate-on-scroll');
+                animatedElements.forEach(element => {
+                    mobileAnimationObserver.observe(element);
+                });
+
+                // Add touch interaction enhancements
+                const featureCards = document.querySelectorAll('.professional-feature-card');
+                featureCards.forEach(card => {
+                    card.addEventListener('touchstart', function() {
+                        this.style.transform = 'translateY(-1px) scale(1.01)';
+                        this.style.transition = 'all 0.15s ease';
+                    });
+                    
+                    card.addEventListener('touchend', function() {
+                        setTimeout(() => {
+                            this.style.transform = 'translateY(0) scale(1)';
+                        }, 150);
+                    });
+                });
+            }
+            
+            
+            // Center-point trigger system handles all background transitions above
+            console.log('🚀 Center-point trigger system initialized');
+            
+            // Initialize navigation colors
+            updateNavigationForSection('hero');
+            
+        });
+    </script>
+
+    <!-- Mobile-specific improvements -->
+    <style>
+        /* Target only hero heading text colors - fix inheritance issue */
+        .hero-section .hero-content .hero-title {
+            color: #9ca3af !important; /* Light grey for "Transform Your" and "Management" */
+        }
+        
+        /* Override the span to be light green - higher specificity */
+        .hero-section .hero-content .hero-title .hero-accent-text {
+            color: #3d7f1e !important; /* Original light green for "Football Venue" */
+            background: none !important;
+            background-image: none !important;
+            -webkit-background-clip: text !important;
+            -webkit-text-fill-color: #3d7f1e !important;
+            background-clip: text !important;
+            animation: none !important;
+            transition: none !important;
+        }
+        
+        /* Shared Background System - Much Simpler */
+        .page-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #1d1d1f;
+            transition: background 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: -1;
+        }
+        
+        body {
+            background: transparent;
+            position: relative;
+        }
+        
+        /* All sections transparent - shared background handles color */
+        .hero-section,
+        .features-section-professional,
+        .pricing-section {
+            background: transparent !important;
+            position: relative;
+            z-index: 1;
+        }
+        
+        /* Add spacing between sections */
+        .features-section-professional {
+            margin-top: 100px;
+        }
+        
+        .pricing-section {
+            margin-top: 100px;
+        }
+        
+        /* Content containers with smooth opacity transitions */
+        .hero-content,
+        .section-container {
+            transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            opacity: 1;
+        }
+        
+        /* Hidden state for inactive sections */
+        .section-hidden .hero-content,
+        .section-hidden .section-container {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        /* Section Overlays for Smooth Transitions */
+        .section-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 20;
+            pointer-events: none;
+            transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            opacity: 0;
+            /* Ensure full coverage */
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Ensure sections have relative positioning for overlays */
+        .hero-section,
+        .features-section-professional,
+        .pricing-section {
+            position: relative;
+        }
+
+        /* Overlay colors that match the ACTIVE section backgrounds */
+        .hero-overlay {
+            background: #ffffff !important; /* White overlay when features section is active */
+            /* Force overlay to cover ENTIRE hero section - now works with container padding */
+            position: absolute !important;
+            top: 0 !important;
+            left: 0 !important;
+            right: 0 !important;
+            bottom: 0 !important;
+            width: 100% !important;
+            height: 100% !important;
+            min-height: 100vh !important; /* Ensure full viewport coverage minimum */
+            z-index: 50 !important; /* Higher than any content */
+            margin: 0 !important;
+            padding: 0 !important;
+        }
+
+        .features-overlay {
+            background: #1d1d1f; /* Dark overlay when hero/pricing sections are active */
+        }
+
+        .pricing-overlay {
+            background: #ffffff; /* White overlay when features section is active */
+        }
+
+        /* Initial overlay states - ALL sections start visible (no overlays) */
+        .hero-section .section-overlay:not(.show) {
+            opacity: 0 !important; /* Hero starts visible - but NOT when show class is present */
+        }
+        
+        /* OVERRIDE: When show class is added, force visibility */
+        .hero-section .section-overlay.show {
+            opacity: 1 !important;
+            background: #ffffff !important;
+        }
+
+        .features-section-professional .section-overlay:not(.show) {
+            opacity: 0 !important; /* Features starts visible - but NOT when show class is present */
+        }
+
+        .pricing-section .section-overlay:not(.show) {
+            opacity: 0 !important; /* Pricing starts visible - but NOT when show class is present */
+        }
+
+        /* Show classes for overlays - OVERRIDE INITIAL STATE */
+        .hero-section .section-overlay.hero-overlay.show,
+        .hero-section .hero-overlay.show,
+        .section-overlay.hero-overlay.show,
+        .hero-overlay.show {
+            opacity: 1 !important;
+            background: #ffffff !important;
+            background-color: #ffffff !important;
+            z-index: 100 !important;
+            /* DEBUG: Force visibility */
+            display: block !important;
+            position: absolute !important;
+            top: 0 !important;
+            left: 0 !important;
+            right: 0 !important;
+            bottom: 0 !important;
+            width: 100% !important;
+            height: 100% !important;
+            min-height: 100vh !important;
+        }
+
+        .features-overlay.show {
+            opacity: 1 !important;
+            background: #1d1d1f !important;
+            z-index: 100 !important;
+        }
+
+        .pricing-overlay.show {
+            opacity: 1 !important;
+            background: #ffffff !important;
+            z-index: 100 !important;
+        }
+
+        /* Ensure overlays are above all section content */
+        .section-overlay {
+            z-index: 50 !important;
+        }
+
+        /* Ensure all section content is below overlays */
+        .hero-content,
+        .hero-background,
+        .animated-grid,
+        .section-container,
+        .pricing-background {
+            position: relative;
+            z-index: 5;
+        }
+
+        /* Override mobile specific hero z-index */
+        @media (max-width: 768px) {
+            .hero-section .hero-content {
+                z-index: 5 !important;
+            }
+            
+            /* Ensure hero overlay works perfectly on mobile */
+            .hero-overlay {
+                z-index: 50 !important;
+                position: absolute !important;
+                top: 0 !important;
+                left: 0 !important;
+                right: 0 !important;
+                bottom: 0 !important;
+                width: 100% !important;
+                height: 100% !important;
+                min-height: 100vh !important;
+            }
+            
+            /* Mobile-specific overlay show rules - MAXIMUM SPECIFICITY */
+            html body section.hero-section .section-overlay.hero-overlay.show,
+            html body section.hero-section div.section-overlay.hero-overlay.show,
+            html body .hero-section .section-overlay.hero-overlay.show,
+            html body .hero-section .hero-overlay.show,
+            html body .section-overlay.hero-overlay.show,
+            html body .hero-overlay.show,
+            html body .hero-overlay.show.section-overlay,
+            html body div.hero-overlay.show,
+            html body div.section-overlay.hero-overlay.show {
+                opacity: 1 !important;
+                background: #ffffff !important;
+                background-color: #ffffff !important;
+                background-image: none !important;
+                z-index: 100 !important;
+                display: block !important;
+                position: absolute !important;
+                top: 0 !important;
+                left: 0 !important;
+                right: 0 !important;
+                bottom: 0 !important;
+                width: 100% !important;
+                height: 100% !important;
+                visibility: visible !important;
+                pointer-events: none !important;
+                transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1) !important;
+            }
+        }
+        
+        /* Background classes for gradient support */
+        body.bg-hero {
+            background: #1d1d1f !important;
+        }
+        
+        body.bg-features {
+            background: #ffffff !important;
+        }
+        
+        body.bg-pricing {
+            background: #1d1d1f !important;
+        }
+        
+        /* Override section backgrounds for smooth transitions */
+        .hero-section {
+            background: transparent !important;
+            min-height: 100vh;
+            padding: 0;
+        }
+        
+        .features-section-professional {
+            background: transparent !important;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .pricing-section {
+            background: transparent !important;
+            padding: 0;
+            margin: 0;
+        }
+
+        /* Move spacing to content containers to avoid overlay issues */
+        .hero-content {
+            padding: 120px 0 200px 0;
+        }
+
+        .features-section-professional .section-container {
+            padding: 350px 0;
+        }
+
+        .pricing-section .section-container {
+            padding: 350px 0;
+        }
+        
+        /* Removed duplicate/conflicting CSS rules */
+        
+        .hero-section .hero-description {
+            color: rgba(255, 255, 255, 0.8) !important;
+        }
+        
+        /* Removed conflicting nav background override to allow JavaScript control */
+        
+        .hero-section .nav-link {
+            color: rgba(255, 255, 255, 0.9) !important;
+        }
+        
+        .hero-section .nav-link:hover {
+            color: var(--primary-green) !important;
+        }
+        
+        .hero-section .nav-cta {
+            background: var(--primary-green) !important;
+            color: white !important;
+        }
+        
+        /* Ensure webapp showcase is visible on dark background */
+        .hero-section .webapp-showcase {
+            background: rgba(255, 255, 255, 0.95) !important;
+            border: 1px solid rgba(255, 255, 255, 0.2) !important;
+        }
+        
+        .hero-section .showcase-header {
+            background: linear-gradient(135deg, rgba(248, 249, 250, 0.9) 0%, rgba(241, 245, 249, 0.9) 100%) !important;
+        }
+        
+        /* Mobile-only fixes for signup page - preserve desktop experience */
+        /* Webapp Showcase Styles */
+        .webapp-showcase {
+            background: var(--surface-primary);
+            border-radius: 20px;
+            box-shadow: var(--shadow-xl);
+            overflow: hidden;
+            border: 1px solid var(--border-light);
+        }
+
+        .showcase-header {
+            padding: 24px 24px 20px;
+            text-align: center;
+            background: linear-gradient(135deg, var(--surface-secondary) 0%, var(--surface-tertiary) 100%);
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .showcase-header h3 {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+
+        .showcase-header p {
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin: 0;
+        }
+
+        .demo-screenshots {
+            padding: 24px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .screenshot-card {
+            text-align: center;
+        }
+
+        .screenshot-placeholder {
+            background: var(--surface-secondary);
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 12px;
+            border: 1px solid var(--border-light);
+            transition: all 0.3s var(--ease-out-expo);
+        }
+
+        .screenshot-placeholder:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .screenshot-content {
+            background: white;
+            border-radius: 8px;
+            padding: 12px;
+            min-height: 120px;
+        }
+
+        .mock-header {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--primary-green);
+            margin-bottom: 12px;
+            text-align: left;
+            border-bottom: 1px solid var(--border-light);
+            padding-bottom: 4px;
+        }
+
+        .mock-stats {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 12px;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--primary-green);
+            line-height: 1;
+        }
+
+        .stat-label {
+            font-size: 10px;
+            color: var(--text-tertiary);
+            margin-top: 2px;
+        }
+
+        .mock-chart {
+            height: 30px;
+            background: linear-gradient(135deg, rgba(46, 100, 23, 0.1) 0%, rgba(46, 100, 23, 0.05) 100%);
+            border-radius: 4px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .mock-chart::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            width: 60%;
+            height: 2px;
+            background: var(--primary-green);
+            border-radius: 1px;
+            animation: chartGrow 2s ease-out infinite alternate;
+        }
+
+        @keyframes chartGrow {
+            0% { width: 30%; }
+            100% { width: 80%; }
+        }
+
+        /* Venue Card Preview Styles */
+        .venue-card-preview {
+            background: var(--surface-secondary);
+            border-radius: 8px;
+            padding: 12px;
+        }
+
+        .venue-preview-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .venue-name {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .venue-plan {
+            font-size: 11px;
+            background: var(--primary-green);
+            color: white;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-weight: 500;
+        }
+
+        .venue-stats {
+            display: flex;
+            justify-content: space-between;
+            gap: 8px;
+        }
+
+        .venue-stat {
+            text-align: center;
+            flex: 1;
+        }
+
+        .venue-stat .stat-number {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--primary-green);
+            line-height: 1;
+        }
+
+        .venue-stat .stat-text {
+            font-size: 10px;
+            color: var(--text-tertiary);
+            margin-top: 2px;
+        }
+
+        /* Pitch Grid Preview Styles */
+        .pitch-grid-preview {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .pitch-card {
+            background: white;
+            border: 1px solid var(--border-light);
+            border-radius: 6px;
+            padding: 8px;
+        }
+
+        .pitch-preview-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .pitch-name {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .pitch-status {
+            font-size: 9px;
+            padding: 2px 6px;
+            border-radius: 8px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .pitch-status.active {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .pitch-status.maintenance {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .pitch-slots {
+            display: flex;
+            gap: 4px;
+        }
+
+        .time-slot {
+            flex: 1;
+            padding: 4px 2px;
+            text-align: center;
+            font-size: 9px;
+            font-weight: 600;
+            border-radius: 4px;
+            transition: all 0.2s ease;
+        }
+
+        .time-slot.booked {
+            background: #dc2626;
+            color: white;
+        }
+
+        .time-slot.available {
+            background: var(--primary-green);
+            color: white;
+        }
+
+        .time-slot.unavailable {
+            background: #6b7280;
+            color: white;
+        }
+
+        .screenshot-label {
+            font-size: 13px;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        /* Professional Features Section Styles */
+        .features-section-professional {
+            background: transparent !important;
+            position: relative;
+        }
+
+        .professional-features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
+            gap: 32px;
+            margin-top: 60px;
+        }
+
+        .professional-feature-card {
+            background: var(--surface-primary);
+            border-radius: 20px;
+            padding: 32px;
+            border: 1px solid var(--border-light);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            transition: all 0.4s var(--ease-out-expo);
+            position: relative;
+            overflow: hidden;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .professional-feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--accent-gradient);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .professional-feature-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
+            border-color: var(--primary-green);
+        }
+
+        .professional-feature-card:hover::before {
+            opacity: 1;
+        }
+
+        .feature-card-header {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 24px;
+            justify-content: center;
+            width: 100%;
+            text-align: center;
+        }
+
+        .feature-icon-pro {
+            width: 52px;
+            height: 52px;
+            background: linear-gradient(135deg, var(--primary-green) 0%, var(--primary-dark) 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            box-shadow: 0 4px 12px rgba(46, 100, 23, 0.25);
+            flex-shrink: 0;
+        }
+
+        .feature-meta {
+            text-align: center;
+            width: 100%;
+        }
+
+        .feature-meta h3 {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin: 0 0 4px 0;
+            line-height: 1.2;
+        }
+
+        .feature-category {
+            font-size: 14px;
+            color: var(--text-tertiary);
+            font-weight: 500;
+            margin: 0;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .feature-description {
+            margin-bottom: 28px;
+            width: 100%;
+            text-align: left;
+        }
+
+        .feature-description p {
+            font-size: 16px;
+            line-height: 1.6;
+            color: var(--text-secondary);
+            margin: 0;
+            text-align: left;
+            max-width: 100%;
+        }
+
+        .feature-preview-pro {
+            background: var(--surface-secondary);
+            border-radius: 12px;
+            padding: 20px;
+            border: 1px solid var(--border-light);
+        }
+
+        /* Common Preview Header Styles */
+        .preview-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .preview-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .preview-count, .preview-date, .preview-period, .preview-status {
+            font-size: 13px;
+            background: var(--primary-green);
+            color: white;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-weight: 500;
+        }
+
+        /* Venue Management Preview */
+        .venue-list-preview {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .venue-item-preview {
+            background: white;
+            padding: 16px;
+            border-radius: 8px;
+            border: 1px solid var(--border-light);
+        }
+
+        .venue-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .venue-name-preview {
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .venue-status-preview {
+            font-size: 11px;
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .venue-status-preview.active {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .venue-stats-preview {
+            display: flex;
+            gap: 16px;
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        /* Scheduling Preview */
+        .schedule-grid-preview {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .time-slot-preview {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .time-label {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-primary);
+            width: 50px;
+            flex-shrink: 0;
+        }
+
+        .pitch-slots {
+            display: flex;
+            gap: 8px;
+            flex: 1;
+        }
+
+        .slot {
+            flex: 1;
+            padding: 8px 12px;
+            text-align: center;
+            font-size: 12px;
+            font-weight: 600;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+        }
+
+        .slot.booked {
+            background: #dc2626;
+            color: white;
+        }
+
+        .slot.available {
+            background: var(--primary-green);
+            color: white;
+        }
+
+        /* League Table Preview */
+        .league-table-preview {
+            background: white;
+            border-radius: 8px;
+            border: 1px solid var(--border-light);
+            overflow: hidden;
+        }
+
+        .table-header-preview {
+            display: grid;
+            grid-template-columns: auto 1fr auto;
+            gap: 16px;
+            padding: 12px 16px;
+            background: var(--surface-secondary);
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .table-row-preview {
+            display: grid;
+            grid-template-columns: auto 1fr auto;
+            gap: 16px;
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--border-light);
+            font-size: 14px;
+            align-items: center;
+        }
+
+        .table-row-preview:last-child {
+            border-bottom: none;
+        }
+
+        .position {
+            font-weight: 700;
+            color: var(--primary-green);
+            width: 24px;
+            text-align: center;
+        }
+
+        .team-name {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .points {
+            font-weight: 700;
+            color: var(--text-primary);
+            text-align: right;
+        }
+
+        /* Team Stats Preview */
+        .team-stats-preview {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+        }
+
+        .stat-card-preview {
+            background: white;
+            padding: 16px;
+            border-radius: 8px;
+            text-align: center;
+            border: 1px solid var(--border-light);
+        }
+
+        .stat-number {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--primary-green);
+            margin-bottom: 4px;
+            line-height: 1;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: var(--text-tertiary);
+            font-weight: 500;
+        }
+
+        /* Analytics Preview */
+        .metrics-preview {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            gap: 20px;
+        }
+
+        .metric-item {
+            flex: 1;
+        }
+
+        .metric-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary-green);
+            margin-bottom: 4px;
+            line-height: 1;
+        }
+
+        .metric-label {
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-bottom: 4px;
+        }
+
+        .metric-trend {
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .metric-trend.positive {
+            color: #059669;
+        }
+
+        .revenue-chart-preview {
+            display: flex;
+            align-items: flex-end;
+            gap: 4px;
+            height: 60px;
+            flex: 1;
+        }
+
+        .chart-bar {
+            flex: 1;
+            background: var(--accent-gradient);
+            border-radius: 2px 2px 0 0;
+            min-height: 20px;
+            animation: chartGrowPro 2s ease-out infinite alternate;
+        }
+
+        @keyframes chartGrowPro {
+            0% { transform: scaleY(0.7); }
+            100% { transform: scaleY(1); }
+        }
+
+        /* Mobile App Preview */
+        .phone-mockup {
+            width: 180px;
+            height: 320px;
+            background: linear-gradient(145deg, #1f2937, #374151);
+            border-radius: 24px;
+            padding: 8px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .phone-mockup::before {
+            content: '';
+            position: absolute;
+            top: 12px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 4px;
+            background: #6b7280;
+            border-radius: 2px;
+        }
+
+        .phone-screen {
+            width: 100%;
+            height: 100%;
+            background: white;
+            border-radius: 16px;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .mobile-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .app-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--primary-green);
+        }
+
+        .notification-badge {
+            background: #dc2626;
+            color: white;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        .mobile-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .mobile-card {
+            background: var(--surface-secondary);
+            padding: 12px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border: 1px solid var(--border-light);
+        }
+
+        .mobile-icon {
+            font-size: 18px;
+        }
+
+        .mobile-text {
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+
+        /* Mobile-specific hero animations */
+        @media (max-width: 768px) {
+            /* Override inline animations with mobile-specific ones */
+            .hero-section .hero-title span {
+                animation: fadeInWord 0.8s ease-out forwards !important;
+            }
+            
+            .hero-section .hero-title span:nth-child(1) {
+                animation-delay: 0.8s !important;
+            }
+            
+            .hero-section .hero-title span:nth-child(2) {
+                animation-delay: 1.4s !important;
+            }
+            
+            .hero-section .hero-title span:nth-child(3) {
+                animation-delay: 2.0s !important;
+            }
+            
+            .hero-section .hero-description {
+                animation: fadeInWord 0.8s ease-out 2.8s forwards !important;
+            }
+            
+            .hero-section .hero-cta {
+                animation: fadeInWord 0.8s ease-out 3.6s forwards !important;
+            }
+            
+            /* Ensure title text is white */
+            .hero-section .hero-title {
+                color: #ffffff !important;
+            }
+            
+            /* White text for non-gradient spans */
+            .hero-section .hero-title span:not(.gradient-text) {
+                color: #ffffff !important;
+                -webkit-text-fill-color: #ffffff !important;
+            }
+            
+            /* Mobile-only: Allow background transitions like desktop */
+            
+            .hero-section {
+                background: transparent !important;
+                background-color: transparent !important;
+            }
+            
+            /* Keep other hero elements transparent */
+            .hero-section .hero-content,
+            .hero-section .hero-background,
+            .hero-section .animated-grid {
+                background: transparent !important;
+                background-color: transparent !important;
+            }
+            
+            .hero-section .hero-content {
+                position: relative;
+                z-index: 10;
+            }
+            
+            .hero-section .hero-title span:not(.gradient-text) {
+                color: #ffffff !important; /* White text for mobile visibility only */
+            }
+            
+            .hero-section .hero-description {
+                color: rgba(255, 255, 255, 0.9) !important; /* Mobile description visibility */
+            }
+            
+            /* Remove any white overlays or containers that might be covering content */
+            .hero-section *:not(.hero-content):not(.hero-title):not(.hero-description):not(.hero-cta):not(span):not(button):not(svg):not(path) {
+                background: transparent !important;
+                background-color: transparent !important;
+            }
+            
+            /* Force remove any potential modal overlays or fixed positioned white elements */
+            .hero-section::before,
+            .hero-section::after {
+                display: none !important;
+            }
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .professional-features-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+                margin-top: 40px;
+                padding: 0 12px;
+            }
+
+            .professional-feature-card {
+                padding: 20px;
+                border-radius: 16px;
+                margin-bottom: 8px;
+                transform: translateY(0);
+                animation: none;
+                background: rgba(255, 255, 255, 0.98);
+                backdrop-filter: blur(10px);
+                border: 1px solid rgba(46, 100, 23, 0.1);
+            }
+
+            .professional-feature-card.animate-visible {
+                animation: mobileCardSlideIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+            }
+
+            .feature-card-header {
+                flex-direction: column;
+                align-items: center;
+                gap: 12px;
+                margin-bottom: 18px;
+                text-align: center;
+                justify-content: center;
+                width: 100%;
+            }
+
+            .feature-icon-pro {
+                width: 44px;
+                height: 44px;
+                border-radius: 10px;
+                align-self: center;
+                box-shadow: 0 3px 8px rgba(46, 100, 23, 0.3);
+                flex-shrink: 0;
+            }
+
+            .feature-meta h3 {
+                font-size: 18px;
+                font-weight: 700;
+                line-height: 1.3;
+                margin: 0;
+            }
+
+            .feature-category {
+                font-size: 12px;
+                letter-spacing: 0.8px;
+                margin-top: 2px;
+                color: var(--primary-green);
+                opacity: 0.8;
+            }
+
+            .feature-description {
+                margin-bottom: 20px;
+            }
+
+            .feature-description p {
+                font-size: 15px;
+                line-height: 1.5;
+                text-align: left;
+                color: var(--text-secondary);
+            }
+
+            .feature-preview-pro {
+                border-radius: 12px;
+                overflow: hidden;
+                transform: scale(0.98);
+                transition: transform 0.3s ease;
+            }
+
+            .professional-feature-card.animate-visible .feature-preview-pro {
+                animation: previewFadeIn 0.8s ease-out 0.2s forwards;
+                opacity: 0;
+            }
+
+            .section-header {
+                text-align: center;
+                margin-bottom: 32px;
+                padding: 0 20px;
+            }
+
+            .section-title {
+                font-size: 28px !important;
+                line-height: 1.2 !important;
+                margin-bottom: 12px;
+                font-weight: 700;
+            }
+
+            .section-subtitle {
+                font-size: 16px !important;
+                line-height: 1.4 !important;
+                color: var(--text-secondary);
+                max-width: 100%;
+            }
+
+            @keyframes mobileCardSlideIn {
+                0% {
+                    opacity: 0;
+                    transform: translateY(30px) scale(0.95);
+                }
+                60% {
+                    transform: translateY(-3px) scale(1.02);
+                }
+                100% {
+                    opacity: 1;
+                    transform: translateY(0) scale(1);
+                }
+            }
+
+            @keyframes previewFadeIn {
+                0% {
+                    opacity: 0;
+                    transform: scale(0.95) translateY(10px);
+                }
+                100% {
+                    opacity: 1;
+                    transform: scale(1) translateY(0);
+                }
+            }
+
+            .professional-feature-card:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 8px 25px rgba(46, 100, 23, 0.15);
+            }
+
+            .features-section-professional .animate-on-scroll {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            .features-section-professional .animate-on-scroll.animate-visible {
+                opacity: 1;
+                transform: translateY(0);
+                transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            }
+
+            /* Mobile feature card centering already handled above */
+
+            .feature-icon-pro {
+                width: 44px;
+                height: 44px;
+            }
+
+            .feature-meta h3 {
+                font-size: 18px;
+            }
+
+            .team-stats-preview {
+                grid-template-columns: 1fr;
+            }
+
+            .metrics-preview {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 16px;
+            }
+
+            .revenue-chart-preview {
+                height: 40px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            /* Hide webapp showcase on mobile for cleaner look */
+            .hero-visual {
+                display: none !important;
+            }
+            
+            .demo-screenshots {
+                grid-template-columns: 1fr;
+            }
+            
+            /* Fix hero content layout for mobile */
+            .hero-content {
+                grid-template-columns: 1fr !important;
+                gap: 0 !important;
+                text-align: center !important;
+                padding: 0 20px !important;
+                max-width: 100% !important;
+            }
+            
+            .hero-section {
+                min-height: 100vh;
+                padding: 0 !important;
+                background: transparent !important;
+            }
+            
+            /* Mobile hero content padding */
+            .hero-content {
+                padding: 90px 0 40px 0 !important;
+            }
+            
+            /* Optimize hero badge for mobile */
+            .hero-badge {
+                margin-bottom: 28px !important;
+                padding: 10px 20px !important;
+                font-size: 14px !important;
+                max-width: fit-content !important;
+                margin-left: auto !important;
+                margin-right: auto !important;
+            }
+            
+            /* Improve hero title readability on mobile */
+            .hero-title {
+                font-size: 2.4rem !important;
+                line-height: 1.15 !important;
+                margin-bottom: 24px !important;
+                padding: 0 !important;
+                max-width: 90% !important;
+                margin-left: auto !important;
+                margin-right: auto !important;
+            }
+            
+            /* Optimize description for mobile */
+            .hero-description {
+                font-size: 1.1rem !important;
+                line-height: 1.6 !important;
+                margin-bottom: 40px !important;
+                padding: 0 !important;
+                max-width: 85% !important;
+                margin-left: auto !important;
+                margin-right: auto !important;
+                color: var(--text-secondary) !important;
+            }
+            
+            /* Improve CTA buttons for mobile */
+            .hero-cta {
+                display: flex !important;
+                flex-direction: column !important;
+                gap: 12px !important;
+                align-items: center !important;
+                margin-bottom: 50px !important;
+                padding: 0 !important;
+            }
+            
+            .primary-cta,
+            .secondary-cta {
+                width: 100% !important;
+                max-width: 300px !important;
+                justify-content: center !important;
+                padding: 16px 32px !important;
+                font-size: 1.05rem !important;
+                font-weight: 500 !important;
+            }
+            
+            /* Clean up floating nav for mobile - keep initial dark background */
+            .floating-nav {
+                padding: 0 20px !important;
+            }
+            
+            .nav-container {
+                height: 60px !important;
+            }
+            
+            .logo-image {
+                height: 36px !important;
+            }
+            
+            /* Simplify nav links on mobile */
+            .nav-links {
+                gap: 8px !important;
+            }
+            
+            .nav-link:not(.nav-cta) {
+                display: none !important;
+            }
+            
+            .nav-cta {
+                font-size: 15px !important;
+                padding: 10px 20px !important;
+                font-weight: 500 !important;
+            }
+            
+            /* Hide floating background elements that create visual clutter */
+            .floating-elements {
+                display: none !important;
+            }
+            
+            /* Simplify animated grid */
+            .animated-grid {
+                opacity: 0.3 !important;
+                background-size: 60px 60px !important;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .hero-section {
+                padding: 0 !important;
+            }
+            
+            /* Small mobile hero content padding */
+            .hero-content {
+                padding: 80px 0 50px 0 !important;
+            }
+            
+            .hero-content {
+                padding: 0 16px !important;
+            }
+            
+            .hero-title {
+                font-size: 2rem !important;
+                margin-bottom: 20px !important;
+                max-width: 95% !important;
+            }
+            
+            .hero-description {
+                font-size: 1rem !important;
+                margin-bottom: 36px !important;
+                max-width: 90% !important;
+            }
+            
+            .hero-badge {
+                padding: 8px 16px !important;
+                font-size: 13px !important;
+                margin-bottom: 24px !important;
+            }
+            
+            .primary-cta,
+            .secondary-cta {
+                max-width: 280px !important;
+                padding: 14px 28px !important;
+                font-size: 1rem !important;
+            }
+            
+            .floating-nav {
+                padding: 0 16px !important;
+            }
+            
+            .nav-container {
+                height: 56px !important;
+            }
+            
+            .logo-image {
+                height: 32px !important;
+            }
+            
+            .nav-cta {
+                font-size: 14px !important;
+                padding: 8px 16px !important;
+            }
+        }
+        
+        @media (max-width: 360px) {
+            .hero-title {
+                font-size: 1.8rem !important;
+            }
+            
+            .hero-description {
+                font-size: 0.95rem !important;
+            }
+            
+            .hero-content {
+                padding: 0 14px !important;
+            }
+            
+            .primary-cta,
+            .secondary-cta {
+                max-width: 100% !important;
+                font-size: 0.95rem !important;
+            }
+            
+            .floating-nav {
+                padding: 0 14px !important;
+            }
+        }
+    </style>
+    
+    <!-- Remove loading overlay when page is fully loaded -->
+    <script>
+        window.addEventListener('load', function() {
+            const overlay = document.getElementById('loading-overlay');
+            const isMobile = window.innerWidth <= 768;
+            
+            if (overlay) {
+                // Remove overlay for all devices - let scroll system handle background
+                overlay.style.opacity = '0';
+                setTimeout(() => overlay.remove(), 300);
+            }
+            
+            // Force hero text colors with JavaScript - works for both desktop and mobile
+            const heroTitle = document.querySelector('.hero-section .hero-title');
+            
+            if (heroTitle) {
+                // Get all child nodes including text nodes and spans
+                const spans = heroTitle.querySelectorAll('span');
+                
+                // Add white to grey gradient effect on spans that are NOT the gradient-text
+                spans.forEach(span => {
+                    if (!span.classList.contains('gradient-text')) {
+                        span.style.setProperty('background', 'linear-gradient(135deg, #ffffff 0%, #9ca3af 100%)', 'important');
+                        span.style.setProperty('-webkit-background-clip', 'text', 'important');
+                        span.style.setProperty('-webkit-text-fill-color', 'transparent', 'important');
+                        span.style.setProperty('background-clip', 'text', 'important');
+                        span.style.setProperty('color', '#ffffff', 'important'); // Fallback for non-webkit browsers
+                    }
+                });
+                
+                // Ensure the title itself doesn't override span colors
+                heroTitle.style.setProperty('color', 'inherit', 'important');
+            }
+        });
+    </script>
 </body>
 </html>
