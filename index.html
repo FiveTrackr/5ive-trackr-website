@@ -18,6 +18,8 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            /* Prevent horizontal scrolling on mobile */
+            overflow-x: hidden;
         }
 
         /* Background Effects - Same as pricing section */
@@ -190,41 +192,120 @@
             opacity: 0.9;
         }
 
-        /* Responsive Design */
+        /* Responsive Design - Mobile First Approach */
         @media (max-width: 768px) {
-            .main-title {
-                font-size: 2.5rem;
+            .landing-content {
+                padding: 20px 16px;
+                max-width: 100%;
+            }
+
+            .logo-container {
+                margin-bottom: 36px;
+            }
+
+            .main-logo {
+                height: 240px;
             }
 
             .main-subtitle {
                 font-size: 1.1rem;
-                margin-bottom: 48px;
+                margin-bottom: 40px;
+                padding: 0 10px;
+                line-height: 1.6;
             }
 
             .portal-buttons {
                 flex-direction: column;
                 align-items: center;
                 gap: 16px;
+                padding: 0 20px;
             }
 
             .portal-btn {
                 width: 100%;
-                max-width: 300px;
+                max-width: 280px;
+                padding: 18px 24px;
+                font-size: 1.05rem;
+                min-height: 56px;
+                justify-content: center;
+                border-radius: 12px;
             }
 
-            .main-logo {
-                height: 280px;
+            /* Improve touch targets */
+            .portal-btn:hover {
+                transform: translateY(-2px);
+            }
+
+            /* Adjust background effects for mobile */
+            .orb-1, .orb-2, .orb-3 {
+                opacity: 0.08;
+            }
+
+            /* Reduce particle count for performance */
+            .particles {
+                display: none;
             }
         }
 
         @media (max-width: 480px) {
-            .main-title {
-                font-size: 2rem;
+            .landing-content {
+                padding: 16px 12px;
+            }
+
+            .logo-container {
+                margin-bottom: 28px;
+            }
+
+            .main-logo {
+                height: 200px;
+            }
+
+            .main-subtitle {
+                font-size: 1rem;
+                margin-bottom: 32px;
+                padding: 0 8px;
+                line-height: 1.5;
+            }
+
+            .portal-buttons {
+                padding: 0 16px;
+                gap: 14px;
             }
 
             .portal-btn {
-                padding: 16px 32px;
+                max-width: 100%;
+                padding: 16px 20px;
                 font-size: 1rem;
+                min-height: 52px;
+                border-radius: 10px;
+            }
+
+            .btn-icon {
+                width: 18px;
+                height: 18px;
+            }
+
+            /* Further reduce effects for small screens */
+            .gradient-orb {
+                display: none;
+            }
+        }
+
+        /* Extra small screens */
+        @media (max-width: 360px) {
+            .main-logo {
+                height: 180px;
+            }
+
+            .main-subtitle {
+                font-size: 0.95rem;
+                margin-bottom: 28px;
+            }
+
+            .portal-btn {
+                padding: 14px 18px;
+                font-size: 0.95rem;
+                min-height: 48px;
             }
         }
 
