@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>5ive Trackr - Professional Football Management</title>
+    <link rel="icon" type="image/svg+xml" href="img/5-web-icon.svg">
+    <link rel="shortcut icon" type="image/svg+xml" href="img/5-web-icon.svg">
     <style>
         /* Prevent zooming without affecting layout */
         html, body {
@@ -506,44 +508,56 @@
                 font-size: 0.75rem !important;
             }
             
-            /* Simple mobile scroll indicator */
-            .mobile-scroll-indicator {
-                position: fixed;
-                bottom: 30px;
-                left: 50%;
-                transform: translateX(-50%);
-                opacity: 0;
-                transition: opacity 0.5s ease-in;
-                z-index: 1000;
-                pointer-events: none;
+            /* Mobile Scroll Indicator */
+            .scroll-indicator {
+                position: fixed !important;
+                bottom: 40px !important;
+                left: 50% !important;
+                transform: translateX(-50%) !important;
+                width: 40px !important;
+                height: 40px !important;
+                min-width: 40px !important;
+                min-height: 40px !important;
+                display: flex !important;
+                align-items: center !important;
+                justify-content: center !important;
+                z-index: 99999 !important;
+                opacity: 0 !important;
+                transition: opacity 0.5s ease !important;
+                box-sizing: border-box !important;
+                flex-shrink: 0 !important;
             }
             
-            .mobile-scroll-indicator.show {
-                opacity: 0.6;
-            }
-            
-            .mobile-scroll-indicator.hidden {
-                opacity: 0;
-                visibility: hidden;
+            @media (min-width: 769px) {
+                .scroll-indicator { display: none; }
             }
             
             .scroll-arrow {
-                width: 24px;
-                height: 24px;
-                border-right: 2px solid rgba(255, 255, 255, 0.8);
-                border-bottom: 2px solid rgba(255, 255, 255, 0.8);
-                transform: rotate(45deg);
-                animation: fadeInOut 3s ease-in-out infinite;
+                width: 16px !important;
+                height: 16px !important;
+                border-right: 2px solid white !important;
+                border-bottom: 2px solid white !important;
+                border-left: none !important;
+                border-top: none !important;
+                background: transparent !important;
+                transform: rotate(45deg) !important;
+                animation: pulse 2s ease-in-out infinite !important;
+                display: block !important;
+                flex-shrink: 0 !important;
+                box-sizing: border-box !important;
             }
             
-            @keyframes fadeInOut {
-                0%, 100% {
-                    opacity: 0.3;
-                }
-                50% {
-                    opacity: 0.9;
-                }
+            @keyframes pulse {
+                0%, 100% { opacity: 0.4; }
+                50% { opacity: 1; }
             }
+            
+            @keyframes continuousFade {
+                0% { opacity: 0.2; }
+                50% { opacity: 1; }
+                100% { opacity: 0.2; }
+            }
+            
             
             
             /* Add padding between header and subtitle */
@@ -719,11 +733,11 @@
             
         </div>
         
-        <!-- Mobile scroll indicator (mobile only) -->
-        <div class="mobile-scroll-indicator" id="mobile-scroll-indicator" style="display: none;">
-            <div class="scroll-arrow"></div>
-        </div>
         
+        <!-- Mobile Scroll Indicator -->
+        <div id="scrollIndicator" class="scroll-indicator">
+            <div class="scroll-arrow">&nbsp;</div>
+        </div>
         
         <!-- New Typewriter Effect -->
         <script>
@@ -864,77 +878,135 @@
             }, 3000); // Start after hero title animations (2.8s + small buffer)
         </script>
         
-        <!-- Mobile scroll indicator script -->
+        
+        <!-- Mobile Scroll Indicator Script -->
         <script>
-            // Show scroll indicator after typewriter effects finish
             document.addEventListener('DOMContentLoaded', function() {
-                const scrollIndicator = document.getElementById('mobile-scroll-indicator');
-                const isMobile = window.innerWidth <= 768;
+                const indicator = document.getElementById('scrollIndicator');
                 
-                console.log('DEBUG: Mobile check:', isMobile, 'Screen width:', window.innerWidth);
-                console.log('DEBUG: Scroll indicator element:', scrollIndicator);
-                
-                if (scrollIndicator && isMobile) {
-                    // Show indicator after 5 seconds with smooth fade-in
-                    setTimeout(() => {
-                        scrollIndicator.style.display = 'flex';
-                        // Trigger smooth fade-in
-                        setTimeout(() => {
-                            scrollIndicator.classList.add('show');
-                        }, 50);
-                        console.log('DEBUG: Scroll indicator shown after 5 seconds');
-                        
-                        // Hide indicator when user starts scrolling with smooth fade
-                        let hasScrolled = false;
-                        window.addEventListener('scroll', function() {
-                            if (!hasScrolled && window.scrollY > 200) {
-                                hasScrolled = true;
-                                // Smooth fade out
-                                scrollIndicator.style.transition = 'opacity 0.5s ease-out';
-                                scrollIndicator.style.opacity = '0';
-                                
-                                // Remove element completely after fade out
-                                setTimeout(() => {
-                                    scrollIndicator.style.display = 'none';
-                                }, 500);
-                            }
-                        });
-                    }, 5000); // Show after 5 seconds
+                // Apply proper scroll indicator styling
+                if (indicator) {
+                    indicator.style.setProperty('display', 'flex', 'important');
+                    indicator.style.setProperty('position', 'fixed', 'important');
+                    indicator.style.setProperty('bottom', '40px', 'important');
+                    indicator.style.setProperty('left', '50%', 'important');
+                    indicator.style.setProperty('margin-left', '-20px', 'important'); // Half of width (40px/2)
+                    indicator.style.setProperty('width', '40px', 'important');
+                    indicator.style.setProperty('height', '40px', 'important');
+                    indicator.style.setProperty('background', 'transparent', 'important');
+                    indicator.style.setProperty('border', 'none', 'important');
+                    indicator.style.setProperty('z-index', '99999', 'important');
+                    indicator.style.setProperty('align-items', 'center', 'important');
+                    indicator.style.setProperty('justify-content', 'center', 'important');
+                    indicator.style.setProperty('cursor', 'pointer', 'important');
+                    indicator.style.setProperty('pointer-events', 'auto', 'important');
                     
-                } else if (scrollIndicator) {
-                    // Hide on desktop
-                    scrollIndicator.style.display = 'none';
-                    console.log('DEBUG: Hidden on desktop');
+                    // Style the arrow
+                    const arrow = indicator.querySelector('.scroll-arrow');
+                    if (arrow) {
+                        arrow.style.setProperty('width', '16px', 'important');
+                        arrow.style.setProperty('height', '16px', 'important');
+                        arrow.style.setProperty('border-right', '2px solid white', 'important');
+                        arrow.style.setProperty('border-bottom', '2px solid white', 'important');
+                        arrow.style.setProperty('border-left', 'none', 'important');
+                        arrow.style.setProperty('border-top', 'none', 'important');
+                        arrow.style.setProperty('background', 'transparent', 'important');
+                        arrow.style.setProperty('transform', 'rotate(45deg)', 'important');
+                        arrow.innerHTML = ''; // Remove the &nbsp;
+                    }
                 }
                 
-                // Also hide if user resizes to desktop
-                window.addEventListener('resize', function() {
-                    if (window.innerWidth > 768 && scrollIndicator) {
-                        scrollIndicator.style.display = 'none';
-                    }
-                });
+                if (window.innerWidth <= 768 && indicator) {
+                    let hasScrolled = false;
+                    let fadeInterval = null;
+                    
+                    // Start invisible
+                    indicator.style.setProperty('opacity', '0', 'important');
+                    
+                    // Add click handler to scroll to features section
+                    indicator.addEventListener('click', () => {
+                        
+                        // Find the features section title (same target as nav)
+                        const featuresTarget = document.querySelector('.features-section-professional .section-title');
+                        
+                        if (featuresTarget) {
+                            // Calculate position (same logic as navigation)
+                            const rect = featuresTarget.getBoundingClientRect();
+                            const elementTop = rect.top + window.pageYOffset;
+                            const navBarHeight = 100; // Mobile nav height
+                            const targetScrollPosition = elementTop - navBarHeight;
+                            
+                            // Smooth scroll to features
+                            window.scrollTo({
+                                top: Math.max(0, targetScrollPosition),
+                                behavior: 'smooth'
+                            });
+                            
+                            // Hide the indicator immediately after click
+                            hasScrolled = true;
+                            if (fadeInterval) {
+                                clearInterval(fadeInterval);
+                            }
+                            indicator.style.setProperty('transition', 'opacity 0.3s ease', 'important');
+                            indicator.style.setProperty('opacity', '0', 'important');
+                        }
+                    });
+                    
+                    // Show after 5 seconds with fade in
+                    setTimeout(() => {
+                        if (!hasScrolled) {
+                            indicator.style.setProperty('transition', 'opacity 0.5s ease', 'important');
+                            indicator.style.setProperty('opacity', '1', 'important');
+                            
+                            // After fade in completes, start continuous fade in/out
+                            setTimeout(() => {
+                                if (!hasScrolled) {
+                                    indicator.style.setProperty('transition', 'opacity 1s ease-in-out', 'important');
+                                    
+                                    let fadeDirection = 'out';
+                                    fadeInterval = setInterval(() => {
+                                        if (hasScrolled) {
+                                            clearInterval(fadeInterval);
+                                            return;
+                                        }
+                                        
+                                        if (fadeDirection === 'out') {
+                                            indicator.style.setProperty('opacity', '0.2', 'important');
+                                            fadeDirection = 'in';
+                                        } else {
+                                            indicator.style.setProperty('opacity', '1', 'important');
+                                            fadeDirection = 'out';
+                                        }
+                                    }, 1000); // Toggle every second
+                                }
+                            }, 600); // Wait for initial fade in to complete
+                        }
+                    }, 5000);
+                    
+                    // Hide when scrolled 200px
+                    window.addEventListener('scroll', () => {
+                        if (window.scrollY > 200 && !hasScrolled) {
+                            hasScrolled = true;
+                            if (fadeInterval) {
+                                clearInterval(fadeInterval);
+                            }
+                            indicator.style.setProperty('transition', 'opacity 0.5s ease', 'important');
+                            indicator.style.setProperty('opacity', '0', 'important');
+                        }
+                    });
+                }
             });
         </script>
         
         <!-- Scroll-based fade effect script -->
         <script>
             document.addEventListener('DOMContentLoaded', function() {
-                console.log('DEBUG: Fade script loading...');
-                
                 const heroSection = document.getElementById('hero-section');
                 const heroContent = document.getElementById('hero-content');
                 const heroTitle = document.getElementById('hero-title');
                 const heroTypewriter = document.getElementById('hero-typewriter');
                 
-                console.log('DEBUG: Elements found:', {
-                    heroSection: !!heroSection,
-                    heroContent: !!heroContent,
-                    heroTitle: !!heroTitle,
-                    heroTypewriter: !!heroTypewriter
-                });
-                
                 if (!heroSection || !heroContent) {
-                    console.log('ERROR: Required elements not found');
                     return;
                 }
                 
@@ -946,7 +1018,6 @@
                 heroSection.style.height = '100vh';
                 heroSection.style.zIndex = '1';
                 
-                console.log('DEBUG: Hero section styled as fixed');
                 
                 // Ensure content starts at full opacity
                 heroContent.style.setProperty('opacity', '1', 'important');
@@ -972,7 +1043,6 @@
                     heroContent.style.setProperty('transform', `scale(${scale})`, 'important');
                     
                     if (scrollY < 100 || scrollY % 100 === 0) { // Log occasionally
-                        console.log(`DEBUG: Scroll: ${scrollY}px, Fade Distance: ${fadeDistance}px, Opacity: ${opacity.toFixed(2)}`);
                     }
                 }
                 
@@ -1496,7 +1566,7 @@
                     </div>
                 </div>
                 
-                <button onclick="console.log('Account created, please verify email')" class="success-btn">
+                <button class="success-btn">
                     <span>Access Your Dashboard</span>
                     <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
                         <path d="M8 1l7 7-7 7M1 8h14"/>
@@ -1648,8 +1718,6 @@
                     const navBarHeight = isMobile ? 100 : 120;
                     const targetScrollPosition = elementTop - navBarHeight;
                     
-                    console.log(`📱 Mobile Dropdown Navigation: ${targetId}`);
-                    console.log(`  - Nav height: ${navBarHeight}px (${isMobile ? 'mobile' : 'desktop'})`);
                     
                     window.scrollTo({
                         top: Math.max(0, targetScrollPosition),
@@ -1669,15 +1737,12 @@
                 const targetId = this.getAttribute('href').substring(1);
                 let targetElement = null;
                 
-                console.log(`🔍 Navigation clicked: ${targetId}`);
                 
                 // Find the actual section title element
                 if (targetId === 'features') {
                     targetElement = document.querySelector('.features-section-professional .section-title');
-                    console.log('🎯 Targeting Features section title:', targetElement?.textContent);
                 } else if (targetId === 'pricing') {
                     targetElement = document.querySelector('.pricing-section .section-title');
-                    console.log('🎯 Targeting Pricing section title:', targetElement?.textContent);
                 } else {
                     // Default behavior for other sections
                     targetElement = document.getElementById(targetId);
@@ -1695,67 +1760,17 @@
                     // Position the element so it appears just below the nav bar
                     const targetScrollPosition = elementTop - navBarHeight;
                     
-                    console.log(`📍 Precise Positioning Debug (${isMobile ? 'Mobile' : 'Desktop'}):`);
-                    console.log(`  - Target element:`, targetElement);
-                    console.log(`  - Element text: "${targetElement.textContent}"`);
-                    console.log(`  - Current page scroll:`, window.pageYOffset);
-                    console.log(`  - Element rect.top (viewport):`, rect.top);
-                    console.log(`  - Element absolute position:`, elementTop);
-                    console.log(`  - Nav bar height (${isMobile ? 'mobile' : 'desktop'}):`, navBarHeight);
-                    console.log(`  - Target scroll position:`, targetScrollPosition);
-                    
                     // Scroll directly to the calculated position
                     window.scrollTo({
                         top: Math.max(0, targetScrollPosition),
                         behavior: 'smooth'
                     });
-                    
-                    // Verify final position
-                    setTimeout(() => {
-                        const finalPosition = window.pageYOffset;
-                        const finalRect = targetElement.getBoundingClientRect();
-                        console.log(`✅ Final scroll position:`, finalPosition);
-                        console.log(`✅ Title distance from viewport top:`, finalRect.top);
-                        console.log(`✅ Should be ~${navBarHeight}px from top`);
-                    }, 1000);
                 } else {
-                    console.log(`❌ Target element not found for: ${targetId}`);
+                    // Target element not found
                 }
             });
         });
 
-        // Live scroll position debugging - continuously shows current scroll position
-        let scrollDebugger;
-        function startScrollDebugger() {
-            if (scrollDebugger) clearInterval(scrollDebugger);
-            
-            let lastPosition = -1;
-            scrollDebugger = setInterval(() => {
-                const currentPosition = Math.round(window.pageYOffset);
-                if (currentPosition !== lastPosition) {
-                    console.log(`📏 Live Position: ${currentPosition}px`);
-                    lastPosition = currentPosition;
-                }
-            }, 100);
-            
-            // Auto-stop after 10 seconds to avoid spam
-            setTimeout(() => {
-                if (scrollDebugger) {
-                    clearInterval(scrollDebugger);
-                    console.log('🛑 Live position tracking stopped');
-                }
-            }, 10000);
-        }
-
-        // Start live debugging when page loads
-        console.log('🎯 Live scroll position debugger ready. Type startScrollDebugger() in console to start live tracking');
-        
-        // Also start debugger when any navigation is clicked
-        document.querySelectorAll('.nav-link[href^="#"]').forEach(link => {
-            link.addEventListener('click', () => {
-                setTimeout(startScrollDebugger, 100); // Start after navigation begins
-            });
-        });
 
         // Custom Scrollbar Implementation
         function initCustomScrollbar() {
@@ -1866,7 +1881,6 @@
                     const prevSection = currentActiveSection;
                     currentActiveSection = newSection;
                     
-                    console.log(`🎯 CENTER TRIGGER: ${prevSection} → ${newSection}`);
                     
                     // Update shared background to match active section
                     const pageBackground = document.getElementById('pageBackground');
@@ -1874,7 +1888,6 @@
                     
                     if (pageBackground && targetSection) {
                         pageBackground.style.background = targetSection.bgColor;
-                        console.log(`✅ Background changed to ${newSection}: ${targetSection.bgColor}`);
                     }
 
                     // Fade in features content when transitioning to features section
@@ -1882,7 +1895,6 @@
                         const featuresContainer = document.querySelector('.features-section-professional .section-container');
                         if (featuresContainer) {
                             featuresContainer.classList.add('fade-in');
-                            console.log('✨ Features content faded in');
                         }
                     }
                     
@@ -1891,7 +1903,6 @@
                         const featuresContainer = document.querySelector('.features-section-professional .section-container');
                         if (featuresContainer) {
                             featuresContainer.classList.remove('fade-in');
-                            console.log('🌫️ Features content faded out');
                         }
                     }
                     
@@ -1901,10 +1912,8 @@
                         if (element) {
                             if (section.name === newSection) {
                                 element.classList.remove('section-hidden');
-                                console.log(`👁️ Show content: ${section.name}`);
                             } else {
                                 element.classList.add('section-hidden');
-                                console.log(`🫥 Hide content: ${section.name}`);
                             }
                         }
                     });
@@ -1940,8 +1949,6 @@
                     
                     const style = navStyles[section];
                     if (style) {
-                        console.log(`🧭 Nav updating for ${section}: ${style.background}`);
-                        console.log(`   Current nav background:`, getComputedStyle(nav).backgroundColor);
                         
                         nav.style.setProperty('background', style.background, 'important');
                         
@@ -1990,12 +1997,10 @@
                         }
                         
                         setTimeout(() => {
-                            console.log(`   After update nav background:`, getComputedStyle(nav).backgroundColor);
                         }, 100);
                         
-                        console.log(`✅ Nav updated for ${section}: ${style.background}`);
                     } else {
-                        console.log(`❌ No style found for section: ${section}`);
+                        // No style found for section
                     }
                 };
                 
@@ -2038,10 +2043,6 @@
                     
                     // Only trigger if section changed
                     if (activeSection !== currentActiveSection) {
-                        console.log(`🎯 BOUNDARY CROSSING: ${currentActiveSection} → ${activeSection}`);
-                        console.log(`   Viewport center: ${Math.round(viewportCenterY)}px`);
-                        console.log(`   Hero boundary: ${Math.round(heroBoundary)}px`);
-                        console.log(`   Features boundary: ${Math.round(featuresBoundary)}px`);
                         handleSectionTransition(activeSection);
                     }
                 };
@@ -2125,10 +2126,9 @@
             
             
             // Center-point trigger system handles all background transitions above
-            console.log('🚀 Center-point trigger system initialized');
             
-            // Initialize navigation colors immediately
-            updateNavigationForSection('hero');
+            // Initialize navigation colors immediately - commented out due to scope issue
+            // updateNavigationForSection('hero');
             
         });
     </script>
@@ -2290,7 +2290,6 @@
             background: #ffffff !important;
             background-color: #ffffff !important;
             z-index: 100 !important;
-            /* DEBUG: Force visibility */
             display: block !important;
             position: absolute !important;
             top: 0 !important;
@@ -3431,14 +3430,15 @@
                 background: transparent !important;
             }
             
-            /* Mobile hero content - perfectly centered */
+            /* Mobile hero content - positioned higher */
             .hero-content {
                 padding: 20px !important;
+                margin-top: 30vh !important;
                 position: relative !important;
-                min-height: 100vh !important;
+                min-height: calc(100vh - 30vh) !important;
                 display: flex !important;
                 flex-direction: column !important;
-                justify-content: center !important;
+                justify-content: flex-start !important;
                 align-items: center !important;
                 text-align: center !important;
             }
