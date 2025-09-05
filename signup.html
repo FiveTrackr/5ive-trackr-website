@@ -2,9 +2,72 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>5ive Trackr - Professional Football Management</title>
     <style>
+        /* Prevent zooming without affecting layout */
+        html, body {
+            touch-action: pan-x pan-y;
+        }
+        
+        /* Disable smooth scrolling behavior that might interfere with custom navigation */
+        html {
+            scroll-behavior: auto !important;
+        }
+        
+        /* Hide default scrollbar completely */
+        ::-webkit-scrollbar {
+            display: none;
+        }
+        
+        html {
+            -ms-overflow-style: none; /* IE and Edge */
+            scrollbar-width: none; /* Firefox */
+        }
+        
+        /* Custom scrollbar container */
+        #custom-scrollbar {
+            position: fixed;
+            top: 0;
+            right: 10px;
+            width: 8px;
+            height: 100vh;
+            background: transparent;
+            z-index: 9999;
+            pointer-events: none;
+        }
+        
+        /* Custom scrollbar thumb */
+        #custom-scrollbar-thumb {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: #2e6417;
+            border-radius: 4px;
+            opacity: 0.7;
+            transition: opacity 0.3s ease, background 0.3s ease;
+            pointer-events: all;
+            cursor: pointer;
+        }
+        
+        #custom-scrollbar-thumb:hover {
+            background: #3d7f1e;
+            opacity: 1;
+        }
+        
+        /* Hide scrollbar when not scrolling (optional) */
+        #custom-scrollbar.hidden {
+            opacity: 0;
+        }
+
+        /* Hide custom scrollbar on mobile devices */
+        @media (max-width: 768px) {
+            #custom-scrollbar {
+                display: none !important;
+            }
+        }
+        
         body { background: #1d1d1f; }
         /* Loading overlay to prevent white flash */
         #loading-overlay {
@@ -63,6 +126,25 @@
             background: rgba(29, 29, 31, 0.9) !important; /* Initial dark background to match hero */
             transition: background 0.6s cubic-bezier(0.4, 0, 0.2, 1) !important;
             backdrop-filter: blur(20px);
+        }
+        
+        /* Desktop navigation container positioning */
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 70px;
+            max-width: 100%;
+            margin: 0;
+            padding: 0;
+        }
+        
+        /* Desktop: Logo positioned 10% from left edge, nav links 10% from right edge */
+        @media (min-width: 769px) {
+            .nav-container {
+                padding-left: 10vw; /* 10% from left edge */
+                padding-right: 10vw; /* 10% from right edge */
+            }
         }
         
         .floating-nav .nav-link,
@@ -274,17 +356,18 @@
             font-weight: 500;
             margin: 0;
             white-space: pre-wrap; /* Preserve line breaks */
-            text-align: justify !important; /* Justify text for solid block appearance */
-            text-align-last: left !important; /* Keep last line left-aligned */
-            border: 2px solid yellow !important; /* DEBUG: Show text container */
-            background: rgba(255, 255, 0, 0.1) !important; /* DEBUG: Highlight background */
         }
         
         /* Desktop specific styles - vertically center with hero title when complete */
         @media (min-width: 769px) {
+            .hero-section .hero-content #hero-title {
+                font-size: 3.7rem !important; /* Desktop font size for proper 3-line layout */
+                line-height: 1.1 !important;
+            }
+            
             .hero-typewriter {
                 align-self: center !important; /* Center the container vertically */
-                transform: translateY(10px) !important; /* Slightly raised from previous position */
+                transform: translateY(10px) translateX(20px) !important; /* Slightly raised and moved right */
                 margin-top: 0 !important;
                 padding-top: 0 !important;
                 display: flex !important;
@@ -297,8 +380,6 @@
                 margin: 0 !important; /* Remove any margins */
                 padding: 0 !important; /* Remove any padding */
                 align-self: flex-start !important; /* Align text to start of flex container */
-                border: 2px solid red !important; /* DEBUG: Different color for desktop */
-                background: rgba(255, 0, 0, 0.1) !important; /* DEBUG: Different background for desktop */
             }
         }
         
@@ -314,36 +395,154 @@
         
         /* Mobile features card adjustments */
         @media (max-width: 768px) {
-            /* Mobile: typewriter below title */
+            /* Mobile: Center hero title and typewriter text */
             .hero-content {
-                display: block !important; /* Stack vertically */
-                grid-template-columns: none !important;
-                gap: 0 !important;
+                display: flex !important;
+                flex-direction: column !important;
+                justify-content: center !important;
+                align-items: center !important;
+                min-height: 100vh !important;
+                padding: 20px !important;
+                text-align: center !important;
             }
             
             .hero-title {
                 position: relative !important;
-                margin-top: 120px !important; /* Space from top */
-                margin-bottom: 60px !important; /* Larger space before subtitle */
+                margin-top: 0 !important;
+                margin-bottom: 30px !important;
                 transform: none !important;
                 width: 90% !important;
-                margin-left: auto !important;
-                margin-right: auto !important;
+                max-width: 400px !important;
                 z-index: 3 !important;
+                order: 1 !important;
             }
             
             .hero-typewriter {
-                width: 90% !important; /* Same as title */
+                position: relative !important;
+                top: auto !important;
+                left: auto !important;
+                transform: none !important;
+                width: 90% !important;
+                max-width: 350px !important;
                 margin: 0 auto !important;
                 padding: 0 !important;
+                order: 2 !important;
+                /* Reserve exact space that final content will occupy */
+                height: 1.4em !important;
+                line-height: 1.4 !important;
             }
             
             .hero-typewriter-text {
                 font-size: 0.85rem !important;
-                text-align: left !important; /* Keep left-aligned on mobile */
-                max-width: 350px !important;
+                text-align: center !important;
                 margin: 0 auto !important;
                 font-weight: 500 !important;
+            }
+            
+            /* Center-align paragraph content in features section on mobile */
+            .features-section-professional .feature-description p {
+                text-align: center !important;
+            }
+        }
+        
+        /* Small mobile devices (iPhone SE, etc.) */
+        @media (max-width: 480px) {
+            .hero-content {
+                padding: 15px !important;
+            }
+            
+            .hero-title {
+                width: 95% !important;
+                font-size: 1.8rem !important;
+                margin-bottom: 25px !important;
+            }
+            
+            .hero-typewriter {
+                width: 95% !important;
+                max-width: 320px !important;
+                height: 1.3em !important;
+                line-height: 1.3 !important;
+            }
+            
+            .hero-typewriter-text {
+                font-size: 0.8rem !important;
+                max-width: 280px !important;
+            }
+        }
+        
+        /* Large mobile devices and small tablets */
+        @media (min-width: 481px) and (max-width: 768px) {
+            .hero-title {
+                font-size: 2.2rem !important;
+                margin-bottom: 35px !important;
+            }
+            
+            .hero-typewriter-text {
+                font-size: 0.9rem !important;
+                max-width: 380px !important;
+            }
+        }
+        
+        /* Very tall mobile screens (centered with more spacing) */
+        @media (max-width: 768px) and (min-height: 800px) {
+            .hero-title {
+                margin-bottom: 40px !important;
+            }
+        }
+        
+        /* Short mobile screens (compact spacing) */
+        @media (max-width: 768px) and (max-height: 600px) {
+            .hero-title {
+                font-size: 1.6rem !important;
+                margin-bottom: 20px !important;
+            }
+            
+            .hero-typewriter {
+                height: 1.2em !important;
+                line-height: 1.2 !important;
+            }
+            
+            .hero-typewriter-text {
+                font-size: 0.75rem !important;
+            }
+            
+            /* Simple mobile scroll indicator */
+            .mobile-scroll-indicator {
+                position: fixed;
+                bottom: 30px;
+                left: 50%;
+                transform: translateX(-50%);
+                opacity: 0;
+                transition: opacity 0.5s ease-in;
+                z-index: 1000;
+                pointer-events: none;
+            }
+            
+            .mobile-scroll-indicator.show {
+                opacity: 0.6;
+            }
+            
+            .mobile-scroll-indicator.hidden {
+                opacity: 0;
+                visibility: hidden;
+            }
+            
+            .scroll-arrow {
+                width: 24px;
+                height: 24px;
+                border-right: 2px solid rgba(255, 255, 255, 0.8);
+                border-bottom: 2px solid rgba(255, 255, 255, 0.8);
+                transform: rotate(45deg);
+                animation: fadeInOut 3s ease-in-out infinite;
+            }
+            
+            @keyframes fadeInOut {
+                0%, 100% {
+                    opacity: 0.3;
+                }
+                50% {
+                    opacity: 0.9;
+                }
             }
             
             
@@ -370,18 +569,24 @@
                 padding: 0 5% !important;
             }
             
-            /* Reduce pricing card size - not full width */
+            /* Reduce pricing card size with more side padding */
             .pricing-card {
-                max-width: 90% !important;
+                max-width: 80% !important;
                 margin: 0 auto 24px auto !important;
                 padding: 24px 20px !important;
             }
             
-            /* Adjust pricing grid for mobile */
+            /* Adjust pricing grid for mobile with more padding */
             .pricing-grid {
                 display: block !important;
                 padding: 0 5% !important;
                 gap: 20px !important;
+            }
+            
+            /* Ensure pricing section has proper mobile padding */
+            .pricing-section .section-container {
+                padding-left: 5% !important;
+                padding-right: 5% !important;
             }
             
         }
@@ -448,6 +653,11 @@
     <!-- Loading overlay to prevent white flash and layout shifts -->
     <div id="loading-overlay"></div>
     
+    <!-- Custom scrollbar -->
+    <div id="custom-scrollbar">
+        <div id="custom-scrollbar-thumb"></div>
+    </div>
+    
     <!-- Floating Navigation -->
     <nav class="floating-nav" style="background: rgba(29, 29, 31, 0.9) !important;">
         <div class="nav-container">
@@ -491,13 +701,13 @@
     <div class="page-background" id="pageBackground"></div>
     
     <!-- Hero Section with Clean Design -->
-    <section class="hero-section">
+    <section class="hero-section" id="hero-section">
         <div class="hero-background">
             <div class="animated-grid"></div>
         </div>
         
-        <div class="hero-content">
-            <h1 class="hero-title animate-up-delay-1">
+        <div class="hero-content" id="hero-content">
+            <h1 class="hero-title animate-up-delay-1" id="hero-title">
                 <span style="opacity: 0; animation: fadeInWord 0.8s ease-out 0.8s forwards;">Transform Your</span>
                 <span class="gradient-text" style="opacity: 0; animation: fadeInWord 0.8s ease-out 1.4s forwards;">Football Venue</span>
                 <span style="opacity: 0; animation: fadeInWord 0.8s ease-out 2.0s forwards;">Management</span>
@@ -505,12 +715,13 @@
             
             <!-- New typewriter subtitle -->
             <div class="hero-typewriter" id="hero-typewriter">
-                <div class="hero-typewriter-debug" style="border: 2px dashed red; padding: 10px; margin: 0; background: rgba(255, 0, 0, 0.1); text-align: center; color: white; font-weight: bold;">
-                    📍 DEBUG: Typewriter Position<br>
-                    <small style="font-size: 12px;">Desktop: Right column | Mobile: Below title</small>
-                </div>
             </div>
             
+        </div>
+        
+        <!-- Mobile scroll indicator (mobile only) -->
+        <div class="mobile-scroll-indicator" id="mobile-scroll-indicator" style="display: none;">
+            <div class="scroll-arrow"></div>
         </div>
         
         
@@ -518,26 +729,10 @@
         <script>
             // Wait for hero title fade-ins to finish (last one finishes at 2.0s + 0.8s = 2.8s)
             setTimeout(() => {
-                console.log('🖨️ DEBUG: Starting typewriter effect');
-                
                 const container = document.getElementById('hero-typewriter');
-                const debugBox = container.querySelector('.hero-typewriter-debug');
                 
                 if (!container) {
-                    console.log('❌ DEBUG: Container not found');
                     return;
-                }
-                
-                console.log('📍 DEBUG: Container position:', {
-                    offsetTop: container.offsetTop,
-                    offsetLeft: container.offsetLeft,
-                    width: container.offsetWidth,
-                    height: container.offsetHeight
-                });
-                
-                // Remove debug box and add text element
-                if (debugBox) {
-                    debugBox.remove();
                 }
                 
                 // Simple working text element
@@ -546,52 +741,250 @@
                 textElement.id = 'typewriter-text';
                 container.appendChild(textElement);
                 
-                // Simple single-string approach that types in place
+                // Fixed approach that doesn't type HTML tags
                 const isMobile = window.innerWidth <= 768;
                 
-                let fullText;
+                let textLines, finalText;
                 if (isMobile) {
-                    // Mobile: Single line
-                    fullText = "The complete platform for football venue management. Streamline operations, maximise revenue, cut down on administration time, and deliver footballing perfection.<br><br>On and off the pitch.";
+                    // Mobile: Only final text
+                    textLines = [];
+                    finalText = "On and off of the pitch.";
                 } else {
-                    // Desktop: With line breaks
-                    fullText = "The complete platform for football venue management.<br>Streamline operations, maximise revenue, cut down on<br>administration time, and deliver footballing perfection.<br><br>On and off the pitch.";
+                    // Desktop: Multiple lines
+                    textLines = [
+                        "The complete platform for football venue management.",
+                        "Streamline operations, maximise revenue, cut down on",
+                        "administration time, and deliver footballing perfection."
+                    ];
+                    finalText = "On and off of the pitch.";
                 }
                 
-                console.log('📱 DEBUG: Device type:', isMobile ? 'Mobile' : 'Desktop');
-                console.log('📝 DEBUG: Full text:', fullText);
                 
+                let currentLineIndex = 0;
                 let charIndex = 0;
+                let isTypingFinal = false;
                 
                 // Create a fixed-size container for the text to prevent shifting
                 textElement.style.minHeight = isMobile ? '120px' : '140px';
                 textElement.style.position = 'relative';
                 
-                const typeInterval = setInterval(() => {
-                    if (charIndex <= fullText.length) {
-                        let currentText = fullText.substring(0, charIndex);
-                        textElement.innerHTML = currentText + '<span class="typewriter-cursor">|</span>';
-                        charIndex++;
-                    } else {
-                        // Typing complete
-                        console.log('✅ DEBUG: Typing complete');
-                        clearInterval(typeInterval);
-                        
-                        // Remove cursor after 2 seconds
-                        setTimeout(() => {
-                            textElement.innerHTML = fullText;
-                            console.log('✅ DEBUG: Cursor removed, typewriter finished');
-                        }, 2000);
+                function updateDisplay() {
+                    let displayHTML = '';
+                    
+                    // Add completed lines
+                    for (let i = 0; i < currentLineIndex; i++) {
+                        displayHTML += textLines[i] + '<br>';
                     }
-                }, 50);
+                    
+                    // Add current typing line
+                    if (!isTypingFinal && currentLineIndex < textLines.length) {
+                        const currentLine = textLines[currentLineIndex].substring(0, charIndex);
+                        displayHTML += currentLine + '<span class="typewriter-cursor">|</span>';
+                    } else if (isTypingFinal) {
+                        // Add empty line before final text
+                        displayHTML += '<br>';
+                        const currentFinalText = finalText.substring(0, charIndex);
+                        displayHTML += currentFinalText + '<span class="typewriter-cursor">|</span>';
+                    }
+                    
+                    textElement.innerHTML = displayHTML;
+                }
+                
+                function typeWithPauses() {
+                    // If no main text lines (mobile), start final text immediately
+                    if (!isTypingFinal && textLines.length === 0) {
+                        isTypingFinal = true;
+                        charIndex = 0;
+                    }
+                    
+                    if (!isTypingFinal) {
+                        // Typing main lines
+                        if (currentLineIndex < textLines.length) {
+                            const currentLine = textLines[currentLineIndex];
+                            if (charIndex < currentLine.length) {
+                                const currentChar = currentLine.charAt(charIndex);
+                                charIndex++;
+                                updateDisplay();
+                                
+                                // Check if we need to pause after comma or full stop
+                                if (currentChar === ',' || currentChar === '.') {
+                                    setTimeout(typeWithPauses, 500); // 0.5 second pause
+                                } else {
+                                    setTimeout(typeWithPauses, 20); // Normal typing speed (2.5x faster: 50ms/2.5 = 20ms)
+                                }
+                            } else {
+                                // Line complete, move to next
+                                currentLineIndex++;
+                                charIndex = 0;
+                                updateDisplay();
+                                
+                                // Pause briefly between lines
+                                if (currentLineIndex < textLines.length) {
+                                    setTimeout(typeWithPauses, 80); // 2.5x faster: 200ms/2.5 = 80ms
+                                } else {
+                                    // All main lines complete, start final text
+                                    setTimeout(() => {
+                                        isTypingFinal = true;
+                                        charIndex = 0;
+                                        typeWithPauses();
+                                    }, 1250); // 1.25 second delay before final line
+                                }
+                            }
+                        }
+                    } else {
+                        // Typing final text
+                        if (charIndex < finalText.length) {
+                            const currentChar = finalText.charAt(charIndex);
+                            charIndex++;
+                            updateDisplay();
+                            
+                            // Check if we need to pause after comma or full stop
+                            if (currentChar === ',' || currentChar === '.') {
+                                setTimeout(typeWithPauses, 500); // 0.5 second pause
+                            } else {
+                                setTimeout(typeWithPauses, 20); // Normal typing speed (2.5x faster: 50ms/2.5 = 20ms)
+                            }
+                        } else {
+                            // All typing complete, remove cursor after 2 seconds
+                            setTimeout(() => {
+                                let finalHTML = '';
+                                textLines.forEach(line => {
+                                    finalHTML += line + '<br>';
+                                });
+                                finalHTML += '<br>' + finalText;
+                                textElement.innerHTML = finalHTML;
+                            }, 2000);
+                        }
+                    }
+                }
+                
+                // Start typing
+                typeWithPauses();
                 
             }, 3000); // Start after hero title animations (2.8s + small buffer)
+        </script>
+        
+        <!-- Mobile scroll indicator script -->
+        <script>
+            // Show scroll indicator after typewriter effects finish
+            document.addEventListener('DOMContentLoaded', function() {
+                const scrollIndicator = document.getElementById('mobile-scroll-indicator');
+                const isMobile = window.innerWidth <= 768;
+                
+                console.log('DEBUG: Mobile check:', isMobile, 'Screen width:', window.innerWidth);
+                console.log('DEBUG: Scroll indicator element:', scrollIndicator);
+                
+                if (scrollIndicator && isMobile) {
+                    // Show indicator after 5 seconds with smooth fade-in
+                    setTimeout(() => {
+                        scrollIndicator.style.display = 'flex';
+                        // Trigger smooth fade-in
+                        setTimeout(() => {
+                            scrollIndicator.classList.add('show');
+                        }, 50);
+                        console.log('DEBUG: Scroll indicator shown after 5 seconds');
+                        
+                        // Hide indicator when user starts scrolling with smooth fade
+                        let hasScrolled = false;
+                        window.addEventListener('scroll', function() {
+                            if (!hasScrolled && window.scrollY > 200) {
+                                hasScrolled = true;
+                                // Smooth fade out
+                                scrollIndicator.style.transition = 'opacity 0.5s ease-out';
+                                scrollIndicator.style.opacity = '0';
+                                
+                                // Remove element completely after fade out
+                                setTimeout(() => {
+                                    scrollIndicator.style.display = 'none';
+                                }, 500);
+                            }
+                        });
+                    }, 5000); // Show after 5 seconds
+                    
+                } else if (scrollIndicator) {
+                    // Hide on desktop
+                    scrollIndicator.style.display = 'none';
+                    console.log('DEBUG: Hidden on desktop');
+                }
+                
+                // Also hide if user resizes to desktop
+                window.addEventListener('resize', function() {
+                    if (window.innerWidth > 768 && scrollIndicator) {
+                        scrollIndicator.style.display = 'none';
+                    }
+                });
+            });
+        </script>
+        
+        <!-- Scroll-based fade effect script -->
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                console.log('DEBUG: Fade script loading...');
+                
+                const heroSection = document.getElementById('hero-section');
+                const heroContent = document.getElementById('hero-content');
+                const heroTitle = document.getElementById('hero-title');
+                const heroTypewriter = document.getElementById('hero-typewriter');
+                
+                console.log('DEBUG: Elements found:', {
+                    heroSection: !!heroSection,
+                    heroContent: !!heroContent,
+                    heroTitle: !!heroTitle,
+                    heroTypewriter: !!heroTypewriter
+                });
+                
+                if (!heroSection || !heroContent) {
+                    console.log('ERROR: Required elements not found');
+                    return;
+                }
+                
+                // Make hero section fixed and full viewport
+                heroSection.style.position = 'fixed';
+                heroSection.style.top = '0';
+                heroSection.style.left = '0';
+                heroSection.style.width = '100%';
+                heroSection.style.height = '100vh';
+                heroSection.style.zIndex = '1';
+                
+                console.log('DEBUG: Hero section styled as fixed');
+                
+                // Ensure content starts at full opacity
+                heroContent.style.setProperty('opacity', '1', 'important');
+                if (heroTitle) heroTitle.style.setProperty('opacity', '1', 'important');
+                if (heroTypewriter) heroTypewriter.style.setProperty('opacity', '1', 'important');
+                
+                function handleScroll() {
+                    const scrollY = window.scrollY;
+                    
+                    // Slower fade - complete just before background change (around 80vh)
+                    const windowHeight = window.innerHeight;
+                    const fadeDistance = windowHeight * 0.8; // 80% of viewport height
+                    const fadeProgress = Math.min(scrollY / fadeDistance, 1);
+                    const opacity = Math.max(1 - fadeProgress, 0);
+                    
+                    // Apply fade to multiple elements with !important
+                    heroContent.style.setProperty('opacity', opacity, 'important');
+                    if (heroTitle) heroTitle.style.setProperty('opacity', opacity, 'important');
+                    if (heroTypewriter) heroTypewriter.style.setProperty('opacity', opacity, 'important');
+                    
+                    // Also apply scale
+                    const scale = 1 - (fadeProgress * 0.05); // Reduced scale effect
+                    heroContent.style.setProperty('transform', `scale(${scale})`, 'important');
+                    
+                    if (scrollY < 100 || scrollY % 100 === 0) { // Log occasionally
+                        console.log(`DEBUG: Scroll: ${scrollY}px, Fade Distance: ${fadeDistance}px, Opacity: ${opacity.toFixed(2)}`);
+                    }
+                }
+                
+                // Direct scroll listener without throttling for testing
+                window.addEventListener('scroll', handleScroll);
+            });
         </script>
         
     </section>
 
     <!-- Professional Features Section -->
-    <section id="features" class="features-section-professional">
+    <section id="features" class="features-section-professional" style="margin-top: 100vh; position: relative; z-index: 2; background: white;">
         <div class="section-container">
             <div class="section-header animate-on-scroll">
                 <h2 class="section-title">Complete Venue Management Platform</h2>
@@ -618,36 +1011,6 @@
                         <p>Complete multi-venue management with intelligent capacity optimization. Real-time facility monitoring, automated maintenance scheduling, and advanced booking analytics across unlimited locations.</p>
                     </div>
                     
-                    <div class="feature-preview-pro">
-                        <div class="venue-management-preview">
-                            <div class="preview-header">
-                                <span class="preview-title">Active Venues</span>
-                                <span class="preview-count">3</span>
-                            </div>
-                            <div class="venue-list-preview">
-                                <div class="venue-item-preview">
-                                    <div class="venue-info">
-                                        <span class="venue-name-preview">Stadium Complex</span>
-                                        <span class="venue-status-preview active">Active</span>
-                                    </div>
-                                    <div class="venue-stats-preview">
-                                        <span>8 Pitches</span>
-                                        <span>50 Teams</span>
-                                    </div>
-                                </div>
-                                <div class="venue-item-preview">
-                                    <div class="venue-info">
-                                        <span class="venue-name-preview">Training Ground</span>
-                                        <span class="venue-status-preview active">Active</span>
-                                    </div>
-                                    <div class="venue-stats-preview">
-                                        <span>3 Pitches</span>
-                                        <span>25 Teams</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                 </div>
 
                 <!-- Pitch Scheduling System -->
@@ -671,32 +1034,6 @@
                         <p>AI-powered pitch scheduling with real-time availability tracking. Advanced conflict resolution, automated referee allocation, and intelligent capacity management with weather-based adjustments.</p>
                     </div>
                     
-                    <div class="feature-preview-pro">
-                        <div class="scheduling-preview">
-                            <div class="preview-header">
-                                <span class="preview-title">Today's Schedule</span>
-                                <span class="preview-date">Wed, Sep 4</span>
-                            </div>
-                            <div class="schedule-grid-preview">
-                                <div class="time-slot-preview">
-                                    <div class="time-label">18:00</div>
-                                    <div class="pitch-slots">
-                                        <div class="slot booked">Main Pitch</div>
-                                        <div class="slot available">Pitch 2</div>
-                                        <div class="slot booked">Pitch 3</div>
-                                    </div>
-                                </div>
-                                <div class="time-slot-preview">
-                                    <div class="time-label">19:00</div>
-                                    <div class="pitch-slots">
-                                        <div class="slot available">Main Pitch</div>
-                                        <div class="slot booked">Pitch 2</div>
-                                        <div class="slot available">Pitch 3</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                 </div>
 
                 <!-- League Management System -->
@@ -720,36 +1057,6 @@
                         <p>Professional league administration with intelligent fixture algorithms, real-time standings calculation, and automated payment tracking. Comprehensive team management with detailed performance analytics.</p>
                     </div>
                     
-                    <div class="feature-preview-pro">
-                        <div class="league-preview">
-                            <div class="preview-header">
-                                <span class="preview-title">Premier Division</span>
-                                <span class="preview-status">Active</span>
-                            </div>
-                            <div class="league-table-preview">
-                                <div class="table-header-preview">
-                                    <span>Position</span>
-                                    <span>Team</span>
-                                    <span>Pts</span>
-                                </div>
-                                <div class="table-row-preview">
-                                    <span class="position">1</span>
-                                    <span class="team-name">Manchester United</span>
-                                    <span class="points">24</span>
-                                </div>
-                                <div class="table-row-preview">
-                                    <span class="position">2</span>
-                                    <span class="team-name">Arsenal FC</span>
-                                    <span class="points">21</span>
-                                </div>
-                                <div class="table-row-preview">
-                                    <span class="position">3</span>
-                                    <span class="team-name">Chelsea FC</span>
-                                    <span class="points">18</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                 </div>
 
                 <!-- Team & Player Management -->
@@ -773,28 +1080,6 @@
                         <p>Complete team ecosystem management with streamlined registration workflows, automated payment processing, and detailed player performance tracking with advanced analytics dashboard.</p>
                     </div>
                     
-                    <div class="feature-preview-pro">
-                        <div class="team-preview">
-                            <div class="preview-header">
-                                <span class="preview-title">Team Overview</span>
-                                <span class="preview-count">247 Players</span>
-                            </div>
-                            <div class="team-stats-preview">
-                                <div class="stat-card-preview">
-                                    <div class="stat-number">32</div>
-                                    <div class="stat-label">Active Teams</div>
-                                </div>
-                                <div class="stat-card-preview">
-                                    <div class="stat-number">8</div>
-                                    <div class="stat-label">Pending Payments</div>
-                                </div>
-                                <div class="stat-card-preview">
-                                    <div class="stat-number">94%</div>
-                                    <div class="stat-label">Attendance Rate</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                 </div>
 
                 <!-- Dashboard & Analytics -->
@@ -820,28 +1105,6 @@
                         <p>Business intelligence suite with real-time revenue analytics, predictive capacity modeling, and comprehensive operational insights. Professional reporting with exportable data visualization.</p>
                     </div>
                     
-                    <div class="feature-preview-pro">
-                        <div class="analytics-preview">
-                            <div class="preview-header">
-                                <span class="preview-title">Revenue Overview</span>
-                                <span class="preview-period">This Month</span>
-                            </div>
-                            <div class="metrics-preview">
-                                <div class="metric-item">
-                                    <div class="metric-value">£15,240</div>
-                                    <div class="metric-label">Total Revenue</div>
-                                    <div class="metric-trend positive">+12%</div>
-                                </div>
-                                <div class="revenue-chart-preview">
-                                    <div class="chart-bar" style="height: 40%"></div>
-                                    <div class="chart-bar" style="height: 60%"></div>
-                                    <div class="chart-bar" style="height: 80%"></div>
-                                    <div class="chart-bar" style="height: 65%"></div>
-                                    <div class="chart-bar" style="height: 90%"></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                 </div>
 
                 <!-- Mobile Applications -->
@@ -863,28 +1126,6 @@
                         <p>Native mobile applications for iOS and Android with full offline synchronization, push notifications for bookings, and intuitive touch-first interface designed for venue managers on-the-go.</p>
                     </div>
                     
-                    <div class="feature-preview-pro">
-                        <div class="mobile-preview">
-                            <div class="phone-mockup">
-                                <div class="phone-screen">
-                                    <div class="mobile-header">
-                                        <span class="app-title">5ive Trackr</span>
-                                        <span class="notification-badge">3</span>
-                                    </div>
-                                    <div class="mobile-content">
-                                        <div class="mobile-card">
-                                            <span class="mobile-icon">⚽</span>
-                                            <span class="mobile-text">Next Match: 18:00</span>
-                                        </div>
-                                        <div class="mobile-card">
-                                            <span class="mobile-icon">👥</span>
-                                            <span class="mobile-text">Team Attendance</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>
@@ -1380,17 +1621,224 @@
             closeIcon.style.display = 'none';
         }
         
-        // Smooth scroll to sections
+        // Smooth scroll to sections for dropdown links (mobile) - use same logic as main nav
         document.querySelectorAll('.dropdown-link[href^="#"]').forEach(link => {
             link.addEventListener('click', function(e) {
                 e.preventDefault();
+                e.stopPropagation();
+                e.stopImmediatePropagation();
+                
                 const targetId = this.getAttribute('href').substring(1);
-                const targetElement = document.getElementById(targetId) || document.querySelector('.' + targetId + '-section');
+                let targetElement = null;
+                
+                // Find the section title element (same as main nav)
+                if (targetId === 'features') {
+                    targetElement = document.querySelector('.features-section-professional .section-title');
+                } else if (targetId === 'pricing') {
+                    targetElement = document.querySelector('.pricing-section .section-title');
+                } else {
+                    targetElement = document.getElementById(targetId);
+                }
+                
                 if (targetElement) {
-                    targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    // Use same positioning logic as main navigation
+                    const rect = targetElement.getBoundingClientRect();
+                    const elementTop = window.pageYOffset + rect.top;
+                    const isMobile = window.innerWidth <= 768;
+                    const navBarHeight = isMobile ? 100 : 120;
+                    const targetScrollPosition = elementTop - navBarHeight;
+                    
+                    console.log(`📱 Mobile Dropdown Navigation: ${targetId}`);
+                    console.log(`  - Nav height: ${navBarHeight}px (${isMobile ? 'mobile' : 'desktop'})`);
+                    
+                    window.scrollTo({
+                        top: Math.max(0, targetScrollPosition),
+                        behavior: 'smooth'
+                    });
                 }
             });
         });
+
+        // Smooth scroll to sections for main navigation links - position section titles just below nav
+        document.querySelectorAll('.nav-link[href^="#"]').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                e.stopImmediatePropagation();
+                
+                const targetId = this.getAttribute('href').substring(1);
+                let targetElement = null;
+                
+                console.log(`🔍 Navigation clicked: ${targetId}`);
+                
+                // Find the actual section title element
+                if (targetId === 'features') {
+                    targetElement = document.querySelector('.features-section-professional .section-title');
+                    console.log('🎯 Targeting Features section title:', targetElement?.textContent);
+                } else if (targetId === 'pricing') {
+                    targetElement = document.querySelector('.pricing-section .section-title');
+                    console.log('🎯 Targeting Pricing section title:', targetElement?.textContent);
+                } else {
+                    // Default behavior for other sections
+                    targetElement = document.getElementById(targetId);
+                }
+                
+                if (targetElement) {
+                    // Calculate the exact position where the element should be positioned
+                    const rect = targetElement.getBoundingClientRect();
+                    const elementTop = window.pageYOffset + rect.top;
+                    
+                    // Different offsets for mobile vs desktop
+                    const isMobile = window.innerWidth <= 768;
+                    const navBarHeight = isMobile ? 100 : 120; // Mobile: 100px, Desktop: 120px
+                    
+                    // Position the element so it appears just below the nav bar
+                    const targetScrollPosition = elementTop - navBarHeight;
+                    
+                    console.log(`📍 Precise Positioning Debug (${isMobile ? 'Mobile' : 'Desktop'}):`);
+                    console.log(`  - Target element:`, targetElement);
+                    console.log(`  - Element text: "${targetElement.textContent}"`);
+                    console.log(`  - Current page scroll:`, window.pageYOffset);
+                    console.log(`  - Element rect.top (viewport):`, rect.top);
+                    console.log(`  - Element absolute position:`, elementTop);
+                    console.log(`  - Nav bar height (${isMobile ? 'mobile' : 'desktop'}):`, navBarHeight);
+                    console.log(`  - Target scroll position:`, targetScrollPosition);
+                    
+                    // Scroll directly to the calculated position
+                    window.scrollTo({
+                        top: Math.max(0, targetScrollPosition),
+                        behavior: 'smooth'
+                    });
+                    
+                    // Verify final position
+                    setTimeout(() => {
+                        const finalPosition = window.pageYOffset;
+                        const finalRect = targetElement.getBoundingClientRect();
+                        console.log(`✅ Final scroll position:`, finalPosition);
+                        console.log(`✅ Title distance from viewport top:`, finalRect.top);
+                        console.log(`✅ Should be ~${navBarHeight}px from top`);
+                    }, 1000);
+                } else {
+                    console.log(`❌ Target element not found for: ${targetId}`);
+                }
+            });
+        });
+
+        // Live scroll position debugging - continuously shows current scroll position
+        let scrollDebugger;
+        function startScrollDebugger() {
+            if (scrollDebugger) clearInterval(scrollDebugger);
+            
+            let lastPosition = -1;
+            scrollDebugger = setInterval(() => {
+                const currentPosition = Math.round(window.pageYOffset);
+                if (currentPosition !== lastPosition) {
+                    console.log(`📏 Live Position: ${currentPosition}px`);
+                    lastPosition = currentPosition;
+                }
+            }, 100);
+            
+            // Auto-stop after 10 seconds to avoid spam
+            setTimeout(() => {
+                if (scrollDebugger) {
+                    clearInterval(scrollDebugger);
+                    console.log('🛑 Live position tracking stopped');
+                }
+            }, 10000);
+        }
+
+        // Start live debugging when page loads
+        console.log('🎯 Live scroll position debugger ready. Type startScrollDebugger() in console to start live tracking');
+        
+        // Also start debugger when any navigation is clicked
+        document.querySelectorAll('.nav-link[href^="#"]').forEach(link => {
+            link.addEventListener('click', () => {
+                setTimeout(startScrollDebugger, 100); // Start after navigation begins
+            });
+        });
+
+        // Custom Scrollbar Implementation
+        function initCustomScrollbar() {
+            const scrollbar = document.getElementById('custom-scrollbar');
+            const thumb = document.getElementById('custom-scrollbar-thumb');
+            
+            if (!scrollbar || !thumb) return;
+            
+            let isDragging = false;
+            let dragStart = 0;
+            let scrollStart = 0;
+            
+            function updateScrollbar() {
+                const documentHeight = document.documentElement.scrollHeight;
+                const windowHeight = window.innerHeight;
+                const scrollTop = window.pageYOffset;
+                
+                // Calculate thumb height and position
+                const thumbHeight = Math.max((windowHeight / documentHeight) * windowHeight, 30);
+                const thumbTop = (scrollTop / (documentHeight - windowHeight)) * (windowHeight - thumbHeight);
+                
+                thumb.style.height = thumbHeight + 'px';
+                thumb.style.top = thumbTop + 'px';
+                
+                // Show/hide scrollbar based on content height
+                if (documentHeight > windowHeight) {
+                    scrollbar.style.opacity = '1';
+                } else {
+                    scrollbar.style.opacity = '0';
+                }
+            }
+            
+            // Update scrollbar on scroll
+            window.addEventListener('scroll', updateScrollbar);
+            window.addEventListener('resize', updateScrollbar);
+            
+            // Dragging functionality
+            thumb.addEventListener('mousedown', (e) => {
+                isDragging = true;
+                dragStart = e.clientY;
+                scrollStart = window.pageYOffset;
+                document.body.style.userSelect = 'none';
+            });
+            
+            document.addEventListener('mousemove', (e) => {
+                if (!isDragging) return;
+                
+                const deltaY = e.clientY - dragStart;
+                const documentHeight = document.documentElement.scrollHeight;
+                const windowHeight = window.innerHeight;
+                const scrollRatio = deltaY / windowHeight;
+                const newScroll = scrollStart + (scrollRatio * (documentHeight - windowHeight));
+                
+                window.scrollTo(0, Math.max(0, Math.min(newScroll, documentHeight - windowHeight)));
+            });
+            
+            document.addEventListener('mouseup', () => {
+                isDragging = false;
+                document.body.style.userSelect = '';
+            });
+            
+            // Click on track to scroll
+            scrollbar.addEventListener('click', (e) => {
+                if (e.target === thumb) return;
+                
+                const rect = scrollbar.getBoundingClientRect();
+                const clickY = e.clientY - rect.top;
+                const documentHeight = document.documentElement.scrollHeight;
+                const windowHeight = window.innerHeight;
+                const targetScroll = (clickY / windowHeight) * (documentHeight - windowHeight);
+                
+                window.scrollTo({
+                    top: Math.max(0, Math.min(targetScroll, documentHeight - windowHeight)),
+                    behavior: 'smooth'
+                });
+            });
+            
+            // Initial update
+            updateScrollbar();
+        }
+        
+        // Initialize custom scrollbar when page loads
+        document.addEventListener('DOMContentLoaded', initCustomScrollbar);
     </script>
     
     <!-- Smooth Background Transitions Script -->
@@ -1427,6 +1875,24 @@
                     if (pageBackground && targetSection) {
                         pageBackground.style.background = targetSection.bgColor;
                         console.log(`✅ Background changed to ${newSection}: ${targetSection.bgColor}`);
+                    }
+
+                    // Fade in features content when transitioning to features section
+                    if (newSection === 'features') {
+                        const featuresContainer = document.querySelector('.features-section-professional .section-container');
+                        if (featuresContainer) {
+                            featuresContainer.classList.add('fade-in');
+                            console.log('✨ Features content faded in');
+                        }
+                    }
+                    
+                    // Hide features content when leaving features section
+                    if (prevSection === 'features' && newSection !== 'features') {
+                        const featuresContainer = document.querySelector('.features-section-professional .section-container');
+                        if (featuresContainer) {
+                            featuresContainer.classList.remove('fade-in');
+                            console.log('🌫️ Features content faded out');
+                        }
                     }
                     
                     // Hide content of inactive sections
@@ -1501,11 +1967,11 @@
                         
                         navLinks.forEach(link => {
                             if (!link.classList.contains('nav-cta')) {
-                                link.style.color = style.textColor;
+                                link.style.setProperty('color', style.textColor, 'important');
                             }
                         });
                         if (navMenuBtn) {
-                            navMenuBtn.style.color = style.textColor;
+                            navMenuBtn.style.setProperty('color', style.textColor, 'important');
                             // Also update the SVG icons inside the button
                             const hamburgerIcon = navMenuBtn.querySelector('.hamburger-icon');
                             const closeIcon = navMenuBtn.querySelector('.close-icon');
@@ -1715,6 +2181,17 @@
         /* Add spacing between sections */
         .features-section-professional {
             margin-top: 100px;
+        }
+
+        /* Initially hide features content for both mobile and desktop */
+        .features-section-professional .section-container {
+            opacity: 0;
+            transition: opacity 1.2s ease-out;
+        }
+
+        /* Show features content when background transition triggers */
+        .features-section-professional .section-container.fade-in {
+            opacity: 1;
         }
         
         .pricing-section {
@@ -2954,14 +3431,16 @@
                 background: transparent !important;
             }
             
-            /* Mobile hero content - centered and clean */
+            /* Mobile hero content - perfectly centered */
             .hero-content {
                 padding: 20px !important;
                 position: relative !important;
                 min-height: 100vh !important;
                 display: flex !important;
                 flex-direction: column !important;
-                justify-content: flex-start !important;
+                justify-content: center !important;
+                align-items: center !important;
+                text-align: center !important;
             }
             
             /* Optimize hero badge for mobile */
@@ -3060,13 +3539,10 @@
                 padding: 0 !important;
             }
             
-            /* Small mobile hero content padding */
+            /* Small mobile hero content - centered with reduced padding */
             .hero-content {
-                padding: 80px 0 50px 0 !important;
+                padding: 16px !important;
             }
-            
-            .hero-content {
-                padding: 0 16px !important;
             }
             
             .hero-title {
@@ -3172,5 +3648,141 @@
             }
         });
     </script>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+        <div class="footer-content">
+            <!-- Desktop Footer -->
+            <div class="footer-desktop">
+                <div class="footer-container">
+                    <div class="footer-bottom">
+                        <div class="footer-bottom-content">
+                            <span class="footer-contact">contact@5ivetrackr.com</span>
+                            <img src="img/5iveTrackr-straight-logo.svg" alt="5ive Trackr" class="footer-logo">
+                            <p class="footer-copyright">© 2025 5ive Trackr. All rights reserved.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Mobile Footer -->
+            <div class="footer-mobile">
+                <div class="footer-mobile-container">
+                    <div class="footer-mobile-bottom">
+                        <img src="img/5iveTrackr-straight-logo.svg" alt="5ive Trackr" class="footer-mobile-logo">
+                        <p class="footer-mobile-contact">contact@5ivetrackr.com</p>
+                        <p class="footer-mobile-copyright">© 2025 5ive Trackr. All rights reserved.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Footer Styles -->
+    <style>
+        /* Base Footer Styles */
+        .site-footer {
+            background: #1d1d1f;
+            color: rgba(255, 255, 255, 0.9);
+            margin-top: 100px;
+            position: relative;
+            z-index: 10;
+        }
+        
+        /* Desktop Footer */
+        .footer-desktop {
+            display: block;
+        }
+        
+        .footer-mobile {
+            display: none;
+        }
+        
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 40px;
+        }
+        
+        .footer-bottom {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 30px 0;
+        }
+        
+        .footer-bottom-content {
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            align-items: center;
+            gap: 20px;
+        }
+        
+        .footer-contact {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 14px;
+            justify-self: start;
+        }
+        
+        .footer-logo {
+            height: 32px;
+            width: auto;
+            justify-self: center;
+        }
+        
+        .footer-copyright {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 14px;
+            margin: 0;
+            justify-self: end;
+        }
+        
+        /* Mobile Footer Styles */
+        @media (max-width: 768px) {
+            .footer-desktop {
+                display: none;
+            }
+            
+            .footer-mobile {
+                display: block;
+            }
+            
+            .footer-mobile-container {
+                padding: 40px 20px;
+                text-align: center;
+            }
+            
+            .footer-mobile-bottom {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 16px;
+                border-top: 1px solid rgba(255, 255, 255, 0.1);
+                padding-top: 20px;
+            }
+            
+            .footer-mobile-logo {
+                height: 28px;
+                width: auto;
+            }
+            
+            .footer-mobile-contact {
+                color: rgba(255, 255, 255, 0.7);
+                font-size: 14px;
+                margin: 0;
+            }
+            
+            .footer-mobile-copyright {
+                color: rgba(255, 255, 255, 0.6);
+                font-size: 13px;
+                margin: 0;
+            }
+        }
+        
+        /* Tablet adjustments */
+        @media (max-width: 1024px) and (min-width: 769px) {
+            .footer-container {
+                padding: 40px 30px;
+            }
+        }
+    </style>
 </body>
 </html>
