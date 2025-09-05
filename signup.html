@@ -534,9 +534,21 @@
                 textElement.id = 'typewriter-text';
                 container.appendChild(textElement);
                 
-                // The text content with justified line breaks for solid block appearance  
-                const mainText = "The complete platform for football venue\nmanagement. Streamline operations, maximise\nrevenue, cut down on administration time, and\ndeliver footballing perfection.";
-                const finalLine = "On and off the pitch.";
+                // Different text formatting for desktop vs mobile
+                const isMobile = window.innerWidth <= 768;
+                
+                let mainText, finalLine;
+                if (isMobile) {
+                    // Mobile: Keep line breaks for narrower width
+                    mainText = "The complete platform for football venue\nmanagement. Streamline operations, maximise\nrevenue, cut down on administration time, and\ndeliver footballing perfection.";
+                } else {
+                    // Desktop: No line breaks, let justification handle the flow
+                    mainText = "The complete platform for football venue management. Streamline operations, maximise revenue, cut down on administration time, and deliver footballing perfection.";
+                }
+                
+                finalLine = "On and off the pitch.";
+                
+                console.log('📱 DEBUG: Device type:', isMobile ? 'Mobile' : 'Desktop');
                 
                 let currentText = '';
                 let charIndex = 0;
