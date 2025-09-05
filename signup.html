@@ -280,13 +280,10 @@
             background: rgba(255, 255, 0, 0.1) !important; /* DEBUG: Highlight background */
         }
         
-        /* Desktop specific justification */
+        /* Desktop specific styles - no justification */
         @media (min-width: 769px) {
             .hero-typewriter-text {
-                text-align: justify !important;
-                text-align-last: left !important;
-                text-justify: inter-word !important; /* Force word spacing justification */
-                hyphens: none !important; /* Prevent hyphenation */
+                text-align: left !important; /* Left align instead of justify */
                 border: 2px solid red !important; /* DEBUG: Different color for desktop */
                 background: rgba(255, 0, 0, 0.1) !important; /* DEBUG: Different background for desktop */
             }
