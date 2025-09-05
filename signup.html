@@ -1530,8 +1530,10 @@
             // Center-point trigger system handles all background transitions above
             console.log('🚀 Center-point trigger system initialized');
             
-            // Initialize navigation colors
-            updateNavigationForSection('hero');
+            // Initialize navigation colors after a short delay to ensure DOM is ready
+            setTimeout(() => {
+                updateNavigationForSection('hero');
+            }, 100);
             
         });
     </script>
