@@ -60,7 +60,7 @@
         
         /* Smooth transitions for floating nav - matches page background transitions */
         .floating-nav {
-            background: rgba(29, 29, 31, 0.9); /* Initial dark background to match hero */
+            background: rgba(29, 29, 31, 0.9) !important; /* Initial dark background to match hero */
             transition: background 0.6s cubic-bezier(0.4, 0, 0.2, 1) !important;
             backdrop-filter: blur(20px);
         }
@@ -141,8 +141,7 @@
         }
         
         .dropdown-close-btn:hover {
-            color: rgba(255, 255, 255, 1);
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(128, 128, 128, 0.15); /* Neutral gray works on both backgrounds */
             transform: rotate(90deg);
         }
         
@@ -164,9 +163,8 @@
         }
         
         .dropdown-link:hover {
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(128, 128, 128, 0.1); /* Neutral gray works on both backgrounds */
             transform: translateX(10px);
-            color: #ffffff;
         }
         
         .dropdown-link::after {
@@ -253,50 +251,91 @@
             }
         }
         
+        /* NEW TYPEWRITER STYLES */
+        
+        /* Desktop: typewriter to the right of title */
+        .hero-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr; /* Two equal columns */
+            gap: 40px;
+            align-items: start;
+        }
+        
+        .hero-typewriter {
+            width: 100%;
+            max-width: none;
+            padding: 20px 0;
+        }
+        
+        .hero-typewriter-text {
+            font-size: 1.0rem;
+            line-height: 1.6;
+            color: rgba(255, 255, 255, 0.8);
+            font-weight: 500;
+            margin: 0;
+            white-space: pre-wrap; /* Preserve line breaks */
+            text-align: justify !important; /* Justify text for solid block appearance */
+            text-align-last: left !important; /* Keep last line left-aligned */
+            border: 2px solid yellow !important; /* DEBUG: Show text container */
+            background: rgba(255, 255, 0, 0.1) !important; /* DEBUG: Highlight background */
+        }
+        
+        /* Desktop specific justification */
+        @media (min-width: 769px) {
+            .hero-typewriter-text {
+                text-align: justify !important;
+                text-align-last: left !important;
+                text-justify: inter-word !important; /* Force word spacing justification */
+                hyphens: none !important; /* Prevent hyphenation */
+                border: 2px solid red !important; /* DEBUG: Different color for desktop */
+                background: rgba(255, 0, 0, 0.1) !important; /* DEBUG: Different background for desktop */
+            }
+        }
+        
+        .typewriter-cursor {
+            animation: blink 1s infinite;
+            color: rgba(255, 255, 255, 0.7);
+        }
+        
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0; }
+        }
+        
         /* Mobile features card adjustments */
         @media (max-width: 768px) {
-            /* Fix hero layout positioning and prevent shifting */
-            .hero-title {
-                margin-bottom: 20px !important;
-                transform: translateY(-10px); /* Raise heading slightly */
-            }
-            
-            .typewriter-container {
-                position: absolute !important;
-                top: 200px !important; /* Position below the heading */
-                left: 50% !important;
-                transform: translateX(-50%) !important; /* Center the container */
-                width: 85% !important; /* Narrower width */
-                max-width: 320px !important; /* Maximum width constraint */
-                z-index: 2 !important;
-            }
-            
-            .hero-description {
-                margin: 0 !important;
-                line-height: 1.4 !important;
-                font-size: 0.9rem !important; /* Smaller font size */
-                text-align: center !important; /* Center align text */
-                white-space: normal !important; /* Ensure text wraps consistently */
-                word-wrap: break-word !important; /* Handle long words properly */
-            }
-            
-            .typewriter-placeholder {
-                opacity: 0 !important; /* Invisible but reserves space */
-                position: relative !important;
-            }
-            
-            .typewriter {
-                position: absolute !important;
-                top: 0 !important;
-                left: 0 !important;
-                right: 0 !important;
-                opacity: 1 !important; /* Visible typing text */
-            }
-            
-            /* Reserve space in hero content so layout doesn't collapse */
+            /* Mobile: typewriter below title */
             .hero-content {
-                padding-bottom: 120px !important; /* Reserve space for the absolute positioned text */
+                display: block !important; /* Stack vertically */
+                grid-template-columns: none !important;
+                gap: 0 !important;
             }
+            
+            .hero-title {
+                position: relative !important;
+                margin-top: 120px !important; /* Space from top */
+                margin-bottom: 60px !important; /* Larger space before subtitle */
+                transform: none !important;
+                width: 90% !important;
+                margin-left: auto !important;
+                margin-right: auto !important;
+                z-index: 3 !important;
+            }
+            
+            .hero-typewriter {
+                width: 90% !important; /* Same as title */
+                margin: 0 auto !important;
+                padding: 0 !important;
+            }
+            
+            .hero-typewriter-text {
+                font-size: 0.85rem !important;
+                text-align: left !important; /* Keep left-aligned on mobile */
+                max-width: 350px !important;
+                margin: 0 auto !important;
+                font-weight: 500 !important;
+            }
+            
             
             /* Add padding between header and subtitle */
             .section-header .section-subtitle {
@@ -400,7 +439,7 @@
     <div id="loading-overlay"></div>
     
     <!-- Floating Navigation -->
-    <nav class="floating-nav">
+    <nav class="floating-nav" style="background: rgba(29, 29, 31, 0.9) !important;">
         <div class="nav-container">
             <div class="nav-logo">
                 <img src="img/5iveTrackr-straight-logo.svg" alt="5ive Trackr" class="logo-image">
@@ -454,43 +493,107 @@
                 <span style="opacity: 0; animation: fadeInWord 0.8s ease-out 2.0s forwards;">Management</span>
             </h1>
             
-            <div class="typewriter-container">
-                <p class="hero-description typewriter-placeholder" id="typewriter-placeholder">The complete platform for professional football venue management. Streamline operations, maximize revenue, and deliver exceptional experiences.</p>
-                <p class="hero-description typewriter" id="typewriter-text"></p>
+            <!-- New typewriter subtitle -->
+            <div class="hero-typewriter" id="hero-typewriter">
+                <div class="hero-typewriter-debug" style="border: 2px dashed red; padding: 5px; margin: 5px;">
+                    DEBUG: Typewriter container positioned here
+                </div>
             </div>
+            
         </div>
         
-        <!-- Typewriter effect -->
+        
+        <!-- New Typewriter Effect -->
         <script>
+            // Wait for hero title fade-ins to finish (last one finishes at 2.0s + 0.8s = 2.8s)
             setTimeout(() => {
-                const text = "The complete platform for professional football venue management. Streamline operations, maximize revenue, and deliver exceptional experiences.";
-                const element = document.getElementById('typewriter-text');
-                let index = 0;
+                console.log('🖨️ DEBUG: Starting typewriter effect');
                 
-                console.log('🖨️ Starting typewriter effect');
+                const container = document.getElementById('hero-typewriter');
+                const debugBox = container.querySelector('.hero-typewriter-debug');
                 
-                if (!element) {
-                    console.log('❌ Element not found');
+                if (!container) {
+                    console.log('❌ DEBUG: Container not found');
                     return;
                 }
                 
-                const typeInterval = setInterval(() => {
-                    // Type into the exact same space as the placeholder
-                    const currentText = text.substring(0, index + 1);
-                    const isMobile = window.innerWidth <= 768;
-                    const cursor = isMobile ? '' : '<span class="typewriter-cursor">|</span>';
-                    
-                    element.innerHTML = currentText + cursor;
-                    index++;
-                    
-                    if (index >= text.length) {
-                        clearInterval(typeInterval);
-                        element.innerHTML = text;
-                        console.log('✅ Typewriter completed');
-                    }
-                }, 17);
+                console.log('📍 DEBUG: Container position:', {
+                    offsetTop: container.offsetTop,
+                    offsetLeft: container.offsetLeft,
+                    width: container.offsetWidth,
+                    height: container.offsetHeight
+                });
                 
-            }, 3000); // Start after 3 seconds
+                // Remove debug box and add text element
+                if (debugBox) {
+                    debugBox.remove();
+                }
+                
+                const textElement = document.createElement('p');
+                textElement.className = 'hero-typewriter-text';
+                textElement.id = 'typewriter-text';
+                container.appendChild(textElement);
+                
+                // The text content with justified line breaks for solid block appearance  
+                const mainText = "The complete platform for football venue\nmanagement. Streamline operations, maximise\nrevenue, cut down on administration time, and\ndeliver footballing perfection.";
+                const finalLine = "On and off the pitch.";
+                
+                let currentText = '';
+                let charIndex = 0;
+                let isTypingFinalLine = false;
+                
+                console.log('🖨️ DEBUG: Starting character by character typing');
+                console.log('📝 DEBUG: Main text length:', mainText.length);
+                console.log('📝 DEBUG: Final line length:', finalLine.length);
+                console.log('📝 DEBUG: Main text:', mainText);
+                
+                const typeInterval = setInterval(() => {
+                    if (!isTypingFinalLine) {
+                        // Typing main text
+                        if (charIndex < mainText.length) {
+                            currentText += mainText[charIndex];
+                            textElement.innerHTML = currentText + '<span class="typewriter-cursor">|</span>';
+                            charIndex++;
+                            
+                            // Debug current character
+                            if (mainText[charIndex - 1] === '\n') {
+                                console.log('📄 DEBUG: Line break typed at position', charIndex - 1);
+                            }
+                        } else {
+                            // Main text complete, pause 2 seconds before final line
+                            console.log('✅ DEBUG: Main text complete, pausing 2 seconds before final line');
+                            clearInterval(typeInterval);
+                            
+                            setTimeout(() => {
+                                console.log('🖨️ DEBUG: Starting final line typing');
+                                currentText += '\n\n'; // Add line breaks
+                                isTypingFinalLine = true;
+                                charIndex = 0;
+                                
+                                // Start typing final line
+                                const finalTypeInterval = setInterval(() => {
+                                    if (charIndex < finalLine.length) {
+                                        currentText += finalLine[charIndex];
+                                        textElement.innerHTML = currentText + '<span class="typewriter-cursor">|</span>';
+                                        charIndex++;
+                                    } else {
+                                        // All typing complete
+                                        console.log('✅ DEBUG: All typing complete');
+                                        clearInterval(finalTypeInterval);
+                                        
+                                        // Remove cursor after 2 seconds
+                                        setTimeout(() => {
+                                            textElement.innerHTML = currentText;
+                                            console.log('✅ DEBUG: Cursor removed, typewriter finished');
+                                        }, 2000);
+                                    }
+                                }, 50);
+                            }, 2000); // 2 second delay before final line
+                        }
+                    }
+                }, 50); // Typing speed - you can adjust this
+                
+            }, 3000); // Start after hero title animations (2.8s + small buffer)
         </script>
         
     </section>
@@ -1384,10 +1487,24 @@
                         
                         nav.style.setProperty('background', style.background, 'important');
                         
-                        // Update dropdown background to match nav
+                        // Update dropdown background and text colors to match nav
                         const dropdown = document.querySelector('.nav-dropdown');
                         if (dropdown) {
                             dropdown.style.setProperty('background', style.background.replace('0.9', '1'), 'important');
+                            
+                            // Update dropdown link colors for readability
+                            const dropdownLinks = dropdown.querySelectorAll('.dropdown-link');
+                            dropdownLinks.forEach(link => {
+                                if (!link.classList.contains('dropdown-cta')) {
+                                    link.style.setProperty('color', style.textColor, 'important');
+                                }
+                            });
+                            
+                            // Update dropdown close button color
+                            const closeBtn = dropdown.querySelector('.dropdown-close-btn');
+                            if (closeBtn) {
+                                closeBtn.style.setProperty('color', style.textColor.replace('0.9', '0.7'), 'important');
+                            }
                         }
                         
                         navLinks.forEach(link => {
@@ -1395,7 +1512,24 @@
                                 link.style.color = style.textColor;
                             }
                         });
-                        if (navMenuBtn) navMenuBtn.style.color = style.textColor;
+                        if (navMenuBtn) {
+                            navMenuBtn.style.color = style.textColor;
+                            // Also update the SVG icons inside the button
+                            const hamburgerIcon = navMenuBtn.querySelector('.hamburger-icon');
+                            const closeIcon = navMenuBtn.querySelector('.close-icon');
+                            if (hamburgerIcon) {
+                                hamburgerIcon.style.stroke = style.textColor;
+                            }
+                            if (closeIcon) {
+                                closeIcon.style.stroke = style.textColor;
+                            }
+                        }
+                        
+                        // Keep logo in original colors - no filter needed
+                        const logo = nav.querySelector('.logo-image');
+                        if (logo) {
+                            logo.style.filter = 'none';
+                        }
                         
                         setTimeout(() => {
                             console.log(`   After update nav background:`, getComputedStyle(nav).backgroundColor);
@@ -1468,7 +1602,12 @@
                 
                 // Initialize with current scroll position
                 setTimeout(() => {
-                    handleScroll(); // This will set the correct initial section based on scroll position
+                    // Force initial state to hero when at top of page
+                    if (window.scrollY < 100) {
+                        handleSectionTransition('hero');
+                    } else {
+                        handleScroll(); // This will set the correct initial section based on scroll position
+                    }
                 }, 100);
             };
             
@@ -1530,10 +1669,8 @@
             // Center-point trigger system handles all background transitions above
             console.log('🚀 Center-point trigger system initialized');
             
-            // Initialize navigation colors after a short delay to ensure DOM is ready
-            setTimeout(() => {
-                updateNavigationForSection('hero');
-            }, 100);
+            // Initialize navigation colors immediately
+            updateNavigationForSection('hero');
             
         });
     </script>
@@ -1824,18 +1961,7 @@
         
         /* Removed conflicting nav background override to allow JavaScript control */
         
-        .hero-section .nav-link {
-            color: rgba(255, 255, 255, 0.9) !important;
-        }
-        
-        .hero-section .nav-link:hover {
-            color: var(--primary-green) !important;
-        }
-        
-        .hero-section .nav-cta {
-            background: var(--primary-green) !important;
-            color: white !important;
-        }
+        /* Removed hero-section specific nav rules to prevent conflicts */
         
         /* Ensure webapp showcase is visible on dark background */
         .hero-section .webapp-showcase {
@@ -2836,9 +2962,14 @@
                 background: transparent !important;
             }
             
-            /* Mobile hero content padding */
+            /* Mobile hero content - centered and clean */
             .hero-content {
-                padding: 90px 0 40px 0 !important;
+                padding: 20px !important;
+                position: relative !important;
+                min-height: 100vh !important;
+                display: flex !important;
+                flex-direction: column !important;
+                justify-content: flex-start !important;
             }
             
             /* Optimize hero badge for mobile */
@@ -2851,15 +2982,13 @@
                 margin-right: auto !important;
             }
             
-            /* Improve hero title readability on mobile */
-            .hero-title {
+            /* Improve hero title readability on mobile - only font styles, not position */
+            .hero-section .hero-title {
                 font-size: 2.4rem !important;
                 line-height: 1.15 !important;
-                margin-bottom: 24px !important;
                 padding: 0 !important;
-                max-width: 90% !important;
-                margin-left: auto !important;
-                margin-right: auto !important;
+                text-align: center !important;
+                /* Position is set in the earlier mobile section */
             }
             
             /* Optimize description for mobile */
