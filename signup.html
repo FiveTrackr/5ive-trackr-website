@@ -258,7 +258,7 @@
             display: grid;
             grid-template-columns: 1fr 1fr; /* Two equal columns */
             gap: 40px;
-            align-items: start;
+            align-items: start; /* Align items to top */
         }
         
         .hero-typewriter {
@@ -280,10 +280,23 @@
             background: rgba(255, 255, 0, 0.1) !important; /* DEBUG: Highlight background */
         }
         
-        /* Desktop specific styles - no justification */
+        /* Desktop specific styles - vertically center with hero title when complete */
         @media (min-width: 769px) {
+            .hero-typewriter {
+                align-self: center !important; /* Center the container vertically */
+                transform: translateY(-40px) !important; /* Move up to account for text height */
+                margin-top: 0 !important;
+                padding-top: 0 !important;
+                display: flex !important;
+                flex-direction: column !important;
+                justify-content: flex-start !important; /* Start content at top of container */
+            }
+            
             .hero-typewriter-text {
                 text-align: left !important; /* Left align instead of justify */
+                margin: 0 !important; /* Remove any margins */
+                padding: 0 !important; /* Remove any padding */
+                align-self: flex-start !important; /* Align text to start of flex container */
                 border: 2px solid red !important; /* DEBUG: Different color for desktop */
                 background: rgba(255, 0, 0, 0.1) !important; /* DEBUG: Different background for desktop */
             }
@@ -526,6 +539,7 @@
                     debugBox.remove();
                 }
                 
+                // Simple working text element
                 const textElement = document.createElement('p');
                 textElement.className = 'hero-typewriter-text';
                 textElement.id = 'typewriter-text';
@@ -534,51 +548,87 @@
                 // Different text formatting for desktop vs mobile
                 const isMobile = window.innerWidth <= 768;
                 
-                // Remove all line breaks for both desktop and mobile to allow justification
-                const mainText = "The complete platform for football venue management. Streamline operations, maximise revenue, cut down on administration time, and deliver footballing perfection.";
+                let lines, finalLine;
+                if (isMobile) {
+                    // Mobile: No line breaks, natural flow
+                    lines = ["The complete platform for football venue management. Streamline operations, maximise revenue, cut down on administration time, and deliver footballing perfection."];
+                } else {
+                    // Desktop: Specific line breaks for balanced layout
+                    lines = [
+                        "The complete platform for football venue management.",
+                        "Streamline operations, maximise revenue, cut down on",
+                        "administration time, and deliver footballing perfection."
+                    ];
+                }
                 
                 finalLine = "On and off the pitch.";
                 
                 console.log('📱 DEBUG: Device type:', isMobile ? 'Mobile' : 'Desktop');
+                console.log('📝 DEBUG: Lines array:', lines);
                 
-                let currentText = '';
+                let completedLines = [];
+                let currentLineIndex = 0;
                 let charIndex = 0;
                 let isTypingFinalLine = false;
                 
-                console.log('🖨️ DEBUG: Starting character by character typing');
-                console.log('📝 DEBUG: Main text length:', mainText.length);
-                console.log('📝 DEBUG: Final line length:', finalLine.length);
-                console.log('📝 DEBUG: Main text:', mainText);
+                console.log('🖨️ DEBUG: Starting line-by-line typing');
+                console.log('📝 DEBUG: Total lines:', lines.length);
+                console.log('📝 DEBUG: Final line:', finalLine);
+                
+                function updateDisplay() {
+                    let displayText = '';
+                    
+                    // Add completed lines
+                    completedLines.forEach(line => {
+                        displayText += line + '<br>';
+                    });
+                    
+                    // Add current typing line
+                    if (!isTypingFinalLine && currentLineIndex < lines.length) {
+                        const currentLine = lines[currentLineIndex].substring(0, charIndex);
+                        displayText += currentLine + '<span class="typewriter-cursor">|</span>';
+                    } else if (isTypingFinalLine) {
+                        // Add spacing before final line
+                        displayText += '<br>';
+                        const finalLineText = finalLine.substring(0, charIndex);
+                        displayText += finalLineText + '<span class="typewriter-cursor">|</span>';
+                    }
+                    
+                    textElement.innerHTML = displayText;
+                }
                 
                 const typeInterval = setInterval(() => {
                     if (!isTypingFinalLine) {
-                        // Typing main text
-                        if (charIndex < mainText.length) {
-                            currentText += mainText[charIndex];
-                            textElement.innerHTML = currentText + '<span class="typewriter-cursor">|</span>';
-                            charIndex++;
+                        // Typing main lines
+                        if (currentLineIndex < lines.length) {
+                            const currentLine = lines[currentLineIndex];
                             
-                            // Debug current character
-                            if (mainText[charIndex - 1] === '\n') {
-                                console.log('📄 DEBUG: Line break typed at position', charIndex - 1);
+                            if (charIndex < currentLine.length) {
+                                charIndex++;
+                                updateDisplay();
+                            } else {
+                                // Current line complete
+                                console.log(`✅ DEBUG: Line ${currentLineIndex + 1} complete`);
+                                completedLines.push(currentLine);
+                                currentLineIndex++;
+                                charIndex = 0;
+                                updateDisplay();
                             }
                         } else {
-                            // Main text complete, pause 2 seconds before final line
-                            console.log('✅ DEBUG: Main text complete, pausing 2 seconds before final line');
+                            // All main lines complete, pause before final line
+                            console.log('✅ DEBUG: All main lines complete, pausing 2 seconds before final line');
                             clearInterval(typeInterval);
                             
                             setTimeout(() => {
                                 console.log('🖨️ DEBUG: Starting final line typing');
-                                currentText += '\n\n'; // Add line breaks
                                 isTypingFinalLine = true;
                                 charIndex = 0;
                                 
                                 // Start typing final line
                                 const finalTypeInterval = setInterval(() => {
                                     if (charIndex < finalLine.length) {
-                                        currentText += finalLine[charIndex];
-                                        textElement.innerHTML = currentText + '<span class="typewriter-cursor">|</span>';
                                         charIndex++;
+                                        updateDisplay();
                                     } else {
                                         // All typing complete
                                         console.log('✅ DEBUG: All typing complete');
@@ -586,7 +636,12 @@
                                         
                                         // Remove cursor after 2 seconds
                                         setTimeout(() => {
-                                            textElement.innerHTML = currentText;
+                                            let finalDisplay = '';
+                                            completedLines.forEach(line => {
+                                                finalDisplay += line + '<br>';
+                                            });
+                                            finalDisplay += '<br>' + finalLine;
+                                            textElement.innerHTML = finalDisplay;
                                             console.log('✅ DEBUG: Cursor removed, typewriter finished');
                                         }, 2000);
                                     }
