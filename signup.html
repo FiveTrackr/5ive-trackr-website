@@ -262,8 +262,8 @@
         }
         
         .hero-typewriter {
-            width: 100%;
-            max-width: none;
+            width: 70%; /* Reduce width to make justification more visible */
+            max-width: 400px; /* Set max width to force justification */
             padding: 20px 0;
         }
         
@@ -537,14 +537,8 @@
                 // Different text formatting for desktop vs mobile
                 const isMobile = window.innerWidth <= 768;
                 
-                let mainText, finalLine;
-                if (isMobile) {
-                    // Mobile: Keep line breaks for narrower width
-                    mainText = "The complete platform for football venue\nmanagement. Streamline operations, maximise\nrevenue, cut down on administration time, and\ndeliver footballing perfection.";
-                } else {
-                    // Desktop: No line breaks, let justification handle the flow
-                    mainText = "The complete platform for football venue management. Streamline operations, maximise revenue, cut down on administration time, and deliver footballing perfection.";
-                }
+                // Remove all line breaks for both desktop and mobile to allow justification
+                const mainText = "The complete platform for football venue management. Streamline operations, maximise revenue, cut down on administration time, and deliver footballing perfection.";
                 
                 finalLine = "On and off the pitch.";
                 
