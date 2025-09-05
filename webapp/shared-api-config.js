@@ -13,7 +13,7 @@
 
 // === PRODUCTION API CONFIGURATION ===
 const PRODUCTION_API = {
-    base: 'https://five-trackr-yq6ly.ondigitalocean.app/api',
+    base: 'https://five-trackr-yq6ly.ondigitalocean.app/api', // DigitalOcean API backend
     endpoints: {
         // User Management
         users: '/admin/users',
@@ -258,9 +258,10 @@ const SHARED_API_CONFIG = {
         if (typeof window !== 'undefined') {
             const hostname = window.location.hostname;
             const isDevelopment = hostname === 'localhost' || hostname === '127.0.0.1';
+            // All production domains (including custom domain) use the same DigitalOcean API
             return isDevelopment ? this.DEVELOPMENT_URL : this.PRODUCTION_URL;
         }
-        return this.PRODUCTION_URL;
+        return this.PRODUCTION_URL; // Points to app.5ivetrackr.com for production launch
     }
 };
 
