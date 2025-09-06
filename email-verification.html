@@ -412,23 +412,22 @@
                     } else {
                         // API failed - check if payment not completed
                         if (data.error === 'Payment not completed') {
-                            showStatus('Complete your payment to activate your account and receive verification email.', 'warning');
+                            showStatus('Please wait a moment while we process your payment. This page will update automatically.', 'info');
                             userEmailEl.textContent = userEmail;
-                            // Hide send email button since payment isn't complete
-                            sendEmailBtn.style.display = 'none';
+                            // Keep trying to check if payment completed
+                            setTimeout(() => initializeUserData(), 5000); // Retry after 5 seconds
                         } else {
                             // Other error - show email anyway
-                            showStatus('Account setup pending. Please check your email for verification.', 'info');
+                            showStatus('Setting up your account. If you already received a verification email, please check your inbox and spam folder.', 'info');
                             userEmailEl.textContent = userEmail;
                         }
                     }
                 } catch (error) {
                     console.error('Error setting up user account:', error);
                     // API failed, but we have email parameter - show email anyway
-                    showStatus('Account setup in progress. Please check your email for verification.', 'info');
+                    showStatus('Processing your account setup. You can manually send a verification email if needed.', 'info');
                     userEmailEl.textContent = userEmail;
-                    // Hide send email button since we can't determine user status
-                    sendEmailBtn.style.display = 'none';
+                    // Don't hide the button - let user manually trigger if needed
                 }
             } else {
                 userEmailEl.textContent = userEmail;
