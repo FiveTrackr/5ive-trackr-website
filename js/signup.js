@@ -569,8 +569,13 @@ async function initStripeIntegration() {
         const controller = new AbortController();
         const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
         
+        // Determine API base URL based on current environment
+        const apiBaseUrl = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+            ? '' // Use relative URLs for local development
+            : 'https://www.5ivetrackr.com'; // Use full URL for production
+        
         // Get Stripe publishable key from server
-        const response = await fetch('/api/signup/stripe-config', {
+        const response = await fetch(`${apiBaseUrl}/api/signup/stripe-config`, {
             signal: controller.signal
         });
         clearTimeout(timeoutId);
@@ -708,7 +713,12 @@ if (registrationForm) {
 // Handle paid signup (no free trial)
 async function handlePaidSignup(formData) {
     try {
-        const response = await fetch('/api/signup/create-tenant', {
+        // Determine API base URL based on current environment
+        const apiBaseUrl = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+            ? '' // Use relative URLs for local development
+            : 'https://www.5ivetrackr.com'; // Use full URL for production
+            
+        const response = await fetch(`${apiBaseUrl}/api/signup/create-tenant`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

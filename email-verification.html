@@ -312,7 +312,7 @@
             <p class="instruction-text">
                 Great! Your email has been verified and your account is now active. You can now access your 5ive Trackr dashboard.
             </p>
-            <a href="https://five-trackr-yq6ly.ondigitalocean.app" class="access-webapp-btn">
+            <a href="https://www.5ivetrackr.com" class="access-webapp-btn">
                 Access Dashboard
                 <span>→</span>
             </a>
@@ -340,7 +340,11 @@
         async function initializeUserData() {
             if (sessionId && !userId) {
                 try {
-                    const response = await fetch(`/api/auth/get-user-from-session?session_id=${sessionId}`);
+                    // Show loading message
+                    showStatus('Setting up your account...', 'info');
+                    
+                    // Use the new endpoint that ensures user creation
+                    const response = await fetch(`/api/auth/ensure-user-from-session?session_id=${sessionId}`);
                     const data = await response.json();
                     
                     if (data.success) {
@@ -352,16 +356,27 @@
                         sessionStorage.setItem('userId', userId);
                         sessionStorage.setItem('userEmail', userEmail);
                         
+                        // Show message based on whether user was just created
+                        if (data.user_created) {
+                            showStatus('Account created successfully! Please check your email for verification.', 'success');
+                        } else {
+                            showStatus('Account found! Please check your email for verification.', 'info');
+                        }
+                        
                         // Check if already verified
                         if (data.user.email_verified) {
                             showVerificationSuccess();
                         }
                     } else {
-                        showStatus('Failed to load user information. Please try again.', 'error');
+                        // API failed, but we have email parameter - show email anyway
+                        showStatus('Account setup pending. Please check your email for verification.', 'info');
+                        userEmailEl.textContent = userEmail;
                     }
                 } catch (error) {
-                    console.error('Error loading user data:', error);
-                    showStatus('Failed to load user information. Please check your connection.', 'error');
+                    console.error('Error setting up user account:', error);
+                    // API failed, but we have email parameter - show email anyway
+                    showStatus('Account setup in progress. Please check your email for verification.', 'info');
+                    userEmailEl.textContent = userEmail;
                 }
             } else {
                 userEmailEl.textContent = userEmail;
