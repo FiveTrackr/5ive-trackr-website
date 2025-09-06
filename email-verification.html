@@ -158,11 +158,16 @@
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
-            display: none;
+            display: none; /* Initially hidden, shown after first email sent */
         }
 
-        .resend-btn:hover {
+        .resend-btn:hover:not(:disabled) {
             background: #f0f7f4;
+        }
+
+        .resend-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
         }
 
         .status-message {
@@ -453,10 +458,9 @@
                     emailSent = true;
                     showStatus('Verification email sent! Please check your inbox and spam folder.', 'success');
                     
-                    // Show resend button after 30 seconds
-                    setTimeout(() => {
-                        resendBtn.style.display = 'block';
-                    }, 30000);
+                    // Show resend button immediately but disabled with countdown
+                    resendBtn.style.display = 'block';
+                    startResendCooldown(30); // 30 second cooldown
 
                     // Start polling for verification status
                     startVerificationPolling();
@@ -515,22 +519,35 @@
             sessionStorage.removeItem('userEmail');
         }
 
+        // Start resend cooldown with countdown timer
+        function startResendCooldown(seconds) {
+            resendCooldown = true;
+            resendBtn.disabled = true;
+            let remainingSeconds = seconds;
+            
+            const updateButton = () => {
+                if (remainingSeconds > 0) {
+                    resendBtn.textContent = `Resend in ${remainingSeconds}s`;
+                    remainingSeconds--;
+                    setTimeout(updateButton, 1000);
+                } else {
+                    resendCooldown = false;
+                    resendBtn.disabled = false;
+                    resendBtn.textContent = 'Resend Email';
+                }
+            };
+            
+            updateButton();
+        }
+
         // Resend email with cooldown
         async function resendEmail() {
             if (resendCooldown) return;
             
-            resendCooldown = true;
             resendBtn.disabled = true;
             resendBtn.textContent = 'Sending...';
             
             await sendVerificationEmail();
-            
-            // Cooldown for 60 seconds
-            setTimeout(() => {
-                resendCooldown = false;
-                resendBtn.disabled = false;
-                resendBtn.textContent = 'Resend Email';
-            }, 60000);
         }
 
         // Event listeners
