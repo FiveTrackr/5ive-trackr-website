@@ -336,6 +336,11 @@
         const verificationContent = document.querySelector('.email-verification-content');
         const verificationSuccess = document.getElementById('verificationSuccess');
 
+        // API Configuration
+        const apiBaseUrl = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+            ? '' // Use relative URLs for local development
+            : 'https://five-trackr-yq6ly.ondigitalocean.app'; // Use DigitalOcean app URL for production
+
         // Initialize user data
         async function initializeUserData() {
             if (sessionId && !userId) {
@@ -344,7 +349,7 @@
                     showStatus('Setting up your account...', 'info');
                     
                     // Use the new endpoint that ensures user creation
-                    const response = await fetch(`/api/auth/ensure-user-from-session?session_id=${sessionId}`);
+                    const response = await fetch(`${apiBaseUrl}/api/auth/ensure-user-from-session?session_id=${sessionId}`);
                     const data = await response.json();
                     
                     if (data.success) {
@@ -421,7 +426,7 @@
             setButtonLoading(true);
 
             try {
-                const response = await fetch('/api/auth/send-verification-email', {
+                const response = await fetch(`${apiBaseUrl}/api/auth/send-verification-email`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -461,7 +466,7 @@
             if (!userId) return false;
 
             try {
-                const response = await fetch(`/api/auth/check-verification-status?user_id=${userId}`);
+                const response = await fetch(`${apiBaseUrl}/api/auth/check-verification-status?user_id=${userId}`);
                 const data = await response.json();
                 
                 return data.verified === true;
