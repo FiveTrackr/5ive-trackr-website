@@ -373,15 +373,25 @@
                             showVerificationSuccess();
                         }
                     } else {
-                        // API failed, but we have email parameter - show email anyway
-                        showStatus('Account setup pending. Please check your email for verification.', 'info');
-                        userEmailEl.textContent = userEmail;
+                        // API failed - check if payment not completed
+                        if (data.error === 'Payment not completed') {
+                            showStatus('Complete your payment to activate your account and receive verification email.', 'warning');
+                            userEmailEl.textContent = userEmail;
+                            // Hide send email button since payment isn't complete
+                            sendEmailBtn.style.display = 'none';
+                        } else {
+                            // Other error - show email anyway
+                            showStatus('Account setup pending. Please check your email for verification.', 'info');
+                            userEmailEl.textContent = userEmail;
+                        }
                     }
                 } catch (error) {
                     console.error('Error setting up user account:', error);
                     // API failed, but we have email parameter - show email anyway
                     showStatus('Account setup in progress. Please check your email for verification.', 'info');
                     userEmailEl.textContent = userEmail;
+                    // Hide send email button since we can't determine user status
+                    sendEmailBtn.style.display = 'none';
                 }
             } else {
                 userEmailEl.textContent = userEmail;
