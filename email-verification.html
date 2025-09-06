@@ -323,11 +323,7 @@
             <div class="status-message" id="statusMessage"></div>
 
             <div class="verification-actions">
-                <button class="send-email-btn" id="sendEmailBtn">
-                    <span id="btnText">Send Verification Email</span>
-                    <div class="spinner" id="spinner" style="display: none;"></div>
-                </button>
-                <button class="resend-btn" id="resendBtn">Resend Email</button>
+                <button class="resend-btn" id="resendBtn" style="display: none;">Resend Verification Email</button>
             </div>
 
             <div class="spam-reminder">
@@ -365,11 +361,8 @@
         
         // Elements
         const userEmailEl = document.getElementById('userEmail');
-        const sendEmailBtn = document.getElementById('sendEmailBtn');
         const resendBtn = document.getElementById('resendBtn');
         const statusMessage = document.getElementById('statusMessage');
-        const btnText = document.getElementById('btnText');
-        const spinner = document.getElementById('spinner');
         const verificationContent = document.querySelector('.email-verification-content');
         const verificationSuccess = document.getElementById('verificationSuccess');
 
@@ -400,10 +393,13 @@
                         
                         // Show message based on whether user was just created
                         if (data.user_created) {
-                            showStatus('Account created successfully! Please check your email for verification.', 'success');
+                            showStatus('Account created successfully! Verification email sent automatically.', 'success');
                         } else {
-                            showStatus('Account found! Please check your email for verification.', 'info');
+                            showStatus('Account found! Verification email sent automatically.', 'info');
                         }
+                        
+                        // Show resend button in case user needs it
+                        document.getElementById('resendBtn').style.display = 'block';
                         
                         // Check if already verified
                         if (data.user.email_verified) {
@@ -455,21 +451,23 @@
             }
         }
 
-        // Set button loading state
-        function setButtonLoading(loading) {
-            sendEmailBtn.disabled = loading;
-            spinner.style.display = loading ? 'block' : 'none';
-            btnText.textContent = loading ? 'Sending...' : (emailSent ? 'Email Sent' : 'Send Verification Email');
-        }
+        // This function is no longer needed since we removed the send button
+        // Resend button has its own loading state management
 
         // Send verification email
         async function sendVerificationEmail() {
             if (!userId) {
-                showStatus('User ID not found. Please try signing up again.', 'error');
-                return;
+                // Try to get userId from sessionStorage or URL params again
+                userId = sessionStorage.getItem('userId') || urlParams.get('user_id');
+                if (!userId) {
+                    showStatus('User session not found. Please try signing up again.', 'error');
+                    return;
+                }
             }
 
-            setButtonLoading(true);
+            const resendBtn = document.getElementById('resendBtn');
+            resendBtn.disabled = true;
+            resendBtn.textContent = 'Sending...';
 
             try {
                 const response = await fetch(`${apiBaseUrl}/api/auth/send-verification-email`, {
@@ -502,7 +500,10 @@
                 console.error('Error sending verification email:', error);
                 showStatus('Network error. Please check your connection and try again.', 'error');
             } finally {
-                setButtonLoading(false);
+                // Reset resend button
+                const resendBtn = document.getElementById('resendBtn');
+                resendBtn.disabled = false;
+                resendBtn.textContent = 'Resend Email';
             }
         }
 
@@ -564,7 +565,7 @@
                 } else {
                     resendCooldown = false;
                     resendBtn.disabled = false;
-                    resendBtn.textContent = 'Resend Email';
+                    resendBtn.textContent = 'Resend Verification Email';
                 }
             };
             
@@ -581,8 +582,7 @@
             await sendVerificationEmail();
         }
 
-        // Event listeners
-        sendEmailBtn.addEventListener('click', sendVerificationEmail);
+        // Event listener
         resendBtn.addEventListener('click', resendEmail);
 
         // Check if user is already verified on page load
