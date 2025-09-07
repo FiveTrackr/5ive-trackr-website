@@ -587,7 +587,7 @@ async function initStripeIntegration() {
         // Determine API base URL based on current environment
         const apiBaseUrl = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
             ? '' // Use relative URLs for local development
-            : 'https://five-trackr-yq6ly.ondigitalocean.app'; // Use DigitalOcean app URL for production
+            : 'https://webapp.5ivetrackr.com'; // Use webapp domain for API
         
         // Get Stripe publishable key from server
         const response = await fetch(`${apiBaseUrl}/api/signup/stripe-config`, {
@@ -737,7 +737,7 @@ async function handlePaidSignup(formData) {
         // Determine API base URL based on current environment
         const apiBaseUrl = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
             ? '' // Use relative URLs for local development
-            : 'https://five-trackr-yq6ly.ondigitalocean.app'; // Use DigitalOcean app URL for production
+            : 'https://webapp.5ivetrackr.com'; // Use webapp domain for API
             
         const response = await fetch(`${apiBaseUrl}/api/signup/create-tenant`, {
             method: 'POST',
