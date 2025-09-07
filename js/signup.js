@@ -410,11 +410,26 @@ function validateStep(stepNumber) {
         }
     });
     
-    // Additional validation for step 1 (passwords)
+    // Additional validation for step 1 (emails and passwords)
     if (stepNumber === 1) {
+        const emailInput = step.querySelector('#email');
+        const confirmEmailInput = step.querySelector('#confirmEmail');
         const passwordInput = step.querySelector('#password');
         const confirmPasswordInput = step.querySelector('#confirmPassword');
         
+        // Email confirmation validation
+        if (emailInput && confirmEmailInput) {
+            if (emailInput.value !== confirmEmailInput.value) {
+                const confirmEmailErrorSpan = confirmEmailInput.nextElementSibling;
+                if (confirmEmailErrorSpan && confirmEmailErrorSpan.classList.contains('error-message')) {
+                    confirmEmailErrorSpan.textContent = 'Email addresses do not match';
+                }
+                confirmEmailInput.style.borderColor = '#ff3b30';
+                isValid = false;
+            }
+        }
+        
+        // Password validation
         if (passwordInput && confirmPasswordInput) {
             if (!validatePassword(passwordInput.value)) {
                 isValid = false;
@@ -626,17 +641,23 @@ if (registrationForm) {
             firstName: document.getElementById('firstName').value,
             lastName: document.getElementById('lastName').value,
             email: document.getElementById('email').value,
-            phone: document.getElementById('phone').value,
+            confirmEmail: document.getElementById('confirmEmail').value,
             password: document.getElementById('password').value,
             confirmPassword: document.getElementById('confirmPassword').value,
             venueName: document.getElementById('venueName').value,
-            venueAddress: document.getElementById('venueAddress').value,
+            venueAddress: '', // Set to empty since field was removed
             city: document.getElementById('city').value,
             postcode: document.getElementById('postcode').value,
             pitchCount: '1', // Default to 1 pitch
             plan: selectedPlan,
             stripePriceId: planData.stripePriceId
         };
+        
+        // Validate email confirmation
+        if (formData.email !== formData.confirmEmail) {
+            showError('Email addresses do not match');
+            return;
+        }
         
         // Validate password requirements
         if (!validatePassword(formData.password)) {
@@ -871,6 +892,31 @@ document.addEventListener('DOMContentLoaded', () => {
             } else {
                 errorMessage.textContent = '';
                 confirmPasswordInput.style.borderColor = 'var(--border-light)';
+            }
+        });
+    }
+    
+    // Real-time email confirmation validation
+    const emailInput = document.getElementById('email');
+    const confirmEmailInput = document.getElementById('confirmEmail');
+    
+    if (confirmEmailInput) {
+        confirmEmailInput.addEventListener('input', () => {
+            const email = emailInput.value;
+            const confirmEmail = confirmEmailInput.value;
+            const errorMessage = confirmEmailInput.nextElementSibling;
+            
+            if (confirmEmail.length > 0) {
+                if (email === confirmEmail) {
+                    errorMessage.textContent = '';
+                    confirmEmailInput.style.borderColor = '#10b981';
+                } else {
+                    errorMessage.textContent = 'Email addresses do not match';
+                    confirmEmailInput.style.borderColor = '#ff3b30';
+                }
+            } else {
+                errorMessage.textContent = '';
+                confirmEmailInput.style.borderColor = 'var(--border-light)';
             }
         });
     }
