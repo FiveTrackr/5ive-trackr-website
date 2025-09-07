@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verification Link Expired - 5ive Trackr</title>
+    <link rel="stylesheet" href="css/main.css">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #f5f5f5 0%, #e8e8e8 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .expired-container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+            padding: 48px;
+            max-width: 500px;
+            width: 90%;
+            text-align: center;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .warning-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 24px;
+            background: linear-gradient(135deg, #ff9800, #f57c00);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .warning-icon svg {
+            width: 40px;
+            height: 40px;
+            fill: white;
+        }
+
+        h1 {
+            color: #333;
+            font-size: 28px;
+            margin: 0 0 16px;
+            font-weight: 700;
+        }
+
+        .expired-message {
+            color: #666;
+            font-size: 16px;
+            line-height: 1.6;
+            margin-bottom: 32px;
+        }
+
+        .resend-form {
+            background: #f8f9fa;
+            padding: 24px;
+            border-radius: 12px;
+            margin: 32px 0;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+            box-sizing: border-box;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #2e6417;
+        }
+
+        .btn {
+            padding: 14px 28px;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: none;
+            display: inline-block;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #2e6417, #3a7d1f);
+            color: white;
+            box-shadow: 0 4px 12px rgba(46, 100, 23, 0.3);
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(46, 100, 23, 0.4);
+        }
+
+        .btn-primary:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .status-message {
+            padding: 12px;
+            border-radius: 8px;
+            margin-top: 16px;
+            font-size: 14px;
+            display: none;
+        }
+
+        .status-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+            display: block;
+        }
+
+        .status-error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+            display: block;
+        }
+
+        .status-info {
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+            display: block;
+        }
+
+        .spinner {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid #f3f3f3;
+            border-top: 2px solid #2e6417;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-right: 8px;
+            vertical-align: middle;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .help-text {
+            margin-top: 24px;
+            padding-top: 24px;
+            border-top: 1px solid #e0e0e0;
+            color: #999;
+            font-size: 14px;
+        }
+
+        .help-text a {
+            color: #2e6417;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .help-text a:hover {
+            text-decoration: underline;
+        }
+
+        .logo {
+            width: 150px;
+            margin: 0 auto 32px;
+        }
+    </style>
+</head>
+<body>
+    <div class="expired-container">
+        <div class="logo">
+            <img src="img/logo.png" alt="5ive Trackr" style="width: 100%;">
+        </div>
+
+        <div class="warning-icon">
+            <svg viewBox="0 0 24 24">
+                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
+            </svg>
+        </div>
+
+        <h1>Verification Link Expired</h1>
+        
+        <p class="expired-message">
+            This verification link has expired or has already been used. Verification links are valid for 24 hours and can only be used once for security reasons.
+        </p>
+
+        <div class="resend-form">
+            <h3 style="margin-top: 0; color: #333;">Request New Verification Email</h3>
+            <p style="color: #666; font-size: 14px; margin-bottom: 20px;">
+                Enter your email address to receive a new verification link.
+            </p>
+            
+            <form id="resendForm">
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" name="email" required placeholder="your.email@example.com">
+                </div>
+                
+                <button type="submit" class="btn btn-primary" id="resendBtn">
+                    <span id="btnText">Send New Verification Email</span>
+                </button>
+            </form>
+            
+            <div class="status-message" id="statusMessage"></div>
+        </div>
+
+        <p class="help-text">
+            Already verified? <a href="https://app.5ivetrackr.com/login">Go to Login</a><br>
+            Need help? Contact support at <a href="mailto:support@5ivetrackr.com">support@5ivetrackr.com</a>
+        </p>
+    </div>
+
+    <script>
+        // API Configuration
+        const apiBaseUrl = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+            ? '' // Use relative URLs for local development
+            : 'https://five-trackr-yq6ly.ondigitalocean.app'; // Use DigitalOcean app URL for production
+
+        const resendForm = document.getElementById('resendForm');
+        const resendBtn = document.getElementById('resendBtn');
+        const btnText = document.getElementById('btnText');
+        const statusMessage = document.getElementById('statusMessage');
+        const emailInput = document.getElementById('email');
+
+        // Pre-fill email if available from previous attempts
+        const savedEmail = sessionStorage.getItem('userEmail');
+        if (savedEmail) {
+            emailInput.value = savedEmail;
+        }
+
+        // Show status message
+        function showStatus(message, type = 'info') {
+            statusMessage.textContent = message;
+            statusMessage.className = `status-message status-${type}`;
+            statusMessage.style.display = 'block';
+        }
+
+        // Handle form submission
+        resendForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const email = emailInput.value.trim();
+            if (!email) {
+                showStatus('Please enter your email address', 'error');
+                return;
+            }
+
+            // Save email for convenience
+            sessionStorage.setItem('userEmail', email);
+            
+            // Disable button and show loading
+            resendBtn.disabled = true;
+            btnText.innerHTML = '<span class="spinner"></span>Sending...';
+            statusMessage.style.display = 'none';
+
+            try {
+                // First, we need to get the user ID for this email
+                // This is a limitation - we might need to enhance the API to accept just email
+                const response = await fetch(`${apiBaseUrl}/api/auth/resend-verification`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ email })
+                });
+
+                const data = await response.json();
+
+                if (response.ok && data.success) {
+                    showStatus('Verification email sent! Please check your inbox and spam folder.', 'success');
+                    
+                    // Redirect to email verification page after 3 seconds
+                    setTimeout(() => {
+                        window.location.href = `/email-verification.html?email=${encodeURIComponent(email)}`;
+                    }, 3000);
+                } else {
+                    showStatus(data.error || 'Failed to send verification email. Please try again.', 'error');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                showStatus('Network error. Please check your connection and try again.', 'error');
+            } finally {
+                // Re-enable button
+                resendBtn.disabled = false;
+                btnText.textContent = 'Send New Verification Email';
+            }
+        });
+    </script>
+</body>
+</html>

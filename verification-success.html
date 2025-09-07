@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email Verified Successfully - 5ive Trackr</title>
+    <link rel="stylesheet" href="css/main.css">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #f0f7f4 0%, #e8f5e9 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .verification-container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+            padding: 48px;
+            max-width: 500px;
+            width: 90%;
+            text-align: center;
+            animation: slideUp 0.5s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .success-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 24px;
+            background: linear-gradient(135deg, #2e6417, #3a7d1f);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: popIn 0.6s ease-out 0.2s both;
+        }
+
+        @keyframes popIn {
+            0% {
+                transform: scale(0);
+            }
+            50% {
+                transform: scale(1.1);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        .checkmark {
+            width: 40px;
+            height: 40px;
+            stroke: white;
+            stroke-width: 3;
+            fill: none;
+            stroke-dasharray: 100;
+            stroke-dashoffset: 100;
+            animation: drawCheck 0.5s ease-out 0.8s forwards;
+        }
+
+        @keyframes drawCheck {
+            to {
+                stroke-dashoffset: 0;
+            }
+        }
+
+        h1 {
+            color: #2e6417;
+            font-size: 32px;
+            margin: 0 0 16px;
+            font-weight: 700;
+        }
+
+        .success-message {
+            color: #666;
+            font-size: 16px;
+            line-height: 1.6;
+            margin-bottom: 24px;
+        }
+
+        .email-display {
+            background: #f0f7f4;
+            padding: 12px 20px;
+            border-radius: 10px;
+            font-weight: 600;
+            color: #2e6417;
+            margin: 24px 0;
+            word-break: break-all;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            margin-top: 32px;
+        }
+
+        .btn {
+            padding: 14px 28px;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: none;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #2e6417, #3a7d1f);
+            color: white;
+            box-shadow: 0 4px 12px rgba(46, 100, 23, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(46, 100, 23, 0.4);
+        }
+
+        .btn-secondary {
+            background: white;
+            color: #2e6417;
+            border: 2px solid #2e6417;
+        }
+
+        .btn-secondary:hover {
+            background: #f0f7f4;
+        }
+
+        .info-text {
+            margin-top: 32px;
+            padding-top: 24px;
+            border-top: 1px solid #e0e0e0;
+            color: #999;
+            font-size: 14px;
+        }
+
+        .logo {
+            width: 150px;
+            margin: 0 auto 32px;
+        }
+    </style>
+</head>
+<body>
+    <div class="verification-container">
+        <div class="logo">
+            <img src="img/logo.png" alt="5ive Trackr" style="width: 100%;">
+        </div>
+
+        <div class="success-icon">
+            <svg class="checkmark" viewBox="0 0 52 52">
+                <path d="M14 27 L22 35 L38 16" />
+            </svg>
+        </div>
+
+        <h1>Email Verified Successfully!</h1>
+        
+        <p class="success-message">
+            Your email address has been verified and your account is now fully activated.
+        </p>
+
+        <div class="email-display" id="userEmail">
+            Loading...
+        </div>
+
+        <p class="success-message">
+            You can now log in to your 5ive Trackr account and start managing your leagues, teams, and matches.
+        </p>
+
+        <div class="action-buttons">
+            <a href="https://app.5ivetrackr.com/login" class="btn btn-primary">
+                Go to Login
+            </a>
+            <a href="https://www.5ivetrackr.com" class="btn btn-secondary">
+                Back to Home
+            </a>
+        </div>
+
+        <p class="info-text">
+            Need help? Contact our support team at support@5ivetrackr.com
+        </p>
+    </div>
+
+    <script>
+        // Get email from URL parameters
+        const urlParams = new URLSearchParams(window.location.search);
+        const email = urlParams.get('email');
+        
+        if (email) {
+            document.getElementById('userEmail').textContent = decodeURIComponent(email);
+        } else {
+            document.getElementById('userEmail').textContent = 'Your email address';
+        }
+
+        // Auto-redirect to login after 5 seconds
+        setTimeout(() => {
+            console.log('Redirecting to login page...');
+            // Uncomment when app login page is ready
+            // window.location.href = 'https://app.5ivetrackr.com/login';
+        }, 5000);
+    </script>
+</body>
+</html>
