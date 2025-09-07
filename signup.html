@@ -3778,6 +3778,28 @@
                 padding: 40px 30px;
             }
         }
+
+        /* Checkbox styling for inline positioning */
+        .checkbox-label {
+            display: flex !important;
+            align-items: center !important;
+            gap: 8px !important;
+            cursor: pointer;
+        }
+
+        .checkbox-label input[type="checkbox"] {
+            margin: 0 !important;
+            order: 1;
+        }
+
+        .checkmark {
+            display: none !important;
+        }
+
+        .checkbox-text {
+            order: 2;
+            line-height: 1.4;
+        }
     </style>
 </body>
 </html>
