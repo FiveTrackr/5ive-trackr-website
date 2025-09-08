@@ -719,7 +719,7 @@ if (registrationForm) {
         try {
             // Create user account and get Stripe checkout URL
             const apiUrl = getApiUrl();
-            const response = await fetch(`${apiUrl}/signup/create-user`, {
+            const response = await fetch(`${apiUrl}/signup/create-account`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(formData)
