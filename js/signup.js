@@ -675,8 +675,13 @@ if (registrationForm) {
         const selectedPlan = modal.dataset.selectedPlan;
         const planData = pricingTiers[selectedPlan];
         
+        // Get account type from the form
+        const accountTypeElement = document.querySelector('input[name="accountType"]:checked');
+        const accountType = accountTypeElement ? accountTypeElement.value : 'business'; // Default to business
+        
         // Collect form data
         const formData = {
+            accountType: accountType,
             firstName: document.getElementById('firstName').value,
             lastName: document.getElementById('lastName').value,
             email: document.getElementById('email').value,
@@ -684,13 +689,24 @@ if (registrationForm) {
             password: document.getElementById('password').value,
             confirmPassword: document.getElementById('confirmPassword').value,
             venueName: document.getElementById('venueName').value,
-            venueAddress: '', // Set to empty since field was removed
-            city: document.getElementById('city').value,
-            postcode: document.getElementById('postcode').value,
-            pitchCount: '1', // Default to 1 pitch
-            plan: selectedPlan,
+            venueAddress: document.getElementById('city').value, // Use city as venue address
+            venuePostcode: document.getElementById('postcode').value,
+            selectedPlan: selectedPlan,
             stripePriceId: planData.stripePriceId
         };
+        
+        // Add business-specific fields if business account
+        if (accountType === 'business') {
+            const orgNameElement = document.getElementById('organisationName');
+            const businessAddressElement = document.getElementById('businessAddress'); 
+            const businessPostcodeElement = document.getElementById('businessPostcode');
+            const selectedRoleElement = document.getElementById('selectedRole');
+            
+            formData.organisationName = orgNameElement ? orgNameElement.value : '';
+            formData.businessAddress = businessAddressElement ? businessAddressElement.value : formData.venueAddress;
+            formData.businessPostcode = businessPostcodeElement ? businessPostcodeElement.value : formData.venuePostcode;
+            formData.selectedRole = selectedRoleElement ? selectedRoleElement.value : 'administrator';
+        }
         
         // Validate email confirmation
         if (formData.email !== formData.confirmEmail) {
