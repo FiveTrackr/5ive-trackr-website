@@ -247,6 +247,8 @@ function initModalSystem() {
     
     // Initialize form step navigation
     initFormSteps();
+    // Initialize signup type handling
+    initSignupTypeHandling();
 }
 
 // Initialize keyboard navigation
@@ -362,7 +364,16 @@ function initFormSteps() {
             const currentStep = this.closest('.form-step');
             if (currentStep) {
                 const stepNumber = parseInt(currentStep.dataset.step);
-                goToStep(stepNumber - 1);
+                
+                // Handle special navigation for personal users
+                const selectedType = document.querySelector('input[name="signupType"]:checked');
+                if (selectedType && selectedType.value === 'personal' && stepNumber === 3) {
+                    // Personal users on Step 3 should go back to Step 1 (skip Step 2)
+                    goToStep(1);
+                } else {
+                    // Normal back navigation
+                    goToStep(stepNumber - 1);
+                }
             }
         });
     });
@@ -574,56 +585,84 @@ async function checkPaymentStatus() {
     return handlePaymentWindowClosed();
 }
 
-// Initialize Stripe integration
+// Clean Stripe integration 
 let stripe = null;
-let stripePublishableKey = null;
 
 async function initStripeIntegration() {
     try {
-        // Add timeout to prevent hanging requests
-        const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
+        // Get API URL
+        const apiUrl = getApiUrl();
         
-        // Determine API base URL based on current environment
-        const apiBaseUrl = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
-            ? '' // Use relative URLs for local development
-            : 'https://webapp.5ivetrackr.com'; // Use webapp domain for API
-        
-        // Get Stripe publishable key from server
-        const response = await fetch(`${apiBaseUrl}/api/signup/stripe-config`, {
-            signal: controller.signal
-        });
-        clearTimeout(timeoutId);
-        
-        if (!response.ok) {
-            throw new Error(`HTTP ${response.status}: Failed to get Stripe configuration`);
-        }
-        
+        // Get Stripe config from server
+        const response = await fetch(`${apiUrl}/signup/stripe-config`);
         const data = await response.json();
         
         if (data.success && data.publishable_key) {
-            stripePublishableKey = data.publishable_key;
-            
-            // Validate publishable key format
-            if (!data.publishable_key.startsWith('pk_')) {
-                throw new Error('Invalid Stripe publishable key format');
-            }
-            
-            stripe = Stripe(stripePublishableKey);
-            console.log('Stripe initialized successfully');
+            stripe = Stripe(data.publishable_key);
+            console.log('✅ Stripe initialized');
         } else {
-            throw new Error('Invalid Stripe configuration response');
+            throw new Error('Failed to get Stripe configuration');
         }
     } catch (error) {
-        console.error('Error initializing Stripe:', error);
-        
-        // Show user-friendly error message
-        const errorMessage = error.name === 'AbortError' 
-            ? 'Request timeout - please check your internet connection' 
-            : 'Failed to initialize payment system. Please refresh the page and try again.';
-            
-        showError(errorMessage);
+        console.error('❌ Stripe initialization failed:', error);
+        showError('Payment system initialization failed. Please refresh the page.');
     }
+}
+
+// Simple API URL helper
+function getApiUrl() {
+    const isDev = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+    return isDev ? 'http://localhost:8080/api' : 'https://webapp.5ivetrackr.com/api';
+}
+
+// Initialize signup type handling
+function initSignupTypeHandling() {
+    const signupTypeInputs = document.querySelectorAll('input[name="signupType"]');
+    const continueBtn = document.querySelector('.form-step[data-step="1"] .continue-btn');
+    
+    if (!continueBtn) return;
+    
+    // Initially disable continue button
+    continueBtn.disabled = true;
+    continueBtn.style.opacity = '0.5';
+    continueBtn.style.cursor = 'not-allowed';
+    
+    // Add event listeners to radio buttons
+    signupTypeInputs.forEach(input => {
+        input.addEventListener('change', function() {
+            if (this.checked) {
+                // Enable continue button
+                continueBtn.disabled = false;
+                continueBtn.style.opacity = '1';
+                continueBtn.style.cursor = 'pointer';
+                
+                // Add visual feedback
+                continueBtn.classList.add('enabled');
+            }
+        });
+    });
+    
+    // Handle continue button click validation
+    continueBtn.addEventListener('click', function(e) {
+        const selectedType = document.querySelector('input[name="signupType"]:checked');
+        
+        if (!selectedType) {
+            e.preventDefault();
+            showError('Please select an account type to continue');
+            return;
+        }
+        
+        // Determine which step to go to based on selection
+        if (selectedType.value === 'personal') {
+            // Skip organisation details for personal users - go directly to Step 3
+            goToStep(3);
+        } else {
+            // Business users go to Step 2 (organisation details)
+            goToStep(2);
+        }
+        
+        console.log('Account type selected:', selectedType.value);
+    });
 }
 
 // Handle form submission (no free trial)
@@ -678,49 +717,32 @@ if (registrationForm) {
         submitButton.disabled = true;
         
         try {
-            // Check if Stripe is initialized
-            if (!stripe) {
-                throw new Error('Payment system not initialized. Please refresh the page.');
+            // Create user account and get Stripe checkout URL
+            const apiUrl = getApiUrl();
+            const response = await fetch(`${apiUrl}/signup/create-user`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(formData)
+            });
+            
+            if (!response.ok) {
+                const error = await response.json();
+                throw new Error(error.message || 'Failed to create account');
             }
             
-            const result = await handlePaidSignup(formData);
+            const result = await response.json();
             
-            // Redirect to Stripe Checkout
+            // Redirect to Stripe checkout
             if (result.checkout_url) {
-                // Store form data for use after payment
-                sessionStorage.setItem('signupFormData', JSON.stringify(formData));
-                sessionStorage.setItem('checkoutSessionUrl', result.checkout_url);
+                submitButton.innerHTML = '<div class="loading-spinner"></div>Opening payment...';
                 
-                // Show redirect message
-                submitButton.innerHTML = '<div class="loading-spinner"></div>Opening secure payment window...';
-                
-                // Add a small delay to show the message
                 setTimeout(() => {
-                    // Open Stripe checkout in a new window
-                    const stripeWindow = window.open(result.checkout_url, '_blank', 'width=800,height=600,menubar=no,toolbar=no,location=yes,status=yes,scrollbars=yes,resizable=yes');
-                    
-                    // Check if popup was blocked
-                    if (!stripeWindow || stripeWindow.closed || typeof stripeWindow.closed == 'undefined') {
-                        showError('Pop-up blocker prevented opening payment window. Please allow pop-ups for this site.');
-                        submitButton.innerHTML = originalText;
-                        submitButton.disabled = false;
-                    } else {
-                        // Show waiting message
-                        submitButton.innerHTML = '<div class="loading-spinner"></div>Waiting for payment...';
-                        
-                        // Monitor window status
-                        const checkInterval = setInterval(() => {
-                            if (stripeWindow.closed) {
-                                clearInterval(checkInterval);
-                                // Check if payment was successful and handle redirect
-                                handlePaymentWindowClosed();
-                            }
-                        }, 500);
-                    }
+                    window.location.href = result.checkout_url;
                 }, 1000);
             } else {
-                throw new Error('Payment setup failed - no checkout URL received');
+                throw new Error('No checkout URL received');
             }
+            
         } catch (error) {
             console.error('Signup error:', error);
             showError(error.message || 'An error occurred during signup');

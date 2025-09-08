@@ -194,6 +194,198 @@
             transform: translateY(0);
         }
         
+        /* Radio button styling for signup form */
+        .radio-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        
+        .radio-label {
+            display: flex;
+            align-items: flex-start;
+            padding: 20px;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: white;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .radio-label:hover {
+            border-color: #4a9d2a;
+            background: #f8fffe;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(74, 157, 42, 0.15);
+        }
+        
+        .radio-label input[type="radio"]:checked {
+            border-color: #4a9d2a;
+        }
+        
+        .radio-label input[type="radio"]:checked + .radio-content {
+            color: #4a9d2a;
+        }
+        
+        .radio-label input[type="radio"]:checked + .radio-content::before {
+            opacity: 1;
+            transform: scale(1);
+        }
+        
+        .radio-label input[type="radio"] {
+            display: none;
+        }
+        
+        /* Selection effect */
+        .radio-label input[type="radio"]:checked ~ .radio-content::before {
+            content: '✓';
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            width: 24px;
+            height: 24px;
+            background: #4a9d2a;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 14px;
+            opacity: 1;
+            transform: scale(1);
+            transition: all 0.3s ease;
+        }
+        
+        .radio-label:has(input[type="radio"]:checked) {
+            background: linear-gradient(135deg, #f8fffe 0%, #f0fdf4 100%);
+            border-color: #4a9d2a;
+            box-shadow: 0 2px 8px rgba(74, 157, 42, 0.2);
+        }
+        
+        .radio-content {
+            flex: 1;
+            position: relative;
+        }
+        
+        .radio-content strong {
+            display: block;
+            color: #1f2937;
+            font-weight: 600;
+            margin-bottom: 4px;
+            transition: color 0.3s ease;
+        }
+        
+        .radio-content p {
+            color: #6b7280;
+            font-size: 14px;
+            margin: 0;
+            line-height: 1.4;
+        }
+        
+        .radio-label input[type="radio"]:checked + .radio-content strong {
+            color: #4a9d2a;
+        }
+        
+        /* Continue button disabled state */
+        .continue-btn:disabled {
+            background: #e5e7eb !important;
+            color: #9ca3af !important;
+            cursor: not-allowed !important;
+            transform: none !important;
+        }
+        
+        .continue-btn:disabled:hover {
+            background: #e5e7eb !important;
+            transform: none !important;
+        }
+        
+        .continue-btn.enabled {
+            animation: enablePulse 0.3s ease;
+        }
+        
+        @keyframes enablePulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        /* Form actions styling */
+        .form-actions {
+            display: flex;
+            gap: 12px;
+            justify-content: space-between;
+            margin-top: 24px;
+        }
+        
+        /* Progress steps equal spacing */
+        .progress-steps {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+        }
+        
+        .progress-step {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+        
+        /* Back button styling */
+        .back-btn {
+            background: transparent;
+            color: #6b7280;
+            border: 2px solid #e5e7eb;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            flex: 1;
+        }
+        
+        .back-btn:hover {
+            background: #f9fafb;
+            border-color: #d1d5db;
+            color: #374151;
+            transform: translateY(-1px);
+        }
+        
+        /* Continue button should take more space */
+        .continue-btn {
+            flex: 2;
+        }
+        
+        /* Info callout styling */
+        .info-callout {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+            border: 1px solid #bae6fd;
+            border-radius: 8px;
+            padding: 16px;
+            margin: 16px 0 24px 0;
+            text-align: center;
+        }
+        
+        .info-content {
+            color: #0c4a6e;
+            font-size: 14px;
+            line-height: 1.4;
+        }
+        
+        .info-content strong {
+            color: #0369a1;
+            font-weight: 600;
+        }
+        
         /* Content container for dropdown links */
         .dropdown-content {
             display: flex;
@@ -1333,21 +1525,93 @@
                         <div class="progress-steps">
                             <div class="progress-step active" data-step="1">
                                 <div class="step-circle">1</div>
-                                <span>Account</span>
+                                <span>Type</span>
                             </div>
                             <div class="progress-step" data-step="2">
                                 <div class="step-circle">2</div>
-                                <span>Venue</span>
+                                <span>Business/Organisation</span>
                             </div>
                             <div class="progress-step" data-step="3">
                                 <div class="step-circle">3</div>
+                                <span>Account</span>
+                            </div>
+                            <div class="progress-step" data-step="4">
+                                <div class="step-circle">4</div>
+                                <span>Venue</span>
+                            </div>
+                            <div class="progress-step" data-step="5">
+                                <div class="step-circle">5</div>
                                 <span>Payment</span>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Step 1: Account Information -->
+                    <!-- Step 1: Account Type Selection -->
                     <div class="form-step active" data-step="1">
+                        <div class="step-content">
+                            <h3>Account Type</h3>
+                            <p>Choose your account type to get started</p>
+                            
+                            <div class="form-grid">
+                                <div class="form-group full-width">
+                                    <div class="radio-group">
+                                        <label class="radio-label">
+                                            <input type="radio" name="signupType" value="business">
+                                            <div class="radio-content">
+                                                <strong>Business/Organisation</strong>
+                                                <p>For clubs, venues, companies, or organisations</p>
+                                            </div>
+                                        </label>
+                                        <label class="radio-label">
+                                            <input type="radio" name="signupType" value="personal">
+                                            <div class="radio-content">
+                                                <strong>Individual/Personal</strong>
+                                                <p>For personal use or small groups</p>
+                                            </div>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="form-actions">
+                                <button type="button" class="continue-btn">Continue</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Step 2: Business/Organization Details -->
+                    <div class="form-step" data-step="2">
+                        <div class="step-content">
+                            <h3>Business/Organisation Details</h3>
+                            <p>Tell us about your business or organisation</p>
+                            
+                            <div class="form-grid">
+                                <div class="form-group full-width" id="organizationNameGroup">
+                                    <label for="organizationName">Business/Organisation Name</label>
+                                    <input type="text" id="organizationName" name="organizationName" required autocomplete="organization">
+                                    <span class="error-message"></span>
+                                </div>
+                                
+                                <div class="form-group full-width" id="roleGroup">
+                                    <label for="userRole">Your Role</label>
+                                    <select id="userRole" name="userRole" required>
+                                        <option value="">Select your role...</option>
+                                        <option value="administrator">Operations / Organisation Administrator</option>
+                                        <option value="league_manager">League Manager</option>
+                                    </select>
+                                    <span class="error-message"></span>
+                                </div>
+                            </div>
+                            
+                            <div class="form-actions">
+                                <button type="button" class="back-btn">Back</button>
+                                <button type="button" class="continue-btn">Continue</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Step 3: Personal Details -->
+                    <div class="form-step" data-step="3">
                         <div class="step-content">
                             <h3>Your Account Details</h3>
                             <p>Create your account to get started</p>
@@ -1392,15 +1656,24 @@
                                 </div>
                             </div>
 
-                            <button type="button" class="continue-btn">Continue</button>
+                            <div class="form-actions">
+                                <button type="button" class="back-btn">Back</button>
+                                <button type="button" class="continue-btn">Continue</button>
+                            </div>
                         </div>
                     </div>
 
-                    <!-- Step 2: Venue Information -->
-                    <div class="form-step" data-step="2">
+                    <!-- Step 4: Venue Information -->
+                    <div class="form-step" data-step="4">
                         <div class="step-content">
                             <h3>Venue Information</h3>
-                            <p>Tell us about your football venue</p>
+                            <p>Tell us about your primary football venue</p>
+                            
+                            <div class="info-callout">
+                                <div class="info-content">
+                                    You can add and manage additional venues from your dashboard after signing up. Start with your main venue here.
+                                </div>
+                            </div>
                             
                             <div class="form-grid">
                                 <div class="form-group full-width">
@@ -1440,15 +1713,15 @@
                                 </div>
                             </div>
 
-                            <div class="form-buttons">
+                            <div class="form-actions">
                                 <button type="button" class="back-btn">Back</button>
                                 <button type="button" class="continue-btn">Continue</button>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Step 3: Payment Information -->
-                    <div class="form-step" data-step="3">
+                    <!-- Step 5: Payment Information -->
+                    <div class="form-step" data-step="5">
                         <div class="step-content">
                             <h3>Payment Information</h3>
                             <p>Secure payment processing by Stripe</p>
@@ -1507,7 +1780,7 @@
                                 </div>
                             </div>
 
-                            <div class="form-buttons">
+                            <div class="form-actions">
                                 <button type="button" class="back-btn">Back</button>
                                 <button type="submit" class="submit-btn" id="submitBtn">
                                     <span class="btn-content">
