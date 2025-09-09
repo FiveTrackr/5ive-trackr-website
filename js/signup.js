@@ -735,6 +735,9 @@ if (registrationForm) {
         submitButton.disabled = true;
         
         try {
+            // Debug: Log form data being sent
+            console.log('Form data being sent:', formData);
+            
             // Create user account and get Stripe checkout URL
             const apiUrl = getApiUrl();
             const response = await fetch(`${apiUrl}/signup/create-account`, {
@@ -745,7 +748,8 @@ if (registrationForm) {
             
             if (!response.ok) {
                 const error = await response.json();
-                throw new Error(error.message || 'Failed to create account');
+                console.error('API Error Response:', error);
+                throw new Error(error.error || error.message || 'Failed to create account');
             }
             
             const result = await response.json();
@@ -964,7 +968,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Add plan details modal functions to global scope
     window.openPlanDetailsModal = function() {
         const modal = document.getElementById('planDetailsModal');
-        const selectedPlan = window.selectedPlan || 'growth'; // Default to growth if not set
+        const selectedPlan = window.selectedPlan || 'pro'; // Default to pro if not set
         const planData = pricingTiers[selectedPlan];
         
         if (planData) {
@@ -1065,7 +1069,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.addEventListener('DOMContentLoaded', function() {
         // Set default selected plan if not already set
         if (!window.selectedPlan) {
-            window.selectedPlan = 'growth'; // Default to growth plan
+            window.selectedPlan = 'pro'; // Default to pro plan
         }
         
         // Ensure the correct icon is displayed
