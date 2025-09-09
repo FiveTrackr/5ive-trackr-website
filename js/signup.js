@@ -695,17 +695,19 @@ if (registrationForm) {
             stripePriceId: planData.stripePriceId
         };
         
-        // Add business-specific fields if business account
+        // Add account-specific fields based on account type
         if (accountType === 'business') {
+            // Business account - get organisation name and role from form
             const orgNameElement = document.getElementById('organisationName');
-            const businessAddressElement = document.getElementById('businessAddress'); 
-            const businessPostcodeElement = document.getElementById('businessPostcode');
-            const selectedRoleElement = document.getElementById('selectedRole');
+            const selectedRoleElement = document.getElementById('userRole');
             
             formData.organisationName = orgNameElement ? orgNameElement.value : '';
-            formData.businessAddress = businessAddressElement ? businessAddressElement.value : formData.venueAddress;
-            formData.businessPostcode = businessPostcodeElement ? businessPostcodeElement.value : formData.venuePostcode;
             formData.selectedRole = selectedRoleElement ? selectedRoleElement.value : 'administrator';
+        } else if (accountType === 'personal') {
+            // Personal account - auto-generate organisation name and set role
+            const fullName = `${formData.firstName} ${formData.lastName}`.trim();
+            formData.organisationName = `${fullName} Sports`; // Auto-generate org name
+            formData.selectedRole = 'league_manager'; // Always league_manager for personal accounts
         }
         
         // Validate email confirmation
