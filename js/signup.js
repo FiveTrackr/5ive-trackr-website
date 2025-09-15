@@ -638,6 +638,20 @@ function initSignupTypeHandling() {
                 
                 // Add visual feedback
                 continueBtn.classList.add('enabled');
+                
+                // Handle required attributes based on account type
+                const orgNameField = document.getElementById('organisationName');
+                const userRoleField = document.getElementById('userRole');
+                
+                if (this.value === 'personal') {
+                    // Remove required for personal accounts
+                    if (orgNameField) orgNameField.removeAttribute('required');
+                    if (userRoleField) userRoleField.removeAttribute('required');
+                } else {
+                    // Add required for business accounts  
+                    if (orgNameField) orgNameField.setAttribute('required', '');
+                    if (userRoleField) userRoleField.setAttribute('required', '');
+                }
             }
         });
     });
@@ -655,9 +669,19 @@ function initSignupTypeHandling() {
         // Determine which step to go to based on selection
         if (selectedType.value === 'personal') {
             // Skip organisation details for personal users - go directly to Step 3
+            // Remove required attribute from organization fields for personal accounts
+            const orgNameField = document.getElementById('organisationName');
+            const userRoleField = document.getElementById('userRole');
+            if (orgNameField) orgNameField.removeAttribute('required');
+            if (userRoleField) userRoleField.removeAttribute('required');
             goToStep(3);
         } else {
             // Business users go to Step 2 (organisation details)
+            // Add required attribute back for business accounts
+            const orgNameField = document.getElementById('organisationName');
+            const userRoleField = document.getElementById('userRole');
+            if (orgNameField) orgNameField.setAttribute('required', '');
+            if (userRoleField) userRoleField.setAttribute('required', '');
             goToStep(2);
         }
         
@@ -675,8 +699,8 @@ if (registrationForm) {
         const selectedPlan = modal.dataset.selectedPlan;
         const planData = pricingTiers[selectedPlan];
         
-        // Get account type from the form
-        const accountTypeElement = document.querySelector('input[name="accountType"]:checked');
+        // Get account type from the form (using signupType which is the actual field name)
+        const accountTypeElement = document.querySelector('input[name="signupType"]:checked');
         const accountType = accountTypeElement ? accountTypeElement.value : 'business'; // Default to business
         
         // Collect form data
@@ -711,6 +735,7 @@ if (registrationForm) {
             const fullName = `${formData.firstName} ${formData.lastName}`.trim();
             formData.organisationName = `${fullName} Sports`; // Auto-generate org name
             formData.selectedRole = 'league_manager'; // Always league_manager for personal accounts
+            console.log('Personal account - auto-generated org name:', formData.organisationName);
         }
         
         // Validate email confirmation
