@@ -612,7 +612,7 @@ async function initStripeIntegration() {
 // Simple API URL helper
 function getApiUrl() {
     const isDev = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-    return isDev ? 'http://localhost:8080/api' : 'https://webapp.5ivetrackr.com/api';
+    return isDev ? 'http://localhost:8082/api' : 'https://webapp.5ivetrackr.com/api';
 }
 
 // Initialize signup type handling
@@ -688,9 +688,12 @@ if (registrationForm) {
             confirmEmail: document.getElementById('confirmEmail').value,
             password: document.getElementById('password').value,
             confirmPassword: document.getElementById('confirmPassword').value,
+            phone: document.getElementById('phone') ? document.getElementById('phone').value : '', // Optional phone field
             venueName: document.getElementById('venueName').value,
             venueAddress: document.getElementById('city').value, // Use city as venue address
             venuePostcode: document.getElementById('postcode').value,
+            venueContactName: document.getElementById('venueContactName') ? document.getElementById('venueContactName').value : '',
+            venueContactPhone: document.getElementById('venueContactPhone') ? document.getElementById('venueContactPhone').value : '',
             selectedPlan: selectedPlan,
             stripePriceId: planData.stripePriceId
         };
@@ -702,7 +705,7 @@ if (registrationForm) {
             const selectedRoleElement = document.getElementById('userRole');
             
             formData.organisationName = orgNameElement ? orgNameElement.value : '';
-            formData.selectedRole = selectedRoleElement ? selectedRoleElement.value : 'administrator';
+            formData.selectedRole = selectedRoleElement ? selectedRoleElement.value : 'organization_owner';
         } else if (accountType === 'personal') {
             // Personal account - auto-generate organisation name and set role
             const fullName = `${formData.firstName} ${formData.lastName}`.trim();
@@ -783,7 +786,7 @@ async function handlePaidSignup(formData) {
             ? '' // Use relative URLs for local development
             : 'https://webapp.5ivetrackr.com'; // Use webapp domain for API
             
-        const response = await fetch(`${apiBaseUrl}/api/signup/create-tenant`, {
+        const response = await fetch(`${apiBaseUrl}/api/signup/create-account`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
