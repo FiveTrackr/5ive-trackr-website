@@ -1,457 +1,85 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en-GB">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>5ive Trackr - Football Management Platform</title>
-    <link rel="icon" type="image/svg+xml" href="img/5-web-icon.svg">
-    <link rel="shortcut icon" type="image/svg+xml" href="img/5-web-icon.svg">
-    <link rel="stylesheet" href="css/signup-styles.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <!-- temporary holding page while the new site is finished; keep it out of search results -->
+    <meta name="robots" content="noindex, nofollow">
+    <title>5ive Trackr - Coming soon</title>
+    <meta name="description" content="The new 5ive Trackr is on its way.">
+    <meta name="theme-color" content="#0a0c0d">
+    <link rel="icon" type="image/svg+xml" href="/img/5-icon.svg">
+    <link rel="apple-touch-icon" href="/img/5-icon-180.png">
     <style>
-        /* Landing Page Specific Styles */
-        .landing-container {
-            min-height: 100vh;
-            max-height: 100vh;
-            background: var(--text-primary);
-            color: white;
-            position: relative;
-            overflow: hidden;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            /* Prevent all scrolling on mobile and desktop */
-            overflow-x: hidden;
-            overflow-y: hidden;
-        }
+        @font-face { font-family: 'Bebas Neue'; font-weight: 400; src: url('/fonts/bebas-neue.woff2') format('woff2'); font-display: swap; ascent-override: 85%; descent-override: 15%; line-gap-override: 0%; }
+        @font-face { font-family: 'Jakarta'; font-weight: 400 600; src: url('/fonts/jakarta-medium.woff2') format('woff2'); font-display: swap; }
 
-        /* Ensure body doesn't scroll on landing page */
+        :root {
+            --night: #0a0c0d;
+            --chalk: #f2f5f2;
+            --mute: #9aa69e;
+            --green: #4ade80;
+            --line: rgba(242, 245, 242, .07);
+        }
+        * { box-sizing: border-box; }
+        html, body { height: 100%; margin: 0; }
         body {
-            overflow: hidden;
-            height: 100vh;
-        }
-
-        /* Background Effects - Same as pricing section */
-        .landing-background {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            pointer-events: none;
-        }
-
-        .gradient-orb {
-            position: absolute;
-            border-radius: 50%;
-            background: radial-gradient(circle, var(--primary-green) 0%, transparent 70%);
-            opacity: 0.15;
-            filter: blur(100px);
-            animation: float 20s ease-in-out infinite;
-        }
-
-        .orb-1 {
-            width: 600px;
-            height: 600px;
-            top: -300px;
-            right: -200px;
-            animation-delay: 0s;
-        }
-
-        .orb-2 {
-            width: 400px;
-            height: 400px;
-            bottom: -200px;
-            left: -100px;
-            animation-delay: -10s;
-        }
-
-        .orb-3 {
-            width: 300px;
-            height: 300px;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            animation-delay: -5s;
-        }
-
-        @keyframes float {
-            0%, 100% {
-                transform: translateY(0px) rotate(0deg);
-            }
-            33% {
-                transform: translateY(-30px) rotate(120deg);
-            }
-            66% {
-                transform: translateY(20px) rotate(240deg);
-            }
-        }
-
-        /* Main Content */
-        .landing-content {
-            text-align: center;
-            position: relative;
-            z-index: 2;
-            max-width: 800px;
-            padding: 0 22px;
-            animation: fadeInUp 1s ease-out;
-        }
-
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(40px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .logo-container {
-            margin-bottom: 48px;
-            animation: fadeInUp 1s ease-out 0.2s both;
-        }
-
-        .main-logo {
-            height: 325px;
-            width: auto;
-            filter: drop-shadow(0 4px 20px rgba(46, 100, 23, 0.3));
-        }
-
-        .main-title {
-            display: none;
-        }
-
-        .main-subtitle {
-            font-size: 1.25rem;
-            color: rgba(255, 255, 255, 0.8);
-            margin-bottom: 64px;
-            max-width: 600px;
-            margin-left: auto;
-            margin-right: auto;
-            line-height: 1.5;
-            animation: fadeInUp 1s ease-out 0.6s both;
-        }
-
-        /* Portal Buttons */
-        .portal-buttons {
-            display: flex;
-            gap: 24px;
-            justify-content: center;
-            flex-wrap: wrap;
-            animation: fadeInUp 1s ease-out 0.8s both;
-        }
-
-        .portal-btn {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 16px;
-            padding: 20px 40px;
-            color: white;
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 1.1rem;
-            transition: all 0.5s var(--ease-out-expo);
-            position: relative;
-            overflow: hidden;
-            min-width: 180px;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .portal-btn.with-icon {
-            position: relative;
-        }
-
-        .portal-btn .btn-icon {
-            position: absolute;
-            width: 20px;
-            height: 20px;
-            opacity: 0.9;
-            /* Position icon further left to avoid overlapping text */
-            left: calc(50% - 60px);
-            top: 50%;
-            transform: translateY(-50%);
-        }
-
-        .portal-btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
-            transition: left 0.5s ease;
-        }
-
-        .portal-btn:hover::before {
-            left: 100%;
-        }
-
-        .portal-btn:hover {
-            transform: translateY(-4px);
-            background: rgba(255, 255, 255, 0.08);
-            border-color: rgba(255, 255, 255, 0.2);
-            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
-        }
-
-        .portal-btn.primary {
-            background: var(--accent-gradient);
-            border-color: var(--primary-green);
-        }
-
-        .portal-btn.primary:hover {
-            background: linear-gradient(135deg, #3d7f1e 0%, #5bb832 100%);
-            box-shadow: 0 12px 40px rgba(46, 100, 23, 0.4);
-        }
-
-        .btn-icon {
-            width: 20px;
-            height: 20px;
-            opacity: 0.9;
-        }
-
-        /* Responsive Design - Mobile First Approach */
-        @media (max-width: 768px) {
-            .landing-content {
-                padding: 20px 16px;
-                max-width: 100%;
-            }
-
-            .logo-container {
-                margin-bottom: 36px;
-            }
-
-            .main-logo {
-                height: 240px;
-            }
-
-            .main-subtitle {
-                display: none;
-            }
-
-            .portal-buttons {
-                flex-direction: column;
-                align-items: center;
-                gap: 16px;
-                padding: 0 20px;
-            }
-
-            .portal-btn {
-                width: 100%;
-                max-width: 280px;
-                padding: 18px 24px;
-                font-size: 1.05rem;
-                min-height: 56px;
-                justify-content: center;
-                border-radius: 12px;
-            }
-
-            /* Improve touch targets */
-            .portal-btn:hover {
-                transform: translateY(-2px);
-            }
-
-            /* Adjust background effects for mobile */
-            .orb-1, .orb-2, .orb-3 {
-                opacity: 0.08;
-            }
-
-            /* Reduce particle count for performance */
-            .particles {
-                display: none;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .landing-content {
-                padding: 16px 12px;
-            }
-
-            .logo-container {
-                margin-bottom: 28px;
-            }
-
-            .main-logo {
-                height: 200px;
-            }
-
-            .main-subtitle {
-                display: none;
-            }
-
-            .portal-buttons {
-                padding: 0 16px;
-                gap: 14px;
-            }
-
-            .portal-btn {
-                max-width: 100%;
-                padding: 16px 20px;
-                font-size: 1rem;
-                min-height: 52px;
-                border-radius: 10px;
-            }
-
-            .btn-icon {
-                width: 18px;
-                height: 18px;
-            }
-
-            /* Further reduce effects for small screens */
-            .gradient-orb {
-                display: none;
-            }
-        }
-
-        /* Extra small screens */
-        @media (max-width: 360px) {
-            .main-logo {
-                height: 180px;
-            }
-
-            .main-subtitle {
-                display: none;
-            }
-
-            .portal-btn {
-                padding: 14px 18px;
-                font-size: 0.95rem;
-                min-height: 48px;
-            }
-        }
-
-        /* Floating particles effect */
-        .particles {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
+            background: var(--night);
+            color: var(--chalk);
+            font: 400 17px/1.6 Jakarta, system-ui, -apple-system, "Segoe UI", sans-serif;
+            display: grid; place-items: center;
+            padding: max(24px, env(safe-area-inset-top)) max(20px, env(safe-area-inset-right)) max(24px, env(safe-area-inset-bottom)) max(20px, env(safe-area-inset-left));
             overflow: hidden;
         }
 
-        .particle {
-            position: absolute;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 50%;
-            animation: particleFloat 15s linear infinite;
+        /* floodlight glow and a faint pitch drawn behind the content */
+        .glow {
+            position: fixed; inset: -20% -10% auto; height: 80vh; pointer-events: none;
+            background: radial-gradient(ellipse at 50% 0%, rgba(74, 222, 128, .16), transparent 62%);
         }
+        .pitch { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+        .pitch * { fill: none; stroke: var(--line); stroke-width: 2; vector-effect: non-scaling-stroke; }
+        .pitch .draw { stroke-dasharray: 1; stroke-dashoffset: 1; animation: draw 2.6s cubic-bezier(.6, 0, .2, 1) .2s forwards; }
 
-        @keyframes particleFloat {
-            from {
-                transform: translateY(100vh) rotate(0deg);
-                opacity: 0;
-            }
-            10% {
-                opacity: 1;
-            }
-            90% {
-                opacity: 1;
-            }
-            to {
-                transform: translateY(-100px) rotate(360deg);
-                opacity: 0;
-            }
+        main { position: relative; text-align: center; max-width: 560px; }
+        .logo { display: block; width: 168px; height: auto; margin: 0 auto 44px; animation: rise .9s cubic-bezier(.2, .7, .2, 1) both; }
+        .eyebrow {
+            display: inline-flex; align-items: center; gap: 10px; margin: 0 0 18px;
+            font-size: 13px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: var(--green);
+            animation: rise .9s cubic-bezier(.2, .7, .2, 1) .12s both;
+        }
+        .eyebrow i { width: 8px; height: 8px; border-radius: 50%; background: var(--green); box-shadow: 0 0 0 0 rgba(74, 222, 128, .5); animation: pulse 2.2s ease-out infinite; }
+        h1 {
+            font: 400 clamp(52px, 13vw, 96px)/.92 'Bebas Neue', Impact, "Arial Narrow", sans-serif;
+            letter-spacing: .01em; margin: 0 0 22px;
+            animation: rise .9s cubic-bezier(.2, .7, .2, 1) .22s both;
+        }
+        h1 span { color: var(--green); }
+        p.lede { margin: 0 auto; max-width: 30em; color: var(--mute); animation: rise .9s cubic-bezier(.2, .7, .2, 1) .34s both; }
+
+        @keyframes rise { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+        @keyframes draw { to { stroke-dashoffset: 0; } }
+        @keyframes pulse { 70% { box-shadow: 0 0 0 10px rgba(74, 222, 128, 0); } 100% { box-shadow: 0 0 0 0 rgba(74, 222, 128, 0); } }
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after { animation: none !important; }
+            .pitch .draw { stroke-dashoffset: 0; }
         }
     </style>
 </head>
 <body>
-    <div class="landing-container">
-        <!-- Background Effects -->
-        <div class="landing-background">
-            <div class="gradient-orb orb-1"></div>
-            <div class="gradient-orb orb-2"></div>
-            <div class="gradient-orb orb-3"></div>
-        </div>
-
-        <!-- Floating Particles -->
-        <div class="particles" id="particles"></div>
-
-        <!-- Main Content -->
-        <div class="landing-content">
-            <div class="logo-container">
-                <img src="img/header-logo.svg" alt="5ive Trackr" class="main-logo">
-            </div>
-
-            
-            <p class="main-subtitle">
-                The ultimate football management platform designed for modern leagues, teams, and venues. 
-                Experience seamless organization with powerful tools built for the beautiful game.
-            </p>
-
-            <div class="portal-buttons">
-                <a href="signup.html" class="portal-btn primary">
-                    Explore
-                </a>
-                
-                <a href="webapp/home.html" class="portal-btn">
-                    Webapp
-                </a>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        // Create floating particles
-        function createParticles() {
-            const particlesContainer = document.getElementById('particles');
-            const particleCount = 20;
-
-            for (let i = 0; i < particleCount; i++) {
-                const particle = document.createElement('div');
-                particle.className = 'particle';
-                
-                // Random size between 2px and 6px
-                const size = Math.random() * 4 + 2;
-                particle.style.width = size + 'px';
-                particle.style.height = size + 'px';
-                
-                // Random horizontal position
-                particle.style.left = Math.random() * 100 + '%';
-                
-                // Random animation duration and delay
-                particle.style.animationDuration = (Math.random() * 10 + 10) + 's';
-                particle.style.animationDelay = Math.random() * 15 + 's';
-                
-                particlesContainer.appendChild(particle);
-            }
-        }
-
-        // Initialize particles when page loads
-        document.addEventListener('DOMContentLoaded', () => {
-            createParticles();
-            
-            // Add some interactive hover effects
-            const buttons = document.querySelectorAll('.portal-btn');
-            buttons.forEach(button => {
-                button.addEventListener('mouseenter', () => {
-                    button.style.transform = 'translateY(-4px) scale(1.02)';
-                });
-                
-                button.addEventListener('mouseleave', () => {
-                    button.style.transform = 'translateY(0) scale(1)';
-                });
-            });
-        });
-
-        // Add subtle parallax effect on mouse move
-        document.addEventListener('mousemove', (e) => {
-            const mouseX = e.clientX / window.innerWidth;
-            const mouseY = e.clientY / window.innerHeight;
-            
-            const orbs = document.querySelectorAll('.gradient-orb');
-            orbs.forEach((orb, index) => {
-                const speed = (index + 1) * 0.5;
-                const x = (mouseX - 0.5) * speed;
-                const y = (mouseY - 0.5) * speed;
-                orb.style.transform += ` translate(${x}px, ${y}px)`;
-            });
-        });
-    </script>
+    <div class="glow" aria-hidden="true"></div>
+    <svg class="pitch" viewBox="0 0 1600 1000" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+        <rect class="draw" pathLength="1" x="120" y="120" width="1360" height="760" rx="6"/>
+        <line class="draw" pathLength="1" x1="800" y1="120" x2="800" y2="880"/>
+        <circle class="draw" pathLength="1" cx="800" cy="500" r="120"/>
+        <path class="draw" pathLength="1" d="M120 360 H260 V640 H120"/>
+        <path class="draw" pathLength="1" d="M1480 360 H1340 V640 H1480"/>
+    </svg>
+    <main>
+        <img class="logo" src="/img/logo.svg" alt="5ive Trackr" width="168" height="69">
+        <p class="eyebrow"><i aria-hidden="true"></i>Under construction</p>
+        <h1>Something new is <span>kicking off.</span></h1>
+        <p class="lede">We're rebuilding 5ive Trackr from the ground up: leagues, referees, live scores and match nights for five-a-side venues, all in one place. The new site will be here soon.</p>
+    </main>
 </body>
 </html>

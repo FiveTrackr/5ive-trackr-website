@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <!-- temporary holding page while the new site is finished; keep it out of search results -->
+    <meta name="robots" content="noindex, nofollow">
+    <title>5ive Trackr - Coming soon</title>
+    <meta name="description" content="The new 5ive Trackr is on its way.">
+    <meta name="theme-color" content="#0a0c0d">
+    <link rel="icon" type="image/svg+xml" href="/img/5-icon.svg">
+    <link rel="apple-touch-icon" href="/img/5-icon-180.png">
+    <style>
+        @font-face { font-family: 'Bebas Neue'; font-weight: 400; src: url('/fonts/bebas-neue.woff2') format('woff2'); font-display: swap; ascent-override: 85%; descent-override: 15%; line-gap-override: 0%; }
+        @font-face { font-family: 'Jakarta'; font-weight: 400 600; src: url('/fonts/jakarta-medium.woff2') format('woff2'); font-display: swap; }
+
+        :root {
+            --night: #0a0c0d;
+            --chalk: #f2f5f2;
+            --mute: #9aa69e;
+            --green: #4ade80;
+            --line: rgba(242, 245, 242, .07);
+        }
+        * { box-sizing: border-box; }
+        html, body { height: 100%; margin: 0; }
+        body {
+            background: var(--night);
+            color: var(--chalk);
+            font: 400 17px/1.6 Jakarta, system-ui, -apple-system, "Segoe UI", sans-serif;
+            display: grid; place-items: center;
+            padding: max(24px, env(safe-area-inset-top)) max(20px, env(safe-area-inset-right)) max(24px, env(safe-area-inset-bottom)) max(20px, env(safe-area-inset-left));
+            overflow: hidden;
+        }
+
+        /* floodlight glow and a faint pitch drawn behind the content */
+        .glow {
+            position: fixed; inset: -20% -10% auto; height: 80vh; pointer-events: none;
+            background: radial-gradient(ellipse at 50% 0%, rgba(74, 222, 128, .16), transparent 62%);
+        }
+        .pitch { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+        .pitch * { fill: none; stroke: var(--line); stroke-width: 2; vector-effect: non-scaling-stroke; }
+        .pitch .draw { stroke-dasharray: 1; stroke-dashoffset: 1; animation: draw 2.6s cubic-bezier(.6, 0, .2, 1) .2s forwards; }
+
+        main { position: relative; text-align: center; max-width: 560px; }
+        .logo { display: block; width: 168px; height: auto; margin: 0 auto 44px; animation: rise .9s cubic-bezier(.2, .7, .2, 1) both; }
+        .eyebrow {
+            display: inline-flex; align-items: center; gap: 10px; margin: 0 0 18px;
+            font-size: 13px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: var(--green);
+            animation: rise .9s cubic-bezier(.2, .7, .2, 1) .12s both;
+        }
+        .eyebrow i { width: 8px; height: 8px; border-radius: 50%; background: var(--green); box-shadow: 0 0 0 0 rgba(74, 222, 128, .5); animation: pulse 2.2s ease-out infinite; }
+        h1 {
+            font: 400 clamp(52px, 13vw, 96px)/.92 'Bebas Neue', Impact, "Arial Narrow", sans-serif;
+            letter-spacing: .01em; margin: 0 0 22px;
+            animation: rise .9s cubic-bezier(.2, .7, .2, 1) .22s both;
+        }
+        h1 span { color: var(--green); }
+        p.lede { margin: 0 auto; max-width: 30em; color: var(--mute); animation: rise .9s cubic-bezier(.2, .7, .2, 1) .34s both; }
+
+        @keyframes rise { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+        @keyframes draw { to { stroke-dashoffset: 0; } }
+        @keyframes pulse { 70% { box-shadow: 0 0 0 10px rgba(74, 222, 128, 0); } 100% { box-shadow: 0 0 0 0 rgba(74, 222, 128, 0); } }
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after { animation: none !important; }
+            .pitch .draw { stroke-dashoffset: 0; }
+        }
+    </style>
+</head>
+<body>
+    <div class="glow" aria-hidden="true"></div>
+    <svg class="pitch" viewBox="0 0 1600 1000" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+        <rect class="draw" pathLength="1" x="120" y="120" width="1360" height="760" rx="6"/>
+        <line class="draw" pathLength="1" x1="800" y1="120" x2="800" y2="880"/>
+        <circle class="draw" pathLength="1" cx="800" cy="500" r="120"/>
+        <path class="draw" pathLength="1" d="M120 360 H260 V640 H120"/>
+        <path class="draw" pathLength="1" d="M1480 360 H1340 V640 H1480"/>
+    </svg>
+    <main>
+        <img class="logo" src="/img/logo.svg" alt="5ive Trackr" width="168" height="69">
+        <p class="eyebrow"><i aria-hidden="true"></i>Under construction</p>
+        <h1>Something new is <span>kicking off.</span></h1>
+        <p class="lede">We're rebuilding 5ive Trackr from the ground up: leagues, referees, live scores and match nights for five-a-side venues, all in one place. The new site will be here soon.</p>
+    </main>
+</body>
+</html>
